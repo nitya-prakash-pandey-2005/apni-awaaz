@@ -9,10 +9,16 @@ Part of our entry to Gnani AI's *Great Indian AI Internship Challenge* (#GnaniAI
 
 ## Quick start
 ```bash
-bash ../dadi-vs-scammers/scripts/sync-core.sh
 uv sync --all-packages
-cp .env.example .env
+cp .env.example .env                              # add GNANI_API_KEY and GROQ_API_KEY
 uv run pytest -q
-cd frontend && npm install && npm run dev         # http://localhost:5193
+bash run_backend.sh                               # port 8767; or FAKE=1 bash run_backend.sh (no keys: tones, scripted nurse)
+cd frontend && npm ci && npm run dev              # http://localhost:5193 (or npm run build: the backend serves dist/)
 ```
+
+## Live test checklist (real keys)
+1. My voice: tick consent, upload a 20-30 s voice note (also try a WhatsApp .opus on Chrome and Safari), build, play the test phrase.
+2. Speak: Hindi, Tamil and English text; romanised Hindi ("mujhe paani chahiye") with Hindi selected. Check the badge says "Your voice".
+3. Converse (earphones off): someone speaks Hindi; captions and 3 replies appear in under 2 s; your own spoken reply is not captioned.
+4. SOS with a second language. Profile: delete my voice, then Speak shows "Fallback voice".
 Voices are cloned only with the speaker's explicit consent.
