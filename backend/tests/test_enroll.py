@@ -34,6 +34,13 @@ def test_noisy_clip_is_flagged(speechlike):
     assert q["snr_db"] < 15
 
 
+def test_very_noisy_long_clip_says_noisy_not_too_short(speechlike):
+    q = clip_quality(speechlike(12, HZ, snr_db=0), HZ)
+    assert q["reasons"] == ["noisy"]  # a 12 s clip must not be called "too short"
+    q = clip_quality(speechlike(3, HZ, snr_db=0), HZ)
+    assert q["reasons"] == ["too short", "noisy"]
+
+
 def test_continuous_sound_like_music_is_flagged():
     # a sustained chord with no pauses (music-like): no quiet gaps, so the SNR estimate is low
     t = np.arange(10 * HZ) / HZ
@@ -128,3 +135,4 @@ def test_phrase_learning(tmp_path):
     assert store.top_phrases("hi-IN") == ["पानी चाहिए", "दर्द हो रहा है", "धन्यवाद"]
     assert store.top_phrases("hi-IN", n=1) == ["पानी चाहिए"]
     assert store.top_phrases("ta-IN") == ["தண்ணீர் வேண்டும்"]
+    assert store.phrase_counts("hi-IN") == [("पानी चाहिए", 3), ("दर्द हो रहा है", 2), ("धन्यवाद", 1)]

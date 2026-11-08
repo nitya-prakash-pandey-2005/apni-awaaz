@@ -90,7 +90,11 @@ class ProfileStore:
         self.db.commit()
 
     def top_phrases(self, lang: str, n: int = 12) -> list[str]:
+        return [text for text, _ in self.phrase_counts(lang, n)]
+
+    def phrase_counts(self, lang: str, n: int = 200) -> list[tuple[str, int]]:
+        """(text, uses), most used first; ties go to the most recently used."""
         rows = self.db.execute(
-            "SELECT text FROM phrase_uses WHERE lang = ? ORDER BY n DESC, last DESC LIMIT ?", (lang, int(n))
+            "SELECT text, n FROM phrase_uses WHERE lang = ? ORDER BY n DESC, last DESC LIMIT ?", (lang, int(n))
         ).fetchall()
-        return [r[0] for r in rows]
+        return [(r[0], int(r[1])) for r in rows]

@@ -133,21 +133,25 @@ async def rewrite_text(text: str, out_lang: str, profile: Profile, llm) -> str:
     return clean_llm_line(raw)
 
 
-async def _clone(text: str, out_lang: str, embedding: dict, settings, gate: GnaniGate) -> tuple[bytes, str | None]:
+async def _clone(clone_fn, text: str, out_lang: str, embedding: dict, settings, gate: GnaniGate) -> tuple[bytes, str | None]:
     kw = dict(sample_rate=SAMPLE_RATE, container="raw", timeout=CLONE_TIMEOUT_S)
     try:
-        return await gate.run(tts_clone_rest, settings.gnani_api_key, text, embedding, language=out_lang, **kw), None
+        return await gate.run(clone_fn, settings.gnani_api_key, text, embedding, language=out_lang, **kw), None
     except GnaniError as e:
         # design call: if cloning rejects the language, let the model pick it from the script instead
         if e.status in (400, 422) and "language" in (e.body or "").lower():
-            return await gate.run(tts_clone_rest, settings.gnani_api_key, text, embedding, language=None, **kw), "auto"
+            return await gate.run(clone_fn, settings.gnani_api_key, text, embedding, language=None, **kw), "auto"
         raise
 
 
 async def speak(text: str, out_lang: str, profile: Profile, settings, llm, cache: TtsCache, *,
-                gate: GnaniGate | None = None, breaker: CloneBreaker | None = None) -> tuple[bytes, dict]:
+                gate: GnaniGate | None = None, breaker: CloneBreaker | None = None,
+                clone_fn=None, tts_fn=None) -> tuple[bytes, dict]:
     """Returns (WAV bytes, meta). meta: voice ("clone"|"fallback"), spoken_text, translated, plus
-    rewrite, lang, cached, voice_name, reason (why the fallback spoke) and lang_note."""
+    rewrite, lang, cached, voice_name, reason (why the fallback spoke) and lang_note.
+    clone_fn / tts_fn replace Gnani's tts_clone_rest / tts_rest (fake mode)."""
+    clone_fn = clone_fn or tts_clone_rest
+    tts_fn = tts_fn or tts_rest
     text = normalise_text(text)
     if not text:
         raise ValueError("nothing to say")
@@ -183,7 +187,7 @@ async def speak(text: str, out_lang: str, profile: Profile, settings, llm, cache
 
     if try_clone:
         try:
-            pcm, note = await _clone(spoken, out_lang, profile.voice, settings, gate)
+            pcm, note = await _clone(clone_fn, spoken, out_lang, profile.voice, settings, gate)
             wav = ensure_wav(pcm)
             meta = {**base, "voice": "clone", "voice_name": "own", "reason": None, "lang_note": note}
             _cache_put(cache, clone_key, wav, meta)
@@ -201,7 +205,7 @@ async def speak(text: str, out_lang: str, profile: Profile, settings, llm, cache
                 return hit[0], {**hit[1], "cached": True, "reason": reason}
 
     try:
-        pcm = await gate.run(tts_rest, settings.gnani_api_key, spoken, voice=profile.fallback_voice,
+        pcm = await gate.run(tts_fn, settings.gnani_api_key, spoken, voice=profile.fallback_voice,
                              model=FALLBACK_MODEL, language=out_lang, speed=1.0, sample_rate=SAMPLE_RATE,
                              container="raw")
     except asyncio.CancelledError:

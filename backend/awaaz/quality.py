@@ -66,11 +66,13 @@ def clip_quality(pcm: np.ndarray, hz: int) -> dict:
         reasons.append("too quiet")
         speech_s = 0.0
     else:
-        if speech_s < MIN_SPEECH_S:
+        noisy = snr < MIN_SNR_DB
+        # in heavy noise the speech-seconds estimate is unreliable: then only the clip length can say "too short"
+        if duration < MIN_SPEECH_S or (not noisy and speech_s < MIN_SPEECH_S):
             reasons.append("too short")
-        elif speech_s > MAX_SPEECH_S:
+        elif not noisy and speech_s > MAX_SPEECH_S:
             reasons.append("too long")
-        if snr < MIN_SNR_DB:
+        if noisy:
             reasons.append("noisy")
     if clipping >= MAX_CLIPPING_PCT:
         reasons.append("clipping")

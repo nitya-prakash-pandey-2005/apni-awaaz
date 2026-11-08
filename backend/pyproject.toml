@@ -3,7 +3,7 @@ name = "awaaz"
 version = "0.1.0"
 description = "Speak again in your own voice: voice banking and talk-assist in Indian languages. Built on Gnani AI voice cloning, Timbre, Prisma and Evon."
 requires-python = ">=3.12,<3.13"
-dependencies = ["voice-core"]
+dependencies = ["voice-core", "python-multipart>=0.0.18"]
 
 [tool.uv.sources]
 voice-core = { workspace = true }
