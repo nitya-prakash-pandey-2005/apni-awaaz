@@ -22,3 +22,5 @@ cd frontend && npm ci && npm run dev              # http://localhost:5193 (or np
 3. Converse (earphones off): someone speaks Hindi; captions and 3 replies appear in under 2 s; your own spoken reply is not captioned.
 4. SOS with a second language. Profile: delete my voice, then Speak shows "Fallback voice".
 Voices are cloned only with the speaker's explicit consent.
+
+Demo, post and submission kit: [`docs/06-demo-and-post.md`](docs/06-demo-and-post.md). Live test results: [`docs/test-log.md`](docs/test-log.md).
