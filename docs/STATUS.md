@@ -7,15 +7,16 @@ Plan: `docs/03-build-plan.md`. Engine contract: `voice-core/README.md` (the engi
 | # | Task | Owner | Branch | Status |
 |---|---|---|---|---|
 | 0 | Bootstrap | CL | main | done (workspace, frontend copy, engine sync) |
-| 1 | see plan | | | todo |
-| 2 | see plan | | | todo |
-| 3 | see plan | | | todo |
-| 4 | see plan | | | todo |
-| 5 | see plan | | | todo |
-| 6 | see plan | | | todo |
+| 1 | Enrolment + quality | CL | feat/cl-awaaz | in progress |
+| 2 | Speak service | CL | feat/cl-awaaz | in progress |
+| 3 | Converse service | CL | feat/cl-awaaz | in progress |
+| 4 | FastAPI app | CL | feat/cl-awaaz | in progress |
+| 5 | Frontend | CL | feat/cl-awaaz | in progress |
+| 6 | Live test + demo | CL | feat/cl-awaaz | todo (needs keys) |
 | 7 | see plan (Pukaar only) | | | todo |
 | 8 | see plan (Pukaar only) | | | todo |
 | 9 | see plan (Pukaar only) | | | todo |
 
 ## Log
 - Sun 8 Nov 11:30: docs, design, plan and bootstrap (CL).
+- Sun 8 Nov 19:50: CL claims Tasks 1–6 (branch feat/cl-awaaz); the engine is synced with TM's Prisma fixes.
