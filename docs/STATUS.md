@@ -7,12 +7,12 @@ Plan: `docs/03-build-plan.md`. Engine contract: `voice-core/README.md` (the engi
 | # | Task | Owner | Branch | Status |
 |---|---|---|---|---|
 | 0 | Bootstrap | CL | main | done (workspace, frontend copy, engine sync) |
-| 1 | see plan | | | todo |
-| 2 | see plan | | | todo |
-| 3 | see plan | | | todo |
-| 4 | see plan | | | todo |
-| 5 | see plan | | | todo |
-| 6 | see plan | | | todo |
+| 1 | see plan | TM | feat/tm-awaaz | in progress |
+| 2 | see plan | TM | feat/tm-awaaz | in progress |
+| 3 | see plan | TM | feat/tm-awaaz | in progress |
+| 4 | see plan | TM | feat/tm-awaaz | in progress |
+| 5 | see plan | TM | feat/tm-awaaz | in progress |
+| 6 | see plan (live test + demo) | | | todo |
 | 7 | see plan (Pukaar only) | | | todo |
 | 8 | see plan (Pukaar only) | | | todo |
 | 9 | see plan (Pukaar only) | | | todo |
