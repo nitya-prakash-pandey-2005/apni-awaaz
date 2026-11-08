@@ -49,3 +49,7 @@
 .sos-btn:disabled { opacity: 0.7; }
 .sos-text { font-size: clamp(22px, 5.5vw, 32px); line-height: 1.35; font-weight: 700; margin: 0; overflow-wrap: anywhere; }
 .sos-card .field { width: min(100%, 320px); }
+
+/* Message banking + switch scanning */
+.phrase.banked { border-color: rgba(255, 77, 157, 0.45); }
+.phrase.scan-on { outline: 4px solid var(--amber); outline-offset: 2px; transform: scale(1.03); }

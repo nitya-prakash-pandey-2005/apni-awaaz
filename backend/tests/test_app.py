@@ -89,3 +89,18 @@ def test_fake_mode_boots_without_overrides(tmp_path, monkeypatch):
     with TestClient(create_app(Settings(cache_dir=tmp_path))) as c:
         assert c.post("/api/voice/enroll?consent=true", content=_clip()).status_code == 200
         assert c.post("/api/speak", json={"text": "mujhe paani chahiye", "lang": "hi-IN"}).headers["x-voice"] == "clone"
+
+
+def test_message_banking_keeps_the_original_recording(client):
+    audio = b"RIFF" + b"\x00" * 2000
+    r = client.post("/api/messages?label=I love you, beta", content=audio, headers={"Content-Type": "audio/wav"})
+    assert r.status_code == 200 and r.json()["label"] == "I love you, beta"
+    mid = r.json()["id"]
+    assert [m["label"] for m in client.get("/api/messages").json()] == ["I love you, beta"]
+    got = client.get(f"/api/messages/{mid}/audio")
+    assert got.content == audio and got.headers["content-type"] == "audio/wav"
+    assert client.post("/api/messages?label=x", content=b"").status_code == 400
+    assert client.post("/api/messages?label=", content=audio).status_code == 400
+    assert client.post("/api/messages?label=big", content=b"0" * (8 * 1024 * 1024 + 1)).status_code == 413
+    assert client.delete(f"/api/messages/{mid}").status_code == 200 and client.get("/api/messages").json() == []
+    assert client.get(f"/api/messages/{mid}/audio").status_code == 404

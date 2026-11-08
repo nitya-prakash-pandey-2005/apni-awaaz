@@ -1,9 +1,14 @@
 // Speak board: type in any script, pick a language, tap a quick phrase; spoken in the user's own voice.
 import { useEffect, useState } from "react";
-import { History, Volume2 } from "lucide-react";
-import { Badge, Card } from "../ui";
+import { Heart, History, ScanLine, Volume2 } from "lucide-react";
+import { Badge, Card, Seg } from "../ui";
 import { useApi, useSpeak } from "../lib/api";
 import { LangChips } from "../lib/langs";
+import { useScan } from "../lib/scan";
+import BankRecorder from "../components/BankRecorder";
+
+const SPEEDS = [{ value: 1000, label: "Fast" }, { value: 1500, label: "Medium" }, { value: 2500, label: "Slow" }];
+const playOriginal = (m) => new Audio(`/api/messages/${m.id}/audio`).play().catch(() => {});
 
 export function VoiceBadge({ last }) {
   if (!last) return null;
@@ -16,6 +21,10 @@ export default function Speak({ profile }) {
   const [history, setHistory] = useState([]);
   const { busy, last, say } = useSpeak();
   const { data: phrases, reload } = useApi(`/api/phrases?lang=${lang}`);
+  const { data: messages, reload: reloadMessages } = useApi("/api/messages");
+  const [scanOn, setScanOn] = useState(false);
+  const [speed, setSpeed] = useState(1500);
+  const items = [...(messages || []).map((m) => ({ kind: "msg", m })), ...(phrases || []).map((p) => ({ kind: "phrase", p }))];
   useEffect(() => { if (profile?.language) setLang(profile.language); }, [profile?.language]);
 
   const speak = async (t) => {
@@ -26,8 +35,31 @@ export default function Speak({ profile }) {
     }
   };
 
+  const pick = (i) => { const it = items[i]; if (it) (it.kind === "msg" ? playOriginal(it.m) : speak(it.p)); };
+  const scan = useScan({ count: items.length, active: scanOn, intervalMs: speed, onSelect: pick });
+  const nMsg = (messages || []).length;
+
   return (
     <div className="stack">
+      <Card title="Switch scanning" icon={ScanLine} right={<label className="row small"><input type="checkbox" checked={scanOn} onChange={(e) => setScanOn(e.target.checked)} /> On</label>}>
+        <div className="small muted">For stroke and ALS users who cannot type or tap: the highlight moves by itself; press Space or Enter (or an assistive switch), or the big button, to speak the highlighted phrase.</div>
+        {scanOn && (
+          <div className="stack-sm" style={{ marginTop: 10 }}>
+            <Seg options={SPEEDS} value={speed} onChange={setSpeed} />
+            <button className="btn primary lg block" onClick={scan.select}>Select</button>
+          </div>
+        )}
+      </Card>
+
+      {nMsg > 0 && (
+        <Card title="In my own recorded voice" icon={Heart}>
+          <div className="phrase-grid">
+            {messages.map((m, i) => (
+              <button key={m.id} className={`phrase banked ${scan.idx === i ? "scan-on" : ""}`} onClick={() => playOriginal(m)}>{m.label}</button>
+            ))}
+          </div>
+        </Card>
+      )}
       <Card title="Say anything" right={<VoiceBadge last={last} />}>
         <div className="stack-sm">
           <textarea className="textarea big-text" rows={3} value={text} onChange={(e) => setText(e.target.value)}
@@ -43,10 +75,14 @@ export default function Speak({ profile }) {
 
       <Card title="Quick phrases">
         <div className="phrase-grid">
-          {(phrases || []).map((p) => (
-            <button key={p} className="phrase" disabled={busy} onClick={() => speak(p)}>{p}</button>
+          {(phrases || []).map((p, i) => (
+            <button key={p} className={`phrase ${scan.idx === nMsg + i ? "scan-on" : ""}`} disabled={busy} onClick={() => speak(p)}>{p}</button>
           ))}
         </div>
+      </Card>
+
+      <Card title="Bank a message in your real voice" icon={Heart}>
+        <BankRecorder onSaved={reloadMessages} />
       </Card>
 
       {history.length > 0 && (

@@ -27,6 +27,7 @@ class ProfileStore:
         self.db.executescript(
             "CREATE TABLE IF NOT EXISTS profile (id INTEGER PRIMARY KEY CHECK (id = 1), data TEXT);"
             "CREATE TABLE IF NOT EXISTS phrases (text TEXT, lang TEXT, uses INTEGER DEFAULT 0, PRIMARY KEY (text, lang));"
+            "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, label TEXT, mime TEXT, audio BLOB, created TEXT);"
         )
 
     def get(self) -> Profile | None:
@@ -57,3 +58,23 @@ class ProfileStore:
     def top_phrases(self, lang: str, n: int = 12) -> list[str]:
         rows = self.db.execute("SELECT text FROM phrases WHERE lang = ? ORDER BY uses DESC, rowid LIMIT ?", (lang, n))
         return [r[0] for r in rows]
+
+    # message banking: the person's own recordings, kept and replayed as they are (no AI)
+    def add_message(self, label: str, mime: str, audio: bytes) -> dict:
+        created = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        cur = self.db.execute("INSERT INTO messages (label, mime, audio, created) VALUES (?, ?, ?, ?)",
+                              (label, mime, audio, created))
+        self.db.commit()
+        return {"id": cur.lastrowid, "label": label, "created": created}
+
+    def list_messages(self) -> list[dict]:
+        rows = self.db.execute("SELECT id, label, created FROM messages ORDER BY id")
+        return [{"id": r[0], "label": r[1], "created": r[2]} for r in rows]
+
+    def message_audio(self, mid: int) -> tuple[str, bytes] | None:
+        row = self.db.execute("SELECT mime, audio FROM messages WHERE id = ?", (mid,)).fetchone()
+        return (row[0], row[1]) if row else None
+
+    def delete_message(self, mid: int) -> None:
+        self.db.execute("DELETE FROM messages WHERE id = ?", (mid,))
+        self.db.commit()

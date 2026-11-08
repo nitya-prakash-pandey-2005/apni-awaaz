@@ -7,6 +7,10 @@ Part of our entry to Gnani AI's *Great Indian AI Internship Challenge* (#GnaniAI
 
 > **New here? Read `docs/START-HERE.md` first.** Status: under active development (8–10 Nov 2026). Read `docs/02-design.md`, then `docs/03-build-plan.md`. Team rules: `docs/TEAM-PLAYBOOK.md`. Task board: `docs/STATUS.md`.
 
+## Beyond cloning
+- **Message banking:** record real phrases before surgery (or cut them from old voice notes); they play back exactly as recorded, next to the cloned voice.
+- **Switch scanning:** stroke and ALS users who cannot type or tap pick phrases with one switch (Space/Enter) while the highlight steps through them.
+
 ## Quick start
 ```bash
 uv sync --all-packages

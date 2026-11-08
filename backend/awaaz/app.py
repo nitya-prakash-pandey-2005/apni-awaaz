@@ -31,6 +31,7 @@ from .speak import LANGS, RATE, speak
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("awaaz")
 MAX_CLIP_S = 30  # Gnani voice cloning takes 5-30 s of reference audio
+MAX_MESSAGE_BYTES = 8 * 1024 * 1024
 
 
 class ProfileIn(BaseModel):
@@ -138,6 +139,35 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
             raise HTTPException(502, f"voice cloning failed, the fallback voice stays on: {e}") from None
         p = store.set_voice(emb, q)
         return {"profile": public(p), "test_text": test_phrase(p.language)}
+
+    @app.post("/api/messages")
+    async def bank_message(request: Request, label: str = ""):
+        """Message banking: an original recording of the person (e.g. before surgery), replayed as it is."""
+        audio = await request.body()
+        if not audio or not label.strip():
+            raise HTTPException(400, "a label and an audio recording are required")
+        if len(audio) > MAX_MESSAGE_BYTES:
+            raise HTTPException(413, "recording too large (8 MB max)")
+        mime = (request.headers.get("content-type") or "audio/webm").split(";")[0]
+        if not mime.startswith("audio/"):
+            mime = "audio/webm"
+        return store.add_message(label.strip()[:80], mime, audio)
+
+    @app.get("/api/messages")
+    async def list_messages():
+        return store.list_messages()
+
+    @app.get("/api/messages/{mid}/audio")
+    async def message_audio(mid: int):
+        got = store.message_audio(mid)
+        if not got:
+            raise HTTPException(404, "recording not found")
+        return Response(got[1], media_type=got[0])
+
+    @app.delete("/api/messages/{mid}")
+    async def delete_message(mid: int):
+        store.delete_message(mid)
+        return {"ok": True}
 
     @app.delete("/api/voice")
     async def delete_voice():
