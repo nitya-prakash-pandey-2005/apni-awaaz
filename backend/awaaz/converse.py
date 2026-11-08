@@ -71,7 +71,7 @@ class ListenSession:
         keyterms = [x for x in [self.profile.name, *self.profile.family_names] if x]
         kw = dict(sample_rate=RATE, keyterms=keyterms or None)
         if self.settings.stt_mode == "turn":
-            return TurnBasedStt(self.settings.gnani_api_key, language_code=f"{self.profile.language},en-IN", **kw)
+            return TurnBasedStt(self.settings.gnani_api_key, language_code=",".join(dict.fromkeys([self.profile.language, "en-IN"])), **kw)
         return PrismaStream(self.settings.gnani_api_key, language_code="indic-auto", **kw)
 
     async def start(self) -> None:

@@ -19,7 +19,6 @@ _SCRIPT_LANGS = {
     "LATIN": {"en-IN"}, "DEVANAGARI": {"hi-IN", "mr-IN"}, "BENGALI": {"bn-IN"}, "TAMIL": {"ta-IN"},
     "TELUGU": {"te-IN"}, "KANNADA": {"kn-IN"}, "MALAYALAM": {"ml-IN"}, "GUJARATI": {"gu-IN"}, "GURMUKHI": {"pa-IN"},
 }
-_rewrites: dict[tuple[str, str], str] = {}  # ponytail: unbounded in-memory memo, fine for one user
 
 
 def script_of(text: str) -> str:
@@ -35,11 +34,12 @@ def needs_rewrite(text: str, out_lang: str) -> bool:
     return out_lang not in _SCRIPT_LANGS.get(script_of(text), set())
 
 
-async def rewrite(text: str, out_lang: str, llm) -> tuple[str, bool]:
+async def rewrite(text: str, out_lang: str, llm, memo: dict | None = None) -> tuple[str, bool]:
     if not needs_rewrite(text, out_lang):
         return text, False
-    if (text, out_lang) in _rewrites:
-        return _rewrites[(text, out_lang)], True
+    memo = {} if memo is None else memo
+    if (text, out_lang) in memo:
+        return memo[(text, out_lang)], True
     lang = LANGS.get(out_lang, out_lang)
     msgs = [{"role": "system", "content": f"Rewrite the user's sentence in {lang}, in its native script. If it is already {lang} "
                                           "in Latin letters, transliterate it; otherwise translate it. Keep names. Output only the sentence."},
@@ -51,13 +51,13 @@ async def rewrite(text: str, out_lang: str, llm) -> tuple[str, bool]:
         out = ""
     if not out:
         return text, False
-    _rewrites[(text, out_lang)] = out
+    memo[(text, out_lang)] = out
     return out, True
 
 
 async def speak(text: str, out_lang: str, profile, settings, llm, cache, *,
-                clone_fn=tts_clone_rest, tts_fn=tts_rest) -> tuple[bytes, dict]:
-    spoken, translated = await rewrite(text.strip(), out_lang, llm)
+                clone_fn=tts_clone_rest, tts_fn=tts_rest, memo: dict | None = None) -> tuple[bytes, dict]:
+    spoken, translated = await rewrite(text.strip(), out_lang, llm, memo)
     meta = {"voice": "clone", "spoken_text": spoken, "translated": translated}
     if profile and profile.voice:
         emb_id = hashlib.sha1(str(profile.voice.get("embedding", ""))[:4096].encode()).hexdigest()[:12]

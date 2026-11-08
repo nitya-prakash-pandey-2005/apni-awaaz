@@ -23,3 +23,9 @@ def default_phrases(lang: str) -> list[str]:
 
 def sos_text(lang: str) -> str:
     return SOS.get(lang, SOS["en-IN"])
+
+TEST = {"en-IN": "Hello, this is my voice.", "hi-IN": "नमस्ते, ये मेरी आवाज़ है।", "ta-IN": "வணக்கம், இது என் குரல்."}
+
+
+def test_phrase(lang: str) -> str:
+    return TEST.get(lang, TEST["en-IN"])
