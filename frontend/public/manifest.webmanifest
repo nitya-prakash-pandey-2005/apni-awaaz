@@ -1,8 +1,8 @@
 {
-  "name": "My App",
-  "short_name": "App",
-  "description": "Replace with your app's description.",
-  "start_url": "/#/app",
+  "name": "Apni Awaaz",
+  "short_name": "Apni Awaaz",
+  "description": "Speak again in your own voice, in 10 Indian languages.",
+  "start_url": "/#/speak",
   "scope": "/",
   "display": "standalone",
   "background_color": "#05060f",
