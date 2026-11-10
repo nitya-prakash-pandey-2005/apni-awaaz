@@ -9,6 +9,7 @@ For people who have lost their voice, or are losing it, to throat or oral cancer
 [![Timbre v3.0](https://img.shields.io/badge/Gnani-Timbre%20v3.0-db2777)](#gnani-models-used-exactly)
 [![Prisma v3.0](https://img.shields.io/badge/Gnani-Prisma%20v3.0-0891b2)](#gnani-models-used-exactly)
 [![Tests](https://img.shields.io/badge/tests-219%20passing-16a34a)](#tests)
+[![CI](https://github.com/nitya-prakash-pandey-2005/apni-awaaz/actions/workflows/ci.yml/badge.svg)](https://github.com/nitya-prakash-pandey-2005/apni-awaaz/actions/workflows/ci.yml)
 [![PWA](https://img.shields.io/badge/PWA-installable-334155)](#accessibility)
 [![10 Indian languages](https://img.shields.io/badge/languages-10%20Indian-f59e0b)](#what-it-does)
 
