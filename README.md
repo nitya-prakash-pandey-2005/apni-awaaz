@@ -328,7 +328,7 @@ uv run python -m pytest -q     # 92 passed
 
 ## Team and family
 
-Design and shared voice engine: **Nitya Prakash Pandey**. Implementation and live testing: **Dilavesh Kanz Nidooli**. Final review and hardening: **Nitya Prakash Pandey**.
+Team: **Nitya Prakash Pandey** · **Dilavesh Kanz Nidooli**
 
 Part of a three-product entry built on one Gnani voice engine: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers) (flagship: an AI grandmother who wastes scammers' time), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) (an overflow emergency voice line for floods and disasters), and Apni Awaaz. Combined pitch: [Dadi's PITCH.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/PITCH.md).
 
