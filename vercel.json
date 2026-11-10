@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "cd frontend && npm install",
+  "buildCommand": "cd frontend && npm run build:demo",
+  "outputDirectory": "frontend/dist",
+  "headers": [
+    { "source": "/demo/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }] }
+  ]
+}
