@@ -334,11 +334,11 @@ See [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) for the Vercel setup (`vercel
 ## Tests
 
 ```bash
-uv run python -m pytest -q     # 121 passed
+uv run python -m pytest -q     # 123 passed
 cd frontend && npm test        # 8 passed (dwell timing, family share links)
 ```
 
-- **Where does it hurt? (15 tests):** every body part × side × pain type × onset × level 0 to 10 in Hindi, Tamil and English (4,400 sentences per language), checking Hindi possessive and left/right agreement against an independent gender table, the postposition after the body part, and the score words; other languages fall back to English; bad input is refused; the endpoint's sentence speaks through `/api/speak`. The browser builder gives the same 17,600 sentences as the server (checked with Node during development).
+- **Where does it hurt? (15 tests):** every body part × side × pain type × onset × level 0 to 10 in Hindi, Tamil and English (4,400 sentences per language), checking Hindi possessive and left/right agreement against an independent gender table, the postposition after the body part, and the score words; other languages fall back to English; bad input is refused; the endpoint's sentence speaks through `/api/speak`. The browser builder gives the same 17,600 sentences as the server, and the browser predictor the same suggestions on 17 cases (2 tests run the web app's JavaScript with Node; skipped if Node is not installed).
 - **Word prediction (14 tests):** phrase completion from a partial word, romanised and native Hindi kept in the typed script, next word after a space, context from mid-sentence, the person's own phrases ranked above the starter list (more uses rank higher), at most five unique chips, the keystrokes-saved formula, and the endpoint learning from what was spoken.
 - **App (30 tests):** consent is required before a voice is built; voice-note checks (too short, clipping, noise, no clear speech, a long note judged on the 30 s actually used); romanised Hindi rewritten then cloned; clone failure falls back to Timbre; Delete my voice also deletes cloned audio; SOS in two languages, and SOS text returned when speech fails; message banking keeps the original recording; live captions with suggested replies and the echo guard; parallel Speak presses never overlap Gnani calls, and a 429 is retried without losing the cloned voice.
 - **Shared voice engine (62 tests):** Gnani protocol (headers, embeddings, TTS bodies), the request gate and retries, audio utilities, the LLM wrapper, turn handling and the realtime session.
