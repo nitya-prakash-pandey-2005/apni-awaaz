@@ -12,6 +12,8 @@ import Converse from "./pages/Converse";
 import Sos from "./pages/Sos";
 import Profile from "./pages/Profile";
 import DwellLayer from "./components/DwellLayer";
+import Landing from "./landing/Landing";
+import { standalone } from "./motion/prefs";
 
 const NAV = [{ group: "Apni Awaaz", items: [
   { to: "/speak", label: "Speak", icon: Volume2 },
@@ -54,9 +56,12 @@ export default function App() {
   const { data: loaded, error, reload } = useApi("/api/profile");
   const profile = loaded || (error ? OFFLINE_PROFILE : null);
   const path = HEADS[route.path] ? route.path : null;
+  const landing = route.path === "/" && !standalone(); // browsers open on the product page; the installed app opens on Speak
   useEffect(() => {
-    if (!path && profile) window.location.hash = profile.has_voice ? "/speak" : "/voice";
-  }, [path, profile]);
+    if (!path && !landing && profile) window.location.hash = profile.has_voice ? "/speak" : "/voice";
+  }, [path, landing, profile]);
+  useEffect(() => { if (!landing) window.scrollTo(0, 0); }, [landing]);
+  if (landing) return <Landing />;
 
   const page = { "/speak": Speak, "/pain": Pain, "/converse": Converse, "/sos": Sos, "/voice": VoiceBank, "/profile": Profile }[path];
   const [kicker, title, sub] = HEADS[path] || [];
