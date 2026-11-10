@@ -22,3 +22,20 @@ awaaz = { workspace = true }
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["voice-core/tests", "backend/tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 150
+extend-exclude = ["frontend", "cache", "docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = [
+  "E501",  # long lines are kept where a one-line expression reads better; the formatter is not enforced
+  "E731",  # small lambdas as stt/llm factories in tests
+  "B008",  # FastAPI-style defaults in signatures
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["awaaz"]
+known-third-party = ["voice_core"]  # the shared engine is vendored per repo; imported like a library

@@ -79,7 +79,7 @@ class ScriptedStt:
             try:
                 await asyncio.wait_for(self._closed.wait(), timeout=self.every)
                 break
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 yield SttEvent("transcript", text=line, language="hi-IN", latency_ms=180.0)
         await self._closed.wait()
         yield SttEvent("closed")

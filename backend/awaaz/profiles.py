@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import sqlite3
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from pydantic import BaseModel
@@ -42,7 +42,7 @@ class ProfileStore:
     def set_voice(self, embedding: dict, source_clip_meta: dict) -> Profile:
         p = self.get() or Profile()
         p.voice, p.voice_meta = embedding, source_clip_meta
-        p.consent_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        p.consent_at = datetime.now(UTC).isoformat(timespec="seconds")
         return self.save(p)
 
     def delete_voice(self) -> Profile:
@@ -61,7 +61,7 @@ class ProfileStore:
 
     # message banking: the person's own recordings, kept and replayed as they are (no AI)
     def add_message(self, label: str, mime: str, audio: bytes) -> dict:
-        created = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        created = datetime.now(UTC).isoformat(timespec="seconds")
         cur = self.db.execute("INSERT INTO messages (label, mime, audio, created) VALUES (?, ?, ?, ?)",
                               (label, mime, audio, created))
         self.db.commit()
