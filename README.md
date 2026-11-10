@@ -13,7 +13,7 @@ For people who have lost their voice, or are losing it, to throat or oral cancer
 [![PWA](https://img.shields.io/badge/PWA-installable-334155)](#accessibility)
 [![10 Indian languages](https://img.shields.io/badge/languages-10%20Indian-f59e0b)](#what-it-does)
 
-**Live demo:** [apni-awaaz-kappa.vercel.app](https://apni-awaaz-kappa.vercel.app/) &nbsp;·&nbsp; **Video:** *[video link]* &nbsp;·&nbsp; **One-page pitch:** [PDF](PITCH.pdf) · [Markdown](PITCH.md)
+**Live demo:** [apni-awaaz-kappa.vercel.app](https://apni-awaaz-kappa.vercel.app/) &nbsp;·&nbsp; **Video:** [Google Drive](https://drive.google.com/drive/folders/1byHuJr_KoofV7NTVx1sCutXupmnX0D_S?usp=sharing) &nbsp;·&nbsp; **One-page pitch:** [PDF](PITCH.pdf) · [Markdown](PITCH.md)
 <br/>
 **Combined pitch for all three products:** [THREE-PRODUCTS.pdf](docs/THREE-PRODUCTS.pdf) &nbsp;·&nbsp; **Sister repos:** [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers) · [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar)
 
