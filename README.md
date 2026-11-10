@@ -6,6 +6,8 @@
 
 **Your own voice, back.**
 
+**Live demo:** *[link]* · **One-page pitch:** [PITCH.md](PITCH.md)
+
 For people who have lost their voice, or are losing it, to throat or oral cancer surgery, stroke, ALS/MND or Parkinson's.
 Apni Awaaz rebuilds a person's own voice from old WhatsApp voice notes, then speaks for them in that voice in 10 Indian languages.
 
@@ -210,6 +212,8 @@ uv run python -m uvicorn awaaz.app:create_app --factory --host 127.0.0.1 --port 
 AWAAZ_FAKE=1 uv run python -m uvicorn awaaz.app:create_app --factory --host 127.0.0.1 --port 8767
 ```
 
+Static demo with no backend, as on the live link (it replays a recorded session): `cd frontend && npm run build:demo`, then serve `frontend/dist`. See [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md).
+
 PowerShell: run `$env:AWAAZ_FAKE = "1"` first, then the same command. For frontend development, `npm run dev` in `frontend/` serves on port 5193 and proxies API calls to the backend.
 
 ## Tests
@@ -230,6 +234,7 @@ uv run python -m pytest -q     # 92 passed
 - [docs/review-cl-2026-11-10.md](docs/review-cl-2026-11-10.md): final review, 16 findings and their fixes
 - [docs/06-demo-and-post.md](docs/06-demo-and-post.md): demo script
 - [docs/EVON-HOSTING.md](docs/EVON-HOSTING.md): how to host Evon v3.3
+- [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md): the static live demo (replays a recorded session, no backend) and how to refresh it
 - [docs/START-HERE.md](docs/START-HERE.md): for contributors
 
 ## Team and family
