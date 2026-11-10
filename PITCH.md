@@ -11,7 +11,9 @@ Apni Awaaz rebuilds a person's **own** voice from the WhatsApp voice notes they 
 - **My voice:** consent first, then a quality check on each note (speech length, clipping, noise, and a Prisma v3.0 transcript), then Gnani zero-shot voice cloning.
 - **Speak:** type in any of 10 Indian languages, or romanised ("mujhe paani chahiye"), or tap a quick phrase. It is spoken through `vachana-vc-v1`, and a badge always says whose voice you heard.
 - **Converse:** live captions of the other person (Prisma v3.0 streaming) and three suggested replies; one tap speaks a reply in your voice.
-- **Banked messages, switch scanning** for stroke and ALS users, and **SOS** that still speaks, in the phone's voice, when the server is down.
+- **Banked messages, switch scanning and dwell selection** for stroke and ALS users, **word prediction** that saves keystrokes, and **SOS** that still speaks when the server is down and shares your location with family.
+- **Where does it hurt?** Tap the body, pick how bad: one grammatical sentence, spoken in your voice.
+- **Visit notes:** after a doctor's visit, the medicines, doses, tests and warning signs (each checked against what was actually said) are read back in your own voice and can be sent to family.
 
 ## Proof (live Gnani runs, synthetic voices)
 
@@ -19,7 +21,8 @@ Apni Awaaz rebuilds a person's **own** voice from the WhatsApp voice notes they 
 - All 7 cloned clips were transcribed back by Prisma word for word, in Hindi and Tamil.
 - Two simultaneous Speak presses were both spoken in the cloned voice, with no rate-limit error.
 - Delete my voice removed the embedding, the consent record and every cloned clip.
-- 92 automated tests pass. Details: [docs/test-log.md](docs/test-log.md).
+- Visit notes from a live doctor visit kept the medicine and its dose exactly as spoken; the read-back in the cloned voice was transcribed back by Prisma in full.
+- 244 Python and 12 JavaScript tests pass; CI is green on GitHub. Details: [docs/test-log.md](docs/test-log.md).
 
 ## How it is different
 Cloning a voice from old WhatsApp notes is **not new**: ElevenLabs' free Impact Program already does it, in [14 Indian languages](https://cxotoday.com/media-coverage/elevenlabs-charts-next-phase-of-india-growth-at-first-summit-in-bengaluru/), for people who apply ([MIT Technology Review](https://www.technologyreview.com/2025/02/13/1111882/motor-neuron-diseases-took-their-voices-ai-bringing-them-back/)). Apple Personal Voice needs a fresh recording made while you can still speak, and supports no Indian language ([Apple](https://www.apple.com/ios/feature-availability/)). Avaz and Jellow are Indian AAC apps, but they do not clone your voice. To our knowledge, no free, India-first phone app combines all three: your own voice from notes you already have, 10 Indian languages with code-mix, and a conversation mode with captions and suggested replies.
@@ -30,4 +33,4 @@ Every voice in our demos is synthetic (Gnani Timbre). We never cloned a real per
 ## Team
 Team: Nitya Prakash Pandey · Dilavesh Kanz Nidooli.
 
-One Gnani voice engine, three products: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) and Apni Awaaz. Combined pitch: [Dadi's PITCH.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/PITCH.md). #GnaniAI #GreatIndianAIInternshipChallenge
+One Gnani voice engine, three products: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) and Apni Awaaz. All three: [THREE-PRODUCTS.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/docs/THREE-PRODUCTS.md). #GnaniAI #GreatIndianAIInternshipChallenge
