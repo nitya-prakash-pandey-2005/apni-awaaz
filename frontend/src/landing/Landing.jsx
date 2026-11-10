@@ -4,7 +4,7 @@ import { REPO } from "../lib/demo";
 import { reducedMotion } from "../motion/prefs";
 import { startLanding } from "./animate";
 import {
-  APP_ENTRY, COMPARE, DADI_URL, FACTS, FEATURES, PIPE_BUILD, PIPE_TALK, PUKAAR_URL, RESULTS, STORIES, VIDEO_URL,
+  APP_ENTRY, COMPARE, DADI_URL, FACTS, FEATURES, PIPE_BUILD, PIPE_TALK, PUKAAR_URL, RESULTS, STORIES, TIMINGS, VIDEO_URL,
 } from "./content";
 
 const BARS = [[130, 130.5, 94.9], [183, 118.7, 149.5], [236, 164.2, 161.9], [289, 118.7, 149.5], [342, 130.5, 94.9]];
@@ -39,11 +39,11 @@ function Phone({ img, alt, eager = false }) {
   );
 }
 
-function Count({ value, decimals = 0, format, suffix = "" }) {
+function Count({ value, decimals = 0, format, suffix = "", tail = "" }) {
   const shown = format === "in" ? value.toLocaleString("en-IN") : value.toFixed(decimals);
   return (
     <span className="lp-count" data-count={value} data-decimals={decimals} data-format={format || ""}>
-      <span className="lp-count-v">{shown}</span>{suffix && <small className="lp-count-s">{suffix}</small>}
+      <span className="lp-count-v">{shown}</span>{tail}{suffix && <small className="lp-count-s">{suffix}</small>}
     </span>
   );
 }
@@ -72,6 +72,32 @@ function Pipeline({ steps, label, id }) {
             </li>
           ))}
         </ol>
+      </div>
+    </figure>
+  );
+}
+
+const MAX_S = 3;
+const pct = (v) => `${(v / MAX_S) * 100}%`;
+const secs = (t) => (t.min === t.max ? `${t.min} s` : `${t.min}–${t.max} s`);
+
+function Timings() {
+  return (
+    <figure className="lp-chart" data-reveal="chart">
+      <figcaption><b>Server time per step</b><span>Live Gnani calls, 10 Nov 2026. Bars show the range over the logged runs.</span></figcaption>
+      <div className="lp-chart-plot">
+        <div className="lp-chart-grid" aria-hidden="true">
+          {[0, 0.5, 1, 1.5, 2, 2.5, 3].map((v) => <span key={v} style={{ left: pct(v) }}><i>{v} s</i></span>)}
+        </div>
+        {TIMINGS.map((t) => (
+          <div key={t.step} className="lp-chart-row" tabIndex={0} aria-label={`${t.step}: ${secs(t)}`} title={`${t.step}: ${secs(t)}`}>
+            <span className="lp-chart-l">{t.step}</span>
+            <span className="lp-chart-track">
+              <span className="lp-chart-bar" style={{ left: pct(t.min), width: `max(10px, ${((t.max - t.min) / MAX_S) * 100}%)` }} />
+              <span className="lp-chart-v" style={{ left: `calc(${pct(t.max)} + 14px)` }}>{secs(t)}</span>
+            </span>
+          </div>
+        ))}
       </div>
     </figure>
   );
@@ -196,6 +222,7 @@ export default function Landing() {
                 </div>
               ))}
             </div>
+            <Timings />
             <p className="lp-fine" data-reveal>Synthetic voices, recorded 8 and 10 Nov 2026. Full log in the repository&rsquo;s docs/test-log.md.</p>
           </div>
         </section>

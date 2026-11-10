@@ -50,7 +50,7 @@ export const PIPE_TALK = [
 
 export const RESULTS = [
   { value: 0.67, decimals: 2, suffix: " s", label: "to build your voice", note: "Gnani embedding call, 10 Nov" },
-  { value: 1.2, decimals: 1, suffix: "–1.65 s", label: "to speak a sentence", note: "in the cloned voice, 8 Nov" },
+  { value: 1.2, decimals: 1, tail: "–1.65", suffix: " s", label: "to speak a sentence", note: "in the cloned voice, 8 Nov" },
   { value: 7, suffix: " / 7", label: "cloned clips understood word for word", note: "re-transcribed by Prisma, Hindi and Tamil" },
   { value: 256, label: "automated tests passing", note: "244 Python + 12 JavaScript" },
 ];
@@ -59,4 +59,12 @@ export const COMPARE = [
   { name: "Apple Personal Voice", rows: ["No Indian language", "Needs a fresh recording while you can still speak", "Free on Apple devices"] },
   { name: "ElevenLabs Impact Program", rows: ["Already clones from WhatsApp notes", "14 Indian languages", "A general voice platform, not built around conversation, to our knowledge", "Free licence, apply first"] },
   { name: "Apni Awaaz", us: true, rows: ["Your own voice from notes you already have", "10 Indian languages, code-mix and romanised typing", "Conversation first: phrases, live captions, suggested replies", "SOS that works when the server is down", "Free, no application step"] },
+];
+
+// Server time per step on 10 Nov (README "Measured results"); ranges are min-max over the runs logged.
+export const TIMINGS = [
+  { step: "Check a voice note", min: 0.27, max: 0.69 },
+  { step: "Build your voice", min: 0.67, max: 0.67 },
+  { step: "Converse reply in your voice", min: 1.3, max: 1.3 },
+  { step: "Speak a sentence in your voice", min: 1.5, max: 2.2 },
 ];

@@ -62,7 +62,7 @@ function History_({ title = "Spoken in your voice", filter = () => true, limit =
   const list = (Array.isArray(recs) ? recs : []).filter((r) => r.file && filter(r)).slice(0, limit);
   if (!DEMO || !list.length) return null;
   return (
-    <Card title={title} icon={History} right={<Badge tone="cyan">Recorded live · 10 Nov</Badge>} className="aa-aside-card">
+    <Card title={title} icon={History} right={<Badge tone="cyan">Live · 10 Nov</Badge>} className="aa-aside-card">
       <div className="aa-hist">
         {list.map((r) => (
           <div key={r.file} className="aa-hist-row">

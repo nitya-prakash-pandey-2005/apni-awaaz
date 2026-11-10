@@ -66,6 +66,12 @@ export function startLanding(root) {
       io.unobserve(e.target);
       const el = e.target;
       if (el.matches("[data-pipe]")) { el.classList.add("in"); pipeline(el); return; }
+      if (el.dataset.reveal === "chart") {
+        animate(el, { opacity: [0, 1], y: [20, 0], duration: 700, ease: "outExpo" });
+        animate(el.querySelectorAll(".lp-chart-bar"), { scaleX: [0, 1], delay: stagger(140, { start: 250 }), duration: 900, ease: "outExpo" });
+        animate(el.querySelectorAll(".lp-chart-v"), { opacity: [0, 1], delay: stagger(140, { start: 700 }), duration: 500, ease: "outQuad" });
+        return;
+      }
       const media = el.dataset.reveal === "media";
       animate(el, { opacity: [0, 1], y: [media ? 48 : 24, 0], scale: media ? [0.94, 1] : [1, 1], duration: media ? 1100 : 800, ease: "outExpo", onBegin: () => el.classList.add("in") });
       el.querySelectorAll?.("[data-count]").forEach(countUp);
