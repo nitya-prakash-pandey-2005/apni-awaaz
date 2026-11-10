@@ -45,6 +45,8 @@
 
 /* HUD label */
 .hud { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+/* Indic scripts break with letter-spacing (the matras detach), so Indic kickers use the Indic font, unspaced. */
+.hud.hud-indic { font-family: var(--font-hi); letter-spacing: 0; font-size: 13px; font-weight: 600; text-transform: none; }
 .hud.c-pink { color: var(--pink-2); } .hud.c-cyan { color: var(--cyan); } .hud.c-violet { color: var(--violet-2); } .hud.c-green { color: var(--green); } .hud.c-amber { color: var(--amber); }
 
 /* ---------- badges / chips ---------- */

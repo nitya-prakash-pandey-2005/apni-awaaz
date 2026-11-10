@@ -115,7 +115,7 @@ export function PageHead({ kicker, title, sub, right, tour }) {
   return (
     <div className="page-head" data-tour={tour}>
       <div className="grow">
-        {kicker && <Hud tone="pink">{kicker}</Hud>}
+        {kicker && <Hud tone="pink" className={/[ऀ-෿]/.test(kicker) ? "hud-indic" : ""}>{kicker}</Hud>}
         <h1 style={{ marginTop: kicker ? 6 : 0 }}>{title}</h1>
         {sub && <p>{sub}</p>}
       </div>
