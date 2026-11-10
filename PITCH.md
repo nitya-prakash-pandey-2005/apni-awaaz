@@ -28,6 +28,6 @@ Cloning a voice from old WhatsApp notes is **not new**: ElevenLabs' free Impact 
 Every voice in our demos is synthetic (Gnani Timbre). We never cloned a real person. The live demo replays a real recorded session and has no backend. Consent is enforced by the API, and deletion is real.
 
 ## Team
-Design and shared voice engine: Nitya Prakash Pandey. Implementation and live testing: Dilavesh Kanz Nidooli. Final review and hardening: Nitya Prakash Pandey.
+Team: Nitya Prakash Pandey · Dilavesh Kanz Nidooli.
 
 One Gnani voice engine, three products: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) and Apni Awaaz. Combined pitch: [Dadi's PITCH.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/PITCH.md). #GnaniAI #GreatIndianAIInternshipChallenge
