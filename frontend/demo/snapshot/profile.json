@@ -1,0 +1,22 @@
+{
+ "name": "Suresh Sharma",
+ "language": "hi-IN",
+ "family_names": [
+  "Meena",
+  "Ravi"
+ ],
+ "condition": "after throat cancer surgery (laryngectomy)",
+ "voice_meta": {
+  "duration_s": 8.08,
+  "speech_s": 6.12,
+  "clipping_pct": 0.0,
+  "snr_db": 105.3,
+  "ok": true,
+  "reasons": [],
+  "text": "हाँ रमेश भाई, कल सुबह दस बजे मंदिर के पास मिलते हैं। वो सारे कागज साथ लेकर आना, बाकी बात वहीं आराम से करेंगे।",
+  "lang": "hi-IN"
+ },
+ "fallback_voice": "Shivani",
+ "consent_at": "2026-11-10T14:00:59+00:00",
+ "has_voice": true
+}

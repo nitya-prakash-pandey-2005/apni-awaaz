@@ -1,0 +1,51 @@
+{
+ "clips": [
+  {
+   "name": "PTT-20240312-WA0007.wav",
+   "file": "audio/notes/PTT-20240312-WA0007.wav",
+   "quality": {
+    "duration_s": 10.64,
+    "speech_s": 7.64,
+    "clipping_pct": 0.0,
+    "snr_db": 101.4,
+    "ok": true,
+    "reasons": [],
+    "text": "अरे बेटा, मैं घर पहुँच गया हूँ, रास्ते में थोड़ी बारिश थी पर सब ठीक है, तुम खाना खा लेना। और मां को बोल देना कि मैं शाम को phone करूंगा।",
+    "lang": "hi-IN"
+   }
+  },
+  {
+   "name": "PTT-20240521-WA0015.wav",
+   "file": "audio/notes/PTT-20240521-WA0015.wav",
+   "quality": {
+    "duration_s": 8.08,
+    "speech_s": 6.12,
+    "clipping_pct": 0.0,
+    "snr_db": 105.3,
+    "ok": true,
+    "reasons": [],
+    "text": "हाँ रमेश भाई, कल सुबह दस बजे मंदिर के पास मिलते हैं। वो सारे कागज साथ लेकर आना, बाकी बात वहीं आराम से करेंगे।",
+    "lang": "hi-IN"
+   }
+  },
+  {
+   "name": "PTT-20240602-WA0021.wav",
+   "file": "audio/notes/PTT-20240602-WA0021.wav",
+   "quality": {
+    "duration_s": 2.0,
+    "speech_s": 1.02,
+    "clipping_pct": 0.0,
+    "snr_db": 101.8,
+    "ok": false,
+    "reasons": [
+     "too short"
+    ],
+    "text": "हाँ, ठीक है।",
+    "lang": "hi-IN"
+   }
+  }
+ ],
+ "used": "PTT-20240521-WA0015.wav",
+ "test_text": "नमस्ते, ये मेरी आवाज़ है।",
+ "lang": "hi-IN"
+}

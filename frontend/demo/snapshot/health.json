@@ -1,0 +1,9 @@
+{
+ "gnani_key": false,
+ "llm_key": false,
+ "llm_provider": "groq",
+ "stt_mode": "stream",
+ "fake": false,
+ "has_voice": true,
+ "demo": true
+}

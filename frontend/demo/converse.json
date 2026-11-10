@@ -1,0 +1,26 @@
+{
+ "audio": "audio/nurse.wav",
+ "duration": 6.08,
+ "events": [
+  {
+   "t": 2.22,
+   "type": "caption",
+   "text": "नमस्ते शर्मा जी।"
+  },
+  {
+   "t": 4.28,
+   "type": "caption",
+   "text": "आज आपको कैसा लग रहा है?"
+  },
+  {
+   "t": 5.28,
+   "type": "suggestions",
+   "items": [
+    "मैं ठीक हूँ, धन्यवाद।",
+    "थोड़ा थका हुआ हूँ।",
+    "सब कुछ ठीक है।"
+   ]
+  }
+ ],
+ "note": "Caption and suggestion texts are from the live session; times follow the audio."
+}
