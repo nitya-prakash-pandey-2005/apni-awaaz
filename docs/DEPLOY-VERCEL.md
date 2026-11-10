@@ -3,18 +3,19 @@
 The live link is a **static demo build** of the real Apni Awaaz app. It has no backend and never calls Gnani or Groq, so it costs nothing to host and cannot use up API credits.
 
 It replays a real session recorded on Gnani's live servers on 10 Nov 2026, with synthetic voices only. In the demo:
-- **Speak** plays the sentences spoken live in the cloned voice, with the "Your voice" badge. Any other text shows: "In the demo, tap one of the recorded phrases; run it locally with your keys to speak anything." The banked messages play as recorded.
+- **Speak** plays the sentences spoken live in the cloned voice, with the "Your voice" badge. Other text typed in "Say anything" is read by the phone's own voice, with the "Phone's voice" badge; another quick phrase shows: "In the demo, tap one of the recorded phrases; run it locally with your keys to speak anything." The banked messages play as recorded. Word and phrase suggestions and the keystrokes-saved count work as in the real app (built in the browser from the same word list).
+- **Where does it hurt?** builds the same sentence as the server (same templates) and the phone's own voice reads it, with the "Phone's voice" badge.
 - **My voice** shows the three synthetic voice notes and their live quality results. Visitors can play each note and the test phrase. Uploading, recording and building are off.
 - **Converse** has "Play the recorded conversation": the nurse's audio, her live captions and the 3 suggested replies at the pace of the audio. Tapping the recorded reply plays it in the cloned voice. There is no microphone and no WebSocket.
 - **SOS** plays the recorded Hindi + Tamil SOS. Without that recording, it falls back to the phone's own voice, as the real app does when Gnani is down.
-- **Profile:** Save and Delete my voice explain that they are off in the demo.
+- **Profile:** Save and Delete my voice explain that they are off in the demo. The family contact for SOS and dwell selection work, because they are stored only in the browser; SOS then offers WhatsApp and SMS links with the location if the visitor allows it.
 - A banner on every page says what the demo is and links to GitHub. The service worker is off in the demo, and an old one is unregistered.
 
 The normal build (`npm run build`) is unchanged. It contains no demo files, and the demo code is switched off.
 
 ## How it works
 - `npm run build:demo` runs `vite build --mode demo`. `frontend/.env.demo` sets `VITE_DEMO=1`, and `vite.config.js` copies `frontend/demo/` to `dist/demo/`.
-- `frontend/src/lib/demo.js` answers every `/api` call in the browser from `dist/demo/`: GETs from `snapshot/*.json`, Speak and SOS from `recordings.json` and its audio, and everything else with a friendly "off in the demo" message.
+- `frontend/src/lib/demo.js` answers every `/api` call in the browser from `dist/demo/`: GETs from `snapshot/*.json`, Speak and SOS from `recordings.json` and its audio, `/api/predict` and `/api/pain/sentence` computed in the browser (`lib/predict.js`, `lib/pain.js`, on the same JSON as the server in `backend/awaaz/data/`), and everything else with a friendly "off in the demo" message.
 - `frontend/demo/` holds the recorded session:
 
 | File | What it is | Made by |
