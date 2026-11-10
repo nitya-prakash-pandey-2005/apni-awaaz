@@ -23,6 +23,7 @@ from voice_core.turns import is_meaningful
 
 from . import fake_mode
 from .converse import ListenSession
+from .gate import GnaniGate
 from .phrases import default_phrases, sos_text, test_phrase
 from .profiles import Profile, ProfileStore
 from .quality import clip_quality
@@ -70,6 +71,8 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
         stt_factory = stt_factory or fake_mode.ScriptedStt
     else:
         clone_fn, tts_fn, embed_fn, transcribe_fn = tts_clone_rest, tts_rest, create_voice_embedding, transcribe_rest
+    gate = GnaniGate()  # one REST request at a time per key (429 otherwise)
+    clone_fn, tts_fn, embed_fn, transcribe_fn = map(gate.wrap, (clone_fn, tts_fn, embed_fn, transcribe_fn))
     live: set[ListenSession] = set()
     rewrites: dict = {}  # ponytail: unbounded in-memory memo of LLM rewrites, fine for one user
     app = FastAPI(title="Apni Awaaz")
