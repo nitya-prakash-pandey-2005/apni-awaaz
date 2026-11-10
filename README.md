@@ -108,6 +108,13 @@ All on a 390 px phone, live against Gnani on 10 Nov 2026 (synthetic voice).
 <img src="docs/screenshots/product/speak-predict-390.png" width="250" alt="Speak: mujhe p typed, with suggestion chips mujhe paani chahiye, mujhe pyaas lagi hai, paani and pyaas" />
 </p>
 
+**7 · Visit notes: what the doctor said, checked, in your own voice** <sub>(from the static demo build, replaying the live 10 Nov run: synthetic doctor, real Prisma captions, real Groq summary, read-back in the cloned voice)</sub>
+
+<p>
+<img src="docs/screenshots/product/visit-notes-390.png" width="250" alt="Visit notes: the doctor's live captions, a medicines table with Pantoprazole, चालीस milligram, morning and empty stomach, the blood test and the warning sign" />&nbsp;
+<img src="docs/screenshots/product/visit-notes-play-390.png" width="250" alt="Visit notes: the read-back text, Play my visit notes, Download notes and audio, and WhatsApp or SMS to family" />
+</p>
+
 <details>
 <summary><b>Desktop screenshots (1440 px)</b></summary>
 
@@ -116,6 +123,7 @@ All on a 390 px phone, live against Gnani on 10 Nov 2026 (synthetic voice).
 <img src="docs/screenshots/product/sos-1440.png" width="720" alt="SOS page on desktop" />
 <img src="docs/screenshots/product/voice-1440.png" width="720" alt="Voice bank on desktop" />
 <img src="docs/screenshots/product/profile-1440.png" width="720" alt="Profile on desktop" />
+<img src="docs/screenshots/product/visit-notes-1440.png" width="720" alt="Visit notes on desktop (static demo build)" />
 <img src="docs/screenshots/product/pain-1440.png" width="720" alt="Where does it hurt on desktop (static demo build)" />
 
 </details>
@@ -279,6 +287,7 @@ All numbers come from real runs against Gnani's live APIs with synthetic voices 
 | SOS in Hindi and Tamil, cloned voice | 7.1 s to make both messages (10.7 s of audio) | 10 Nov |
 | Two Speak presses at the same moment | Both spoken in the cloned voice (2.0 s and 3.5 s, queued by the gate), no 429 | 10 Nov |
 | Delete my voice | Embedding and consent cleared, 9 cloned clips on disk → 0, the next Speak used the fallback voice (0.6 s) | 10 Nov |
+| Visit notes | A synthetic doctor visit captioned by Prisma (0.50 s), summarised by one Groq call (1.23 s) and read back in the cloned voice (7.7 s for 12 s of audio). Medicine, dose "चालीस milligram" as said, timing, test, warning sign and the patient's question kept; the LLM missed "14 days" | 10 Nov |
 | Converse | Prisma captioned a synthetic nurse ("नमस्ते शर्मा जी।", "आज आपको कैसा लग रहा है?") and 3 fitting replies appeared | 10 Nov |
 
 ## Privacy and consent by design

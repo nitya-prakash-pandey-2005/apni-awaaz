@@ -364,7 +364,7 @@ def read_back(summary: dict, lang: str) -> str:
     if meds:
         parts.append(f"{L['meds']} " + "; ".join(meds) + ("।" if tl == "hi-IN" else "."))
     if summary["tests"]:
-        parts.append(f"{L['tests']} " + ", ".join(t[k] for t in summary["tests"]) + ("।" if tl == "hi-IN" else "."))
+        parts.append(f"{L['tests']} " + ", ".join(t[k].rstrip("।. ") for t in summary["tests"]) + ("।" if tl == "hi-IN" else "."))
     if not meds and not summary["tests"]:
         parts.append(L["none"])
     if summary["next_visit"]:
