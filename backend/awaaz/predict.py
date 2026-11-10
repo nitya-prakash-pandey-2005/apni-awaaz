@@ -74,7 +74,7 @@ def predict(text: str, lang: str = "hi-IN", history=(), k: int = 5) -> list[dict
     for p, weight in phrases:
         orig = _TRIM.sub("", p).split()
         pw = ["<s>", *words(p)]
-        for (a, b), o in zip(zip(pw, pw[1:]), orig):
+        for (a, b), o in zip(zip(pw, pw[1:], strict=False), orig, strict=False):  # shortest wins, as in the JS mirror
             bi[(a, b)] = bi.get((a, b), 0) + weight
             uni[b] = uni.get(b, 0) + weight
             shown.setdefault(b, o)

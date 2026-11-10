@@ -23,11 +23,11 @@ from voice_core.llm import LLM
 from voice_core.turns import is_meaningful
 
 from . import fake_mode
+from . import pain as pain_mod
 from .converse import ListenSession
 from .gate import GnaniGate
-from . import pain as pain_mod
-from .predict import predict
 from .phrases import default_phrases, sos_text, test_phrase
+from .predict import predict
 from .profiles import Profile, ProfileStore
 from .quality import clip_quality
 from .speak import LANGS, RATE, speak
