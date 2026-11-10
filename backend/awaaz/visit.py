@@ -114,8 +114,18 @@ def _numbers(s: str) -> set[str]:
     return {n.rstrip("0").rstrip(".") if "." in n else n for n in _NUM_RE.findall(ascii_digits(str(s)))}
 
 
+# Hindi number words a caption may use instead of digits ("चौदह दिन"): they count as said numbers.
+HI_NUMBERS = {"एक": 1, "दो": 2, "तीन": 3, "चार": 4, "पाँच": 5, "पांच": 5, "छह": 6, "छः": 6, "सात": 7, "आठ": 8, "नौ": 9,
+              "दस": 10, "ग्यारह": 11, "बारह": 12, "तेरह": 13, "चौदह": 14, "पंद्रह": 15, "पन्द्रह": 15, "बीस": 20, "तीस": 30,
+              "चालीस": 40, "पचास": 50, "सौ": 100}
+
+
+def _said_numbers(said: str) -> set[str]:
+    return _numbers(said) | {str(HI_NUMBERS[w]) for w in _words(said) if w in HI_NUMBERS}
+
+
 def _numbers_said(s: str, said: str) -> bool:
-    return _numbers(s) <= _numbers(said)
+    return _numbers(s) <= _said_numbers(said)
 
 
 def _said(words: list[str], said: str) -> bool:
@@ -224,7 +234,7 @@ def _medicine(m, said: str) -> dict | None:
         dose = ""  # a dose whose number nobody said is dropped, never "corrected"
     days = m.get("days")
     days = str(days).strip() if isinstance(days, (int, str)) and str(days).strip() else None
-    if days and (not days.isdigit() or days not in _numbers(said)):
+    if days and (not days.isdigit() or days not in _said_numbers(said)):
         days = None
     when = [w for w in (m.get("when") if isinstance(m.get("when"), list) else []) if w in WHEN and _said(WHEN[w], said)]
     return {"name": name, "dose": dose, "when": list(dict.fromkeys(when)), "days": int(days) if days else None}

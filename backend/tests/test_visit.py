@@ -163,3 +163,11 @@ def test_skeleton_does_not_confuse_different_medicines():
     turns = [{"speaker": "partner", "text": "आपको पैंटोप्राजोल 40 mg लेनी है।"}]
     for other in ["Omeprazole", "Paracetamol", "Amlodipine", "Atorvastatin"]:
         assert visit.sanitise({"medicines": [{"name": other, "dose": "40 mg"}]}, turns)["medicines"] == []
+
+
+def test_hindi_number_words_count_as_said():
+    turns = [{"speaker": "partner", "text": "पैंटोप्राजोल चालीस एमजी सुबह, चौदह दिन तक लीजिए।"}]
+    m = visit.sanitise({"medicines": [{"name": "Pantoprazole", "dose": "40 mg", "when": ["morning"], "days": 14}]}, turns)["medicines"][0]
+    assert (m["dose"], m["days"]) == ("40 mg", 14)
+    m = visit.sanitise({"medicines": [{"name": "Pantoprazole", "dose": "400 mg", "days": 41}]}, turns)["medicines"][0]
+    assert (m["dose"], m["days"]) == ("", None)

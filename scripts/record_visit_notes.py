@@ -25,8 +25,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import demo_session as S  # noqa: E402
 
 RATE = 16000
-DOCTOR = ("Aapko Pantoprazole 40 mg subah khaali pet, 14 din tak lena hai. Agle Monday ko blood test karwa lijiye. "
-          "Agar khoon ki ulti ho toh turant aaiye.")
+# Hinglish as a doctor says it; written in Devanagari with the English words in Latin, which Timbre reads naturally.
+DOCTOR = ("आपको Pantoprazole 40 mg सुबह खाली पेट, 14 दिन तक लेनी है। अगले Monday को blood test करवा लीजिए। "
+          "अगर खून की उल्टी हो तो तुरंत आइए।")
 PATIENT = "क्या मैं चाय पी सकता हूँ?"  # the patient's reply, tapped and spoken in their own voice in Converse
 DOCTOR_VOICE = "Prakash"
 
