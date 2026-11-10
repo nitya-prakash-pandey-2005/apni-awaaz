@@ -78,7 +78,7 @@ export default function Profile({ profile, reload }) {
 
       <Card title="My voice" right={<Badge tone={profile.has_voice ? "green" : "muted"} dot>{profile.has_voice ? "Cloned" : "Not set"}</Badge>}>
         <p className="small muted" style={{ marginTop: 0 }}>
-          {profile.has_voice ? `Consent given ${profile.consent_at}. The voice embedding is stored only on this app's server.` : "No cloned voice. The fallback voice is used."}
+          {profile.has_voice ? `Consent given ${new Date(profile.consent_at).toLocaleString()}. The voice embedding is stored only on this app's server.` : "No cloned voice. The fallback voice is used."}
         </p>
         <button className="btn danger" disabled={!profile.has_voice} onClick={() => setConfirm(true)}><Trash2 size={16} /> Delete my voice</button>
       </Card>
