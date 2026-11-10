@@ -28,6 +28,7 @@ export const FEATURES = [
   { img: "pain-body", kicker: "Where does it hurt?", title: "Tap the body. Say how bad.", text: "Tap a body part, pick 0 to 10 and the kind of pain. One clear, grammatical sentence is spoken in your voice, in your language. No typing at all." },
   { img: "speak-predict", kicker: "Word prediction", title: "Fewer keystrokes, every sentence.", text: "Up to five big chips offer the next word or the whole phrase, learned from what you have said before. An honest “Keystrokes saved” count shows the effort it saves." },
   { img: "converse-reply", kicker: "Converse", title: "Hear them. Answer in one tap.", text: "Gnani Prisma captions what the other person says, live. Three suggested replies appear within about a second; tap one and it is spoken in your voice." },
+  { img: "visit-notes", kicker: "Visit notes", title: "What the doctor said, in your own voice.", text: "After a doctor or nurse visit, one tap turns the captions and your replies into clear notes: a medicines table (name, dose, when, how many days), tests, the next visit and what to watch for. Play them back in your voice, download them, or send them to family.", points: ["Marked as made by AI: check with the doctor", "Replay what you could not ask them to repeat"] },
   { img: "sos-spoken", kicker: "SOS", title: "Help, in your own voice, even offline.", text: "One large button speaks an emergency message in two languages and shows it in large type. If the server is down it still works in the phone’s voice, and it can share your location with family on WhatsApp or SMS." },
   { img: "profile-consent", kicker: "Privacy", title: "Your voice stays yours.", text: "The voice embedding never reaches the browser. “Delete my voice” removes the embedding, the consent record and every clip made in your voice. In our test: 9 cloned clips on disk → 0." },
 ];
@@ -51,7 +52,7 @@ export const RESULTS = [
   { value: 0.67, decimals: 2, suffix: " s", label: "to build your voice", note: "Gnani embedding call, 10 Nov" },
   { value: 1.2, decimals: 1, suffix: "–1.65 s", label: "to speak a sentence", note: "in the cloned voice, 8 Nov" },
   { value: 7, suffix: " / 7", label: "cloned clips understood word for word", note: "re-transcribed by Prisma, Hindi and Tamil" },
-  { value: 219, label: "automated tests passing", note: "211 Python + 8 JavaScript" },
+  { value: 256, label: "automated tests passing", note: "244 Python + 12 JavaScript" },
 ];
 
 export const COMPARE = [

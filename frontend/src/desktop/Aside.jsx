@@ -1,7 +1,7 @@
 // Desktop-only right column (>= 1200 px): context, the person's own recordings and plain explanations.
 // Uses only real data: the profile, and in the demo build the recordings captured on Gnani's live servers.
 import { useEffect, useState } from "react";
-import { AudioLines, BadgeCheck, Ear, History, KeyRound, Lightbulb, MessagesSquare, ShieldCheck, Siren, Sparkles } from "lucide-react";
+import { AudioLines, BadgeCheck, ClipboardList, Ear, History, KeyRound, Lightbulb, MessagesSquare, ShieldCheck, Siren, Sparkles } from "lucide-react";
 import { Badge, Card } from "../ui";
 import { DEMO, DEMO_DIR } from "../lib/demo";
 import { langName } from "../lib/langs";
@@ -108,6 +108,9 @@ function ConverseAside({ profile }) {
           ["Three replies", "Suggestions appear within about a second."],
           ["One tap", "Your reply is spoken in your own voice."],
         ]} />
+      </Card>
+      <Card title="After a doctor's visit" icon={ClipboardList} className="aa-aside-card">
+        <p className="small muted aa-lead">Tap <b>{DEMO ? "Show the recorded visit notes" : "Make visit notes"}</b>: the captions and your replies become a medicines table, tests, the next visit and what to watch for, read back in your own voice. Made by AI, so check them with the doctor.</p>
       </Card>
       <History_ title="Replies spoken in your voice" filter={(r) => r.kind === "speak" && r.lang === (profile?.language || "hi-IN")} limit={3} />
     </>

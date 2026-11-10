@@ -129,7 +129,7 @@ html.lp-page, html.lp-page body { background: #0c0812; }
 .lp-pipe-line { fill: none; stroke-width: 2.5; stroke-linecap: round; }
 .lp-pipe-pulse { fill: none; stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 14 86; stroke-dashoffset: 100; opacity: 0; filter: drop-shadow(0 0 6px #ff8a5b); }
 .lp-pipe.in .lp-pipe-pulse { opacity: .9; }
-.lp-pipe-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; position: relative; }
+.lp-pipe-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; position: relative; }
 .lp-node { display: grid; grid-template-columns: 46px 1fr; grid-template-rows: auto auto; column-gap: 14px; align-items: center; }
 .lp-node-dot { grid-row: span 2; width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; background: #1d1224; border: 1.5px solid var(--lp-line-2); font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--lp-text-2); box-shadow: 0 0 0 6px var(--lp-bg); }
 .lp-node.gnani .lp-node-dot { border-color: rgba(255, 138, 91, 0.7); color: #ffb199; background: #2a1520; }
@@ -205,7 +205,7 @@ html.lp-page, html.lp-page body { background: #0c0812; }
   .lp-cmp-card.us { transform: translateY(-10px); }
   .lp-pipe { padding: 32px 32px 30px; }
   .lp-pipe-svg.v { display: none; }
-  .lp-pipe-svg.h { display: block; left: calc(100% / var(--n, 6) / 2); right: calc(100% / var(--n, 6) / 2); top: 21px; height: 4px; }
+  .lp-pipe-svg.h { display: block; left: calc(100% / var(--n, 6) / 2); width: calc(100% - 100% / var(--n, 6)); top: 21px; height: 4px; }
   .lp-pipe-steps { grid-template-columns: repeat(var(--n), 1fr); gap: 10px; }
   .lp-node { grid-template-columns: 1fr; justify-items: center; text-align: center; row-gap: 4px; }
   .lp-node-dot { grid-row: auto; margin-bottom: 10px; }
