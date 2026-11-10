@@ -11,6 +11,7 @@ import Pain from "./pages/Pain";
 import Converse from "./pages/Converse";
 import Sos from "./pages/Sos";
 import Profile from "./pages/Profile";
+import DwellLayer from "./components/DwellLayer";
 
 const NAV = [{ group: "Apni Awaaz", items: [
   { to: "/speak", label: "Speak", icon: Volume2 },
@@ -84,6 +85,7 @@ export default function App() {
         {page && profile && (() => { const P = page; return <P profile={profile} reload={reload} />; })()}
       </AppShell>
       <Toasts />
+      <DwellLayer />
     </>
   );
 }

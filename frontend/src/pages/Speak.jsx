@@ -51,6 +51,8 @@ export default function Speak({ profile }) {
   const speakBox = async () => {
     const t = text;
     if (!t.trim() || busy) return;
+    const pressed = keys.current; // keys for this sentence; typing during playback counts for the next one
+    keys.current = 0;
     let r;
     if (DEMO && !recorded.some((x) => x.text.trim() === t.trim())) {
       speakLocally(t, { lang });
@@ -61,10 +63,8 @@ export default function Speak({ profile }) {
       setDevice(null);
       r = await speak(t);
     }
-    if (r) {
-      setSaved((v) => ({ pressed: v.pressed + keys.current, letters: v.letters + t.trim().length }));
-      keys.current = 0;
-    }
+    if (r) setSaved((v) => ({ pressed: v.pressed + pressed, letters: v.letters + t.trim().length }));
+    else keys.current += pressed;
   };
 
   const speak = async (t) => {

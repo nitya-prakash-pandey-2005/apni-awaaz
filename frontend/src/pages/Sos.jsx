@@ -7,6 +7,7 @@ import { speak as speakLocally } from "../lib/speech";
 import { LANGS } from "../lib/langs";
 import { VoiceBadge } from "./Speak";
 import { DEMO } from "../lib/demo";
+import FamilyShare from "../components/FamilyShare";
 
 const OFFLINE = { langs: ["en-IN"], texts: ["Emergency! I cannot speak. Please help me and call a doctor or my family now."] };
 
@@ -48,6 +49,7 @@ export default function Sos({ profile }) {
       <VoiceBadge last={last} />
       {(last?.spoken || []).map((t, i) => <p key={i} className="sos-text">{t}</p>)}
       {DEMO && !last && <p className="small muted">The demo plays the SOS recorded live in Hindi and Tamil.</p>}
+      <FamilyShare lang={profile?.language || "hi-IN"} />
       {!last && <p className="small muted">Speaks in {LANGS.find((l) => l.value === profile?.language)?.label || "your language"}, then in the language you pick.</p>}
     </div>
   );

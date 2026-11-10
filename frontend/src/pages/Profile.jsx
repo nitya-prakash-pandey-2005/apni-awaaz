@@ -5,6 +5,8 @@ import { Badge, Card, Sheet, toast } from "../ui";
 import { send, useApi } from "../lib/api";
 import { LANGS, VOICES } from "../lib/langs";
 import { DEMO } from "../lib/demo";
+import DwellSetting from "../components/DwellSetting";
+import FamilyContact from "../components/FamilyContact";
 
 export default function Profile({ profile, reload }) {
   const [form, setForm] = useState(null);
@@ -76,6 +78,9 @@ export default function Profile({ profile, reload }) {
           <button className="btn primary" onClick={save}><Save size={16} /> Save</button>
         </div>
       </Card>
+
+      <FamilyContact />
+      <DwellSetting />
 
       <Card title="My voice" right={<Badge tone={profile.has_voice ? "green" : "muted"} dot>{profile.has_voice ? "Cloned" : "Not set"}</Badge>}>
         <p className="small muted" style={{ marginTop: 0 }}>

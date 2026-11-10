@@ -93,3 +93,18 @@
 .suggest-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip.suggest { font-size: 17px; padding: 10px 16px; min-height: 52px; white-space: normal; text-align: left; color: var(--text); }
 .chip.suggest.phrase { border-color: rgba(255, 77, 157, 0.45); background: var(--grad-soft); }
+
+/* Dwell selection */
+.dwell-ring { position: fixed; z-index: 9999; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; pointer-events: none;
+  background: conic-gradient(var(--amber) calc(var(--p) * 360deg), rgba(255, 255, 255, 0.18) 0);
+  -webkit-mask: radial-gradient(circle, transparent 15px, #000 16px); mask: radial-gradient(circle, transparent 15px, #000 16px); }
+.dwell-on { outline: 3px solid var(--amber) !important; outline-offset: 2px; }
+.body-part.dwell-on { outline: none !important; stroke: var(--amber); stroke-width: 3; }
+.dwell-row { display: flex; align-items: center; gap: 12px; }
+.dwell-row input[type=range] { flex: 1; height: 40px; }
+.family-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: min(100%, 420px); }
+.family-actions .btn { min-height: 56px; font-size: 16px; }
+.family-preview { white-space: pre-wrap; text-align: left; margin: 0; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); font-family: inherit; overflow-wrap: anywhere; }
+.consent-line { align-items: flex-start; gap: 10px; }
+.consent-line input { margin-top: 3px; width: 20px; height: 20px; flex: none; }
+.family-actions .btn { text-decoration: none; justify-content: center; }
