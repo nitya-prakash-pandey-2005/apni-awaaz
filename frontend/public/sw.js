@@ -1,6 +1,6 @@
 // Offline-first service worker: the page itself network-first (so a new build shows up on the next load), hashed
 // assets cache-first, API network-only.
-const CACHE = "awaaz-v2"; // a new name drops the old caches on activate
+const CACHE = "awaaz-v3"; // a new name drops the old caches on activate
 self.addEventListener("install", (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(["/", "/index.html", "/manifest.webmanifest"]))); });
 self.addEventListener("activate", (e) => e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())));
 const keep = (req, res) => { if (res.ok && new URL(req.url).origin === location.origin) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); } return res; };
