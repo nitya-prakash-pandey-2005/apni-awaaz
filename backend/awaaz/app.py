@@ -88,10 +88,12 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
         return lang
 
     async def wav_in(request: Request) -> tuple[np.ndarray, int]:
+        """The clip, cut to the first 30 s: only that much is sent to Gnani, so only that much is judged."""
         try:
-            return read_wav(await request.body())
+            x, hz = read_wav(await request.body())
         except Exception:
             raise HTTPException(400, "send a 16-bit PCM WAV body") from None
+        return x[: MAX_CLIP_S * hz], hz
 
     async def say(text: str, lang: str) -> tuple[bytes, dict]:
         wav, meta = await speak(text, lang, profile(), settings, llm, cache, clone_cache=clone_cache, clone_fn=clone_fn, tts_fn=tts_fn, memo=rewrites)
@@ -119,7 +121,7 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
         x, hz = await wav_in(request)
         q = clip_quality(x, hz)
         try:
-            ev = await transcribe_fn(settings.gnani_api_key, wav_bytes(float_to_pcm16(x[: MAX_CLIP_S * hz]), hz),
+            ev = await transcribe_fn(settings.gnani_api_key, wav_bytes(float_to_pcm16(x), hz),
                                      language_code=",".join(dict.fromkeys([profile().language, "en-IN"])))
             q["text"], q["lang"] = ev.text, ev.language
             if not is_meaningful(ev.text):
@@ -138,7 +140,7 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
         if not q["ok"]:
             raise HTTPException(422, {"message": "clip quality too low", "quality": q})
         try:
-            emb = await embed_fn(settings.gnani_api_key, wav_bytes(float_to_pcm16(x[: MAX_CLIP_S * hz]), hz))
+            emb = await embed_fn(settings.gnani_api_key, wav_bytes(float_to_pcm16(x), hz))
         except Exception as e:
             log.warning("voice cloning failed: %r", e)
             raise HTTPException(502, f"voice cloning failed, the fallback voice stays on: {e}") from None

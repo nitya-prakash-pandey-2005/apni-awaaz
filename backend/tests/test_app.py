@@ -8,6 +8,7 @@ from voice_core.audio import float_to_pcm16, wav_bytes
 from voice_core.config import Settings
 from voice_core.testing import FakeLLM, FakeStt, ev
 
+from awaaz import fake_mode
 from awaaz.app import create_app
 
 GOOD = json.dumps({"replies": ["हाँ", "थोड़ा पानी", "धन्यवाद"]})
@@ -40,6 +41,24 @@ def test_clip_check(client):
     bad = client.post("/api/voice/clip-check", content=_clip(3), headers={"Content-Type": "audio/wav"}).json()
     assert not bad["ok"] and "too short" in bad["reasons"]
     assert client.post("/api/voice/clip-check", content=b"not a wav").status_code == 400
+
+
+def test_long_voice_note_is_judged_on_the_30_s_actually_used(client):
+    long = _clip(60)  # a one-minute WhatsApp note: about 37 s of speech
+    q = client.post("/api/voice/clip-check", content=long).json()
+    assert q["ok"], q
+    assert client.post("/api/voice/enroll?consent=true", content=long).status_code == 200
+
+
+def test_clip_with_no_clear_speech_is_flagged(tmp_path, monkeypatch):
+    async def music_only(api_key, wav, **kw):  # Prisma hears nothing usable (music, two people talking over each other)
+        return fake_mode.SttEvent("transcript", text="", language=None)
+
+    monkeypatch.setenv("AWAAZ_FAKE", "1")
+    monkeypatch.setattr(fake_mode, "fake_transcribe", music_only)
+    with TestClient(create_app(Settings(cache_dir=tmp_path))) as c:
+        q = c.post("/api/voice/clip-check", content=_clip()).json()
+    assert not q["ok"] and "no clear speech" in q["reasons"]
 
 
 def test_enroll_needs_consent_then_speaks_in_clone_voice(client):
