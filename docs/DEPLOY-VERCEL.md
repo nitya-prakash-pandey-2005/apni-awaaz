@@ -39,7 +39,7 @@ It uses the same synthetic voice note (`PTT-20240521-WA0015.wav`), the same mode
 1. On vercel.com: **Add New → Project →** import `nitya-prakash-pandey-2005/apni-awaaz`.
 2. Leave **Root Directory** as the repo root. `vercel.json` sets everything: no framework, `cd frontend && npm install`, `cd frontend && npm run build:demo`, output `frontend/dist`. The build needs `../voice-core/web`, which is why it runs from the root.
 3. Add no environment variables. The demo needs no keys, so never add `GNANI_API_KEY` or `GROQ_API_KEY` to Vercel.
-4. Deploy, open the link on a phone, and replace `[link]` at the top of `README.md` and `PITCH.md`.
+4. Deploy, open the link on a phone, and replace `*[live demo link]*` (and `*[video link]*`) at the top of `README.md` and `PITCH.md`. Then regenerate the one-page PDF: `uv run --no-project --with markdown --with pypdf python scripts/make_pitch_pdf.py`.
 
 To check locally first: `cd frontend && npm run build:demo && npx serve dist` (or `python -m http.server -d dist 8790`), with no backend running. Afterwards run `npm run build` again: the backend serves `frontend/dist`, and a demo build there would answer from the recording instead of the server.
 
