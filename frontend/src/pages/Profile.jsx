@@ -2,12 +2,14 @@
 import { useEffect, useState } from "react";
 import { Save, Trash2 } from "lucide-react";
 import { Badge, Card, Sheet, toast } from "../ui";
-import { send } from "../lib/api";
+import { send, useApi } from "../lib/api";
 import { LANGS, VOICES } from "../lib/langs";
 
 export default function Profile({ profile, reload }) {
   const [form, setForm] = useState(null);
   const [confirm, setConfirm] = useState(false);
+  const [dropMsg, setDropMsg] = useState(null); // a banked recording waiting for "Delete"
+  const { data: messages, reload: reloadMessages } = useApi("/api/messages");
   useEffect(() => {
     if (profile) setForm({ ...profile, family: (profile.family_names || []).join(", ") });
   }, [profile]);
@@ -33,6 +35,17 @@ export default function Profile({ profile, reload }) {
       toast("Your voice was deleted", "ok");
       setConfirm(false);
       reload();
+    } catch (e) {
+      toast(e.message, "warn");
+    }
+  };
+
+  const delMessage = async () => {
+    try {
+      await send(`/api/messages/${dropMsg.id}`, { method: "DELETE" });
+      toast("Recording deleted", "ok");
+      setDropMsg(null);
+      reloadMessages();
     } catch (e) {
       toast(e.message, "warn");
     }
@@ -69,6 +82,21 @@ export default function Profile({ profile, reload }) {
         </p>
         <button className="btn danger" disabled={!profile.has_voice} onClick={() => setConfirm(true)}><Trash2 size={16} /> Delete my voice</button>
       </Card>
+
+      <Card title="My recordings" right={<Badge tone="muted">{(messages || []).length}</Badge>}>
+        {(messages || []).length === 0
+          ? <p className="small muted" style={{ margin: 0 }}>No banked recordings yet. Add them on the Speak page.</p>
+          : <div className="list">{messages.map((m) => (
+            <div key={m.id} className="li">
+              <div className="grow" style={{ minWidth: 0 }}><div className="t">{m.label}</div><div className="s">Your real voice · {m.created?.slice(0, 10)}</div></div>
+              <button className="btn icon ghost" onClick={() => setDropMsg(m)} aria-label={`Delete recording: ${m.label}`}><Trash2 size={18} /></button>
+            </div>))}</div>}
+      </Card>
+
+      <Sheet open={!!dropMsg} onClose={() => setDropMsg(null)} title="Delete this recording?">
+        <p>“{dropMsg?.label}” is deleted from this app for good.</p>
+        <div className="row"><button className="btn danger" onClick={delMessage}>Delete</button><button className="btn ghost" onClick={() => setDropMsg(null)}>Cancel</button></div>
+      </Sheet>
 
       <Sheet open={confirm} onClose={() => setConfirm(false)} title="Delete your voice?">
         <p>This removes your cloned voice from this app. You can build it again from your clips at any time.</p>
