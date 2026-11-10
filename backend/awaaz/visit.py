@@ -21,6 +21,8 @@ from voice_core.llm import parse_json_loose
 log = logging.getLogger("awaaz.visit")
 DISCLAIMER = {"en-IN": "Notes made by AI from the conversation. Check with your doctor.",
               "hi-IN": "ये नोट्स AI ने बातचीत से बनाए हैं। अपने डॉक्टर से ज़रूर पूछ लें।"}
+DISCLAIMER_KEYWORDS = {"en-IN": "Notes picked out automatically from the conversation by keywords. Check with your doctor.",
+                       "hi-IN": "ये नोट्स बातचीत के शब्दों से अपने-आप बने हैं। अपने डॉक्टर से ज़रूर पूछ लें।"}
 MAX_ITEMS = 6
 MAX_LEN = 140
 
@@ -262,6 +264,12 @@ async def extract(llm, turns: list[dict]) -> tuple[dict, str]:
     except Exception as e:
         log.warning("visit summary LLM failed, using the keyword fallback: %r", e)
         return fallback(turns), "fallback"
+
+
+def disclaimer(source: str, lang: str) -> str:
+    """The caution shown and shared with every set of notes: AI-made, or (fallback) picked out by keywords."""
+    d = DISCLAIMER if source == "llm" else DISCLAIMER_KEYWORDS
+    return d.get(text_lang(lang), d["en-IN"])
 
 
 def text_lang(lang: str) -> str:

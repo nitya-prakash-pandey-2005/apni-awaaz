@@ -141,6 +141,7 @@ def test_endpoint_fake_mode_uses_the_fallback(tmp_path, monkeypatch):
     with TestClient(create_app(Settings(cache_dir=tmp_path))) as c:
         r = c.post("/api/visit/summary", json={"turns": TURNS, "lang": "en-IN"}).json()
     assert r["source"] == "fallback" and r["summary"]["medicines"][0]["dose"] == "40 mg" and r["text_lang"] == "en-IN"
+    assert r["disclaimer"].startswith("Notes picked out automatically") and "AI" not in r["disclaimer"]  # no AI was used
 
 
 def test_invented_tests_are_dropped():

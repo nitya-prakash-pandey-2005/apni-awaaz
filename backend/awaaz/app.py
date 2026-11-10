@@ -254,7 +254,7 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
         tl = visit_mod.text_lang(lang)
         return {"summary": summary, "source": source, "lang": lang, "text_lang": tl,
                 "text": {"local": visit_mod.read_back(summary, lang), "en": visit_mod.read_back(summary, "en-IN")},
-                "disclaimer": visit_mod.DISCLAIMER.get(tl, visit_mod.DISCLAIMER["en-IN"])}
+                "disclaimer": visit_mod.disclaimer(source, lang)}
 
     @app.post("/api/sos")
     async def sos(body: SosIn):

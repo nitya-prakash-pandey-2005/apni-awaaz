@@ -33,6 +33,7 @@ The backend is one FastAPI app (`backend/awaaz/app.py`, built by `create_app()`)
 | GET | `/api/phrases?lang=` | Quick phrases: the user's most used, then the defaults |
 | POST | `/api/sos` | Emergency message in the profile language and a local language, as one WAV |
 | GET | `/api/predict?text=&lang=` | Up to 5 next-word / phrase suggestions from the person's own phrases and a starter lexicon |
+| POST | `/api/visit/summary` | Visit notes from a Converse session: medicines, tests, next visit, warning signs, advice, questions, checked against the transcript, plus the read-back text |
 | POST | `/api/pain/sentence` | "Where does it hurt?": builds the sentence to speak (then spoken through `/api/speak`) |
 | POST | `/api/messages?label=` | Bank an original recording (kept and replayed as it is) |
 | GET | `/api/messages` | List banked recordings |
@@ -200,6 +201,33 @@ Response: the sentence in that language (Hindi and Tamil from tested templates w
 {"text": "मेरी बाईं बाँह में आज से तेज़ दर्द है, दस में से सात।", "lang": "hi-IN", "template_lang": "hi"}
 ```
 Unknown part, type or level → `400` with a message. The same templates (`backend/awaaz/data/pain.json`) drive the browser in demo mode; a test checks that both produce identical sentences.
+
+### `POST /api/visit/summary`
+Body (`VisitIn`): `turns` (at most 200; each `{"speaker": "partner" | "user", "text": "...", "t": 1.0}`: `partner` is the
+doctor or nurse, `user` the patient's spoken replies) and an optional `lang` for the read-back (default: the profile language).
+```json
+{"turns": [{"speaker": "partner", "text": "Aapko Pantoprazole 40 mg subah khaali pet, 14 din tak lena hai. Agle Monday ko blood test karwa lijiye."},
+           {"speaker": "user", "text": "क्या मैं चाय पी सकता हूँ?"}], "lang": "hi-IN"}
+```
+Response: the checked summary, where it came from (`llm`, or `fallback` for the keyword pass), and the text to read back
+in the profile language (`text.local`, written in `text_lang`: Hindi or English templates; other languages get English,
+which `/api/speak` translates) and in English (`text.en`). Each text item carries `en`, `hi` and the transcript `quote` it rests on.
+```json
+{"summary": {"medicines": [{"name": "Pantoprazole", "dose": "40 mg", "when": ["morning", "empty_stomach"], "days": 14}],
+             "tests": [{"en": "Blood test", "hi": "ब्लड टेस्ट", "quote": "blood test karwa lijiye"}],
+             "next_visit": {"en": "Next Monday", "hi": "अगले सोमवार", "quote": "Agle Monday ko"},
+             "warning_signs": [], "advice": [], "questions_asked": [{"en": "Can I drink tea?", "hi": "क्या मैं चाय पी सकता हूँ?", "quote": "क्या मैं चाय पी सकता हूँ?"}]},
+ "source": "llm", "lang": "hi-IN", "text_lang": "hi-IN",
+ "text": {"local": "मेरे विज़िट नोट्स।
+दवाइयाँ: Pantoprazole 40 mg सुबह खाली पेट 14 दिन तक।
+…", "en": "My visit notes.
+Medicines: Pantoprazole 40 mg in the morning on an empty stomach for 14 days.
+…"},
+ "disclaimer": "ये नोट्स AI ने बातचीत से बनाए हैं। अपने डॉक्टर से ज़रूर पूछ लें।"}
+```
+No doctor/nurse turn with text → `400`; unsupported `lang` → `400`; a bad `speaker` or more than 200 turns → `422`.
+Medicines, doses, days, tests and quotes that are not in the transcript are dropped (see `backend/tests/test_visit.py`).
+To read the notes aloud, POST `text.local` to `/api/speak` with `remember: false`.
 
 ## Message banking
 

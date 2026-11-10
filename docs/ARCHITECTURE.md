@@ -60,6 +60,7 @@ flowchart LR
 | `quality.py` | `clip_quality()` scores a voice note from the signal alone; `best_clip()` picks the highest-SNR clip that passed. |
 | `speak.py` | `speak()` turns text into a WAV in the cloned voice, falling back to Timbre; `rewrite()` transliterates or translates text whose script does not match the output language. |
 | `converse.py` | `ListenSession` runs one conversation socket; `suggest()` asks the LLM for 3 replies and always returns 3. |
+| `visit.py` | Visit notes: `extract()` makes one LLM JSON call over the Converse turns and `sanitise()` keeps only what the transcript supports (names said, numbers said, quotes found, no unsaid medicine or test); `fallback()` is the keyword/regex path; `read_back()` builds the Hindi/English text spoken through `speak()`. |
 | `profiles.py` | `ProfileStore`: one profile row (JSON), phrase-use counts and banked recordings in SQLite. |
 | `phrases.py` | Built-in quick phrases, SOS sentences and the enrolment test sentence (Hindi, English, Tamil; other languages use English and are translated by `speak()`). |
 | `gate.py` | `GnaniGate`: serialises the app's Gnani REST calls and retries a `429` twice (0.5 s, then 1.5 s). |

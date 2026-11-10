@@ -116,7 +116,7 @@ async def main() -> None:
            "doctor": {"text": DOCTOR, "voice": f"Gnani Timbre v3.0 {DOCTOR_VOICE} (synthetic)", "audio": "audio/doctor-visit.wav"},
            "turns": turns, "llm": getattr(llm, "model", "?"), "numbers": nums,
            "response": {"summary": summary, "source": source, "lang": lang, "text_lang": visit.text_lang(lang),
-                        "text": {"local": local, "en": en}, "disclaimer": visit.DISCLAIMER[visit.text_lang(lang)]},
+                        "text": {"local": local, "en": en}, "disclaimer": visit.disclaimer(source, lang)},
            "readback": {"file": "audio/visit-notes.wav", "voice": voice, "text": local, "lang": lang}}
     (out / "visit.json").write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"visit.json written to {out}")
