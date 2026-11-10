@@ -1,6 +1,6 @@
 // Speak board: type in any script, pick a language, tap a quick phrase; spoken in the user's own voice.
 import { useEffect, useState } from "react";
-import { Heart, History, Radio, ScanLine, Volume2 } from "lucide-react";
+import { Heart, History, PersonStanding, Radio, ScanLine, Volume2 } from "lucide-react";
 import { Badge, Card, Seg } from "../ui";
 import { useApi, useSpeak } from "../lib/api";
 import { LangChips } from "../lib/langs";
@@ -46,6 +46,7 @@ export default function Speak({ profile }) {
 
   return (
     <div className="stack">
+      <a className="pain-link dwell-target" href="#/pain"><PersonStanding size={28} aria-hidden="true" /><span><b>Where does it hurt?</b><small>Tap the body, say how bad: spoken in one sentence</small></span></a>
       <Card title="Switch scanning" icon={ScanLine} right={<label className="row small"><input type="checkbox" checked={scanOn} onChange={(e) => setScanOn(e.target.checked)} /> On</label>}>
         <div className="small muted">For stroke and ALS users who cannot type or tap: the highlight moves by itself; press Space or Enter (or an assistive switch), or the big button, to speak the highlighted phrase.</div>
         {scanOn && (

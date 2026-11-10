@@ -57,3 +57,34 @@
 .phrase { scroll-margin: calc(var(--topbar) + 12px) 0 calc(var(--bottomnav) + 24px + env(safe-area-inset-bottom)); }
 .demo-banner { margin-bottom: 14px; padding: 9px 12px; border-color: var(--cyan); background: var(--cyan-a); font-size: 12.5px; line-height: 1.4; }
 .demo-banner a { color: inherit; font-weight: 600; text-decoration: underline; }
+
+/* Where does it hurt? */
+.pain-link { display: flex; align-items: center; gap: 14px; padding: 16px 18px; min-height: 64px; border-radius: 16px; border: 1px solid rgba(255, 77, 157, 0.45);
+  background: var(--grad-soft); color: #fff; text-decoration: none; }
+.pain-link span { display: flex; flex-direction: column; gap: 2px; }
+.pain-link b { font-size: 18px; }
+.pain-link small { color: var(--text-2); font-size: 13px; }
+.pain-body { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 16px; align-items: start; }
+.body-map { width: 100%; height: auto; max-height: 440px; touch-action: manipulation; }
+.body-part { fill: rgba(255, 255, 255, 0.07); stroke: rgba(255, 255, 255, 0.35); stroke-width: 1.2; cursor: pointer; transition: fill .15s; }
+.body-part:hover { fill: rgba(255, 77, 157, 0.25); }
+.body-part:focus-visible { outline: none; stroke: var(--amber); stroke-width: 3; }
+.body-part.on { fill: var(--pink); stroke: #fff; stroke-width: 2.5; }
+.body-side { fill: var(--muted); font-size: 16px; font-weight: 700; }
+.part-chips { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+.part-chip { font-size: 15px; padding: 10px 14px; min-height: 48px; }
+.faces { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.face { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; min-height: 64px; border-radius: 14px;
+  border: 2px solid var(--line); background: var(--surface-2); font-size: 28px; line-height: 1; }
+.face small { font-size: 13px; color: var(--text-2); font-weight: 700; }
+.face.on { border-color: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 35%, transparent); }
+.pain-slider { width: 100%; margin-top: 14px; height: 40px; accent-color: var(--c); }
+.phrase.picked { border-color: var(--pink); background: var(--grad-soft); color: #fff; }
+.pain-since { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.pain-since .chip { font-size: 15px; padding: 10px 14px; min-height: 48px; }
+.pain-sentence { font-size: clamp(20px, 5vw, 26px); line-height: 1.45; font-weight: 700; margin: 4px 0; overflow-wrap: anywhere; }
+@media (max-width: 560px) {
+  .pain-body { grid-template-columns: 1fr; }
+  .body-map { max-height: 360px; }
+  .pain-types { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
