@@ -2,8 +2,11 @@
 import { REPO } from "../lib/demo";
 
 export const VIDEO_URL = `${REPO}#readme`;
-export const DADI_URL = "https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers";
-export const PUKAAR_URL = "https://github.com/nitya-prakash-pandey-2005/pukaar";
+export const AWAAZ_URL = "https://apni-awaaz-kappa.vercel.app/";
+export const DADI_URL = "https://dadi-vs-scammers.vercel.app/";
+export const PUKAAR_URL = "https://pukaar-snowy.vercel.app/";
+export const DADI_REPO = "https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers";
+export const PUKAAR_REPO = "https://github.com/nitya-prakash-pandey-2005/pukaar";
 export const APP_ENTRY = "#/app"; // not a page: App.jsx sends it to /speak or /voice like a first run
 
 const IARC_INDIA = "https://gco.iarc.who.int/media/globocan/factsheets/populations/356-india-fact-sheet.pdf";

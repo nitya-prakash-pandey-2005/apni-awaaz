@@ -4,7 +4,7 @@ import { REPO } from "../lib/demo";
 import { reducedMotion } from "../motion/prefs";
 import { startLanding } from "./animate";
 import {
-  APP_ENTRY, COMPARE, DADI_URL, FACTS, FEATURES, PIPE_BUILD, PIPE_TALK, PUKAAR_URL, RESULTS, STORIES, TIMINGS, VIDEO_URL,
+  APP_ENTRY, COMPARE, DADI_REPO, DADI_URL, FACTS, FEATURES, PIPE_BUILD, PIPE_TALK, PUKAAR_REPO, PUKAAR_URL, RESULTS, STORIES, TIMINGS, VIDEO_URL,
 } from "./content";
 
 const BARS = [[130, 130.5, 94.9], [183, 118.7, 149.5], [236, 164.2, 161.9], [289, 118.7, 149.5], [342, 130.5, 94.9]];
@@ -74,6 +74,20 @@ function Pipeline({ steps, label, id }) {
         </ol>
       </div>
     </figure>
+  );
+}
+
+function Product({ name, text, live, repo, us = false }) {
+  const external = live.startsWith("http");
+  return (
+    <article className={`lp-prod ${us ? "us" : ""}`} data-reveal>
+      <b>{name}</b>
+      <span>{text}</span>
+      <div className="lp-prod-links">
+        <a className="lp-prod-live" href={live} {...(external ? { target: "_blank", rel: "noreferrer" } : {})}>{us ? "Try it here" : "Open live demo"} <ArrowRight size={15} /></a>
+        <a className="lp-prod-gh" href={repo} target="_blank" rel="noreferrer"><Github size={15} /> GitHub</a>
+      </div>
+    </article>
   );
 }
 
@@ -248,9 +262,9 @@ export default function Landing() {
             <p className="lp-eyebrow" data-reveal>One engine, three products</p>
             <h2 id="lp-engine-h" className="lp-h2" data-reveal>One Gnani voice engine. Three ways it helps.</h2>
             <div className="lp-trio">
-              <a className="lp-prod" href={DADI_URL} target="_blank" rel="noreferrer" data-reveal><b>Dadi vs Scammers</b><span>An AI grandmother who wastes scammers&rsquo; time.</span></a>
-              <a className="lp-prod" href={PUKAAR_URL} target="_blank" rel="noreferrer" data-reveal><b>Pukaar</b><span>An overflow emergency voice line for floods and disasters.</span></a>
-              <a className="lp-prod us" href={APP_ENTRY} data-reveal><b>Apni Awaaz</b><span>Your own voice back, in 10 Indian languages.</span></a>
+              <Product name="Dadi vs Scammers" text="An AI grandmother who wastes scammers’ time." live={DADI_URL} repo={DADI_REPO} />
+              <Product name="Pukaar" text="An overflow emergency voice line for floods and disasters." live={PUKAAR_URL} repo={PUKAAR_REPO} />
+              <Product name="Apni Awaaz" text="Your own voice back, in 10 Indian languages." live={APP_ENTRY} repo={REPO} us />
             </div>
           </div>
         </section>
