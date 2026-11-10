@@ -13,6 +13,7 @@ import "./styles/layout.css";
 import "./styles/tour.css";
 import "./app.css";
 import "./landing.css";
+import "./desktop/desktop.css";
 import { applySavedTheme } from "./lib/theme";
 import { DEMO, installDemo } from "./lib/demo";
 import App from "./App";

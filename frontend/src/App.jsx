@@ -14,6 +14,10 @@ import Profile from "./pages/Profile";
 import DwellLayer from "./components/DwellLayer";
 import Landing from "./landing/Landing";
 import { standalone } from "./motion/prefs";
+import { pageEnter } from "./motion/pageEnter";
+import SpeakingWave from "./motion/SpeakingWave";
+import Aside, { hasAside } from "./desktop/Aside";
+import useWide from "./desktop/useWide";
 
 const NAV = [{ group: "Apni Awaaz", items: [
   { to: "/speak", label: "Speak", icon: Volume2 },
@@ -61,6 +65,14 @@ export default function App() {
     if (!path && !landing && profile) window.location.hash = profile.has_voice ? "/speak" : "/voice";
   }, [path, landing, profile]);
   useEffect(() => { if (!landing) window.scrollTo(0, 0); }, [landing]);
+  const wide = useWide();
+  const ready = !!profile;
+  useEffect(() => {
+    if (landing || !ready) return undefined;
+    let stop = () => {};
+    const raf = requestAnimationFrame(() => { stop = pageEnter(); });
+    return () => { cancelAnimationFrame(raf); stop(); };
+  }, [route.path, landing, ready]);
   if (landing) return <Landing />;
 
   const page = { "/speak": Speak, "/pain": Pain, "/converse": Converse, "/sos": Sos, "/voice": VoiceBank, "/profile": Profile }[path];
@@ -87,10 +99,20 @@ export default function App() {
             <button className="btn sm" onClick={() => { reload(); reloadHealth(); }}>Retry</button>
           </div>
         )}
-        {page && profile && (() => { const P = page; return <P profile={profile} reload={reload} />; })()}
+        {page && profile && (() => {
+          const P = page;
+          const side = wide && hasAside(path);
+          return (
+            <div className={`aa-layout ${side ? "with-aside" : ""}`}>
+              <div className="aa-main"><P profile={profile} reload={reload} /></div>
+              {side && <Aside path={path} profile={profile} />}
+            </div>
+          );
+        })()}
       </AppShell>
       <Toasts />
       <DwellLayer />
+      <SpeakingWave />
     </>
   );
 }
