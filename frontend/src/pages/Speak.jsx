@@ -36,7 +36,7 @@ export default function Speak({ profile }) {
     }
   };
 
-  const pick = (i) => { const it = items[i]; if (it) (it.kind === "msg" ? playOriginal(it.m) : speak(it.p)); };
+  const pick = (i) => { const it = items[i]; if (it && !busy) (it.kind === "msg" ? playOriginal(it.m) : speak(it.p)); }; // one at a time
   const scan = useScan({ count: items.length, active: scanOn, intervalMs: speed, onSelect: pick });
   const nMsg = (messages || []).length;
 
