@@ -53,3 +53,5 @@
 /* Message banking + switch scanning */
 .phrase.banked { border-color: rgba(255, 77, 157, 0.45); }
 .phrase.scan-on { outline: 4px solid var(--amber); outline-offset: 2px; transform: scale(1.03); }
+/* the scanning highlight must never sit under the sticky top bar or the phone's bottom tab bar */
+.phrase { scroll-margin: calc(var(--topbar) + 12px) 0 calc(var(--bottomnav) + 24px + env(safe-area-inset-bottom)); }
