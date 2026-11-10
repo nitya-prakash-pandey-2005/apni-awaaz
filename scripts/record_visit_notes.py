@@ -45,6 +45,7 @@ async def retry(fn, *a, **kw):
 async def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--fake", type=Path, help="write tones and the fallback summary to this folder instead")
+    ap.add_argument("--verify", action="store_true", help="re-transcribe the read-back with Prisma (1 more request)")
     a = ap.parse_args()
 
     from voice_core.audio import float_to_pcm16, read_wav, wav_bytes
@@ -121,6 +122,11 @@ async def main() -> None:
            "readback": {"file": "audio/visit-notes.wav", "voice": voice, "text": local, "lang": lang}}
     (out / "visit.json").write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"visit.json written to {out}")
+    if a.verify:  # one more Prisma request: is the read-back in the cloned voice understandable?
+        ev = await retry(stt, key, wav_bytes(pcm, RATE), language_code="hi-IN,en-IN")
+        rec["readback"]["prisma_text"] = ev.text
+        (out / "visit.json").write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(f"read-back re-transcribed by Prisma: {ev.text}")
 
 
 if __name__ == "__main__":
