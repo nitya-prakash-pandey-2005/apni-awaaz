@@ -98,6 +98,20 @@ def test_sos_speaks_two_languages(client):
     assert len(texts) == 2 and texts[0].startswith("அவசரம்") and texts[1].startswith("आपातकाल")
 
 
+def test_sos_when_speech_fails_still_returns_the_texts(tmp_path, monkeypatch):
+    async def down(*a, **kw):
+        raise RuntimeError("Gnani unreachable")
+
+    monkeypatch.setenv("AWAAZ_FAKE", "1")
+    monkeypatch.setattr(fake_mode, "tone_pcm", down)
+    with TestClient(create_app(Settings(cache_dir=tmp_path))) as c:
+        c.put("/api/profile", json={"language": "ta-IN"})
+        r = c.post("/api/sos", json={"local_lang": "hi-IN"})
+    assert r.status_code == 502
+    d = r.json()["detail"]
+    assert d["texts"][0].startswith("அவசரம்") and d["texts"][1].startswith("आपातकाल") and d["langs"] == ["ta-IN", "hi-IN"]
+
+
 def test_listen_ws_caption_and_suggestions(client):
     client.put("/api/profile", json={"name": "Asha", "language": "hi-IN"})
     with client.websocket_connect("/ws/listen") as ws:

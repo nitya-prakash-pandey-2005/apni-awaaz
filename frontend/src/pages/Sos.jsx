@@ -3,8 +3,11 @@ import { useState } from "react";
 import { Siren } from "lucide-react";
 import { toast } from "../ui";
 import { speakVia } from "../lib/api";
+import { speak as speakLocally } from "../lib/speech";
 import { LANGS } from "../lib/langs";
 import { VoiceBadge } from "./Speak";
+
+const OFFLINE = { langs: ["en-IN"], texts: ["Emergency! I cannot speak. Please help me and call a doctor or my family now."] };
 
 export default function Sos({ profile }) {
   const [local, setLocal] = useState("hi-IN");
@@ -18,7 +21,13 @@ export default function Sos({ profile }) {
       setLast(r);
       await r.played;
     } catch (e) {
-      toast(e.message, "warn");
+      // Gnani or the server is down: show the message in large type and read it with the phone's own voice
+      const d = e.detail?.texts ? e.detail : OFFLINE;
+      setLast({ voice: "device", spoken: d.texts });
+      toast(`Using the phone's voice. ${e.message}`, "warn");
+      for (let i = 0; i < d.texts.length; i++) {
+        await new Promise((done) => speakLocally(d.texts[i], { lang: d.langs[i], onEnd: done }));
+      }
     } finally {
       setBusy(false);
     }

@@ -17,14 +17,19 @@ export async function send(path, { method = "POST", json, body } = {}) {
     init.headers = { "Content-Type": "audio/wav" };
     init.body = body;
   }
-  const r = await fetch(path, init);
+  let r;
+  try {
+    r = await fetch(path, init);
+  } catch {
+    throw new Error("Can't reach the Apni Awaaz server. Check the connection and try again.");
+  }
   if (!r.ok) {
-    let msg = `${path} → ${r.status}`;
+    let msg = `${path} → ${r.status}`, detail;
     try {
-      const d = (await r.json()).detail;
-      msg = typeof d === "string" ? d : d?.message || msg;
+      detail = (await r.json()).detail;
+      msg = typeof detail === "string" ? detail : detail?.message || msg;
     } catch { /* not JSON */ }
-    throw new Error(msg);
+    throw Object.assign(new Error(msg), { detail });
   }
   return r;
 }

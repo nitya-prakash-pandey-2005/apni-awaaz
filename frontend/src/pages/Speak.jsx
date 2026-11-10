@@ -12,6 +12,7 @@ const playOriginal = (m) => new Audio(`/api/messages/${m.id}/audio`).play().catc
 
 export function VoiceBadge({ last }) {
   if (!last) return null;
+  if (last.voice === "device") return <Badge tone="rose" dot>Phone's voice</Badge>;
   return last.voice === "clone" ? <Badge tone="green" dot>Your voice</Badge> : <Badge tone="amber" dot>Fallback voice</Badge>;
 }
 

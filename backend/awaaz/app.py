@@ -208,7 +208,12 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
         langs = list(dict.fromkeys([p.language, check_lang(body.local_lang or p.language)]))
         parts, texts, voices = [], [], set()
         for lang in langs:
-            wav, meta = await say(sos_text(lang), lang)
+            try:
+                wav, meta = await say(sos_text(lang), lang)
+            except Exception as e:  # the app shows these in large type and reads them with the phone's own voice
+                log.warning("SOS speech failed: %r", e)
+                raise HTTPException(502, {"message": f"SOS speech failed: {e}", "langs": langs,
+                                          "texts": [sos_text(x) for x in langs]}) from None
             parts += [read_wav(wav)[0], np.zeros(int(0.6 * RATE), np.float32)]
             texts.append(meta["spoken_text"])
             voices.add(meta["voice"])
