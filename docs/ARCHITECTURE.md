@@ -41,10 +41,10 @@ flowchart LR
   end
 
   UI -->|REST| APP
-  MIC -->|"/ws/listen binary frames"| CONV
+  MIC -->|PCM over /ws/listen| CONV
   CONV -->|caption, suggestions| UI
   SCAN --> UI
-  UI -. "server or Gnani down (SOS)" .-> LOCAL
+  UI -.->|SOS when the server or Gnani is down| LOCAL
   APP --> Q & SPK & CONV & PH & STORE
   SPK --> CACHE
   APP --> GATE --> GN
