@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "../ui";
 
 export async function getJSON(path) {
@@ -72,8 +72,10 @@ export async function speakVia(path, json) {
 export function useSpeak() {
   const [busy, setBusy] = useState(false);
   const [last, setLast] = useState(null);
+  const inFlight = useRef(false); // one utterance at a time: a double tap or a second Enter is ignored
   const say = useCallback(async (text, lang, remember = true) => {
-    if (!text?.trim()) return null;
+    if (!text?.trim() || inFlight.current) return null;
+    inFlight.current = true;
     setBusy(true);
     try {
       const r = await speakVia("/api/speak", { text, lang, remember });
@@ -84,6 +86,7 @@ export function useSpeak() {
       toast(e.message, "warn");
       return null;
     } finally {
+      inFlight.current = false;
       setBusy(false);
     }
   }, []);
