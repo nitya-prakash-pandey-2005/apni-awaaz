@@ -29,7 +29,8 @@ export default function VisitNotes({ lines, profile, listening }) {
   const [demoVisit, setDemoVisit] = useState(null);
   const [family] = useState(loadFamily);
   const player = useRef(null);
-  useEffect(() => () => { player.current?.pause(); if (audio?.url) URL.revokeObjectURL(audio.url); }, [audio]);
+  const urlRef = useRef(null); // the read-back audio's object URL, freed when replaced or on leaving the page
+  useEffect(() => () => { player.current?.pause(); if (urlRef.current) URL.revokeObjectURL(urlRef.current); }, []);
 
   // The demo summarises the doctor visit recorded in the live run (its real captions); the app uses this conversation.
   const turns = DEMO ? demoVisit?.turns || [] : turnsFromLines(lines);
@@ -63,6 +64,8 @@ export default function VisitNotes({ lines, profile, listening }) {
       if (!a) {
         const r = await send("/api/speak", { json: { text: resp.text.local, lang: resp.lang, remember: false } });
         a = { url: URL.createObjectURL(await r.blob()), voice: r.headers.get("X-Voice") || "fallback", spoken: unq(r.headers.get("X-Spoken-Text")) };
+        if (urlRef.current) URL.revokeObjectURL(urlRef.current);
+        urlRef.current = a.url;
         setAudio(a);
       }
       player.current?.pause();
@@ -151,7 +154,7 @@ export default function VisitNotes({ lines, profile, listening }) {
           </div>
         </div>
       ) : <div className="small muted">Add a family contact in <a href="#/profile">Profile</a> to send these notes with one tap.</div>}
-      <button className="btn ghost" onClick={() => { setResp(null); setAudio(null); }}>Close the notes</button>
+      <button className="btn ghost" onClick={() => { player.current?.pause(); setResp(null); setAudio(null); }}>Close the notes</button>
     </Card>
   );
 }
