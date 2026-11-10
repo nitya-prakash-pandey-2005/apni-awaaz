@@ -15,7 +15,7 @@ The normal build (`npm run build`) is unchanged. It contains no demo files, and 
 
 ## How it works
 - `npm run build:demo` runs `vite build --mode demo`. `frontend/.env.demo` sets `VITE_DEMO=1`, and `vite.config.js` copies `frontend/demo/` to `dist/demo/`.
-- `frontend/src/lib/demo.js` answers every `/api` call in the browser from `dist/demo/`: GETs from `snapshot/*.json`, Speak and SOS from `recordings.json` and its audio, `/api/predict` and `/api/pain/sentence` computed in the browser (`lib/predict.js`, `lib/pain.js`, on the same JSON as the server in `backend/awaaz/data/`), and everything else with a friendly "off in the demo" message.
+- `frontend/src/lib/demo.js` answers every `/api` call in the browser from `dist/demo/`: GETs from `snapshot/*.json`, Speak and SOS from `recordings.json` and its audio, `/api/visit/summary` and the visit-notes read-back from `visit.json`, `/api/predict` and `/api/pain/sentence` computed in the browser (`lib/predict.js`, `lib/pain.js`, on the same JSON as the server in `backend/awaaz/data/`), and everything else with a friendly "off in the demo" message.
 - `frontend/demo/` holds the recorded session:
 
 | File | What it is | Made by |
@@ -25,6 +25,7 @@ The normal build (`npm run build`) is unchanged. It contains no demo files, and 
 | `voice-clips.json`, `audio/notes/*.wav` | the three synthetic voice notes and their live quality results | `scripts/snapshot_demo.py` (facts in `scripts/demo_session.py`) |
 | `converse.json`, `audio/nurse.wav` | the nurse's sentence (synthetic, Timbre Kalpana), captions and suggestions | `scripts/snapshot_demo.py --nurse` |
 | `recordings.json`, `audio/clone-*.wav`, `audio/sos.wav` | the sentences and the SOS in the cloned voice | `scripts/record_demo_audio.py` (needs keys) |
+| `visit.json`, `audio/doctor-visit.wav`, `audio/visit-notes.wav` | Visit notes: a synthetic doctor visit (Timbre Prakash), its Prisma captions, the summary and the read-back in the cloned voice | `scripts/record_visit_notes.py` (needs keys; 4 Gnani requests and 1 LLM call) |
 
 ## Before the first deploy: record the cloned-voice audio (once, about 10 Gnani requests)
 The cloned audio from the 10 Nov session was wiped by that session's own "Delete my voice" test, which is the feature working as designed. Until it is recorded again, the demo's Speak and Converse replies show the friendly message, and SOS uses the phone's voice.

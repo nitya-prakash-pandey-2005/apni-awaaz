@@ -1,0 +1,83 @@
+{
+ "recorded_at": "2026-11-10T16:54:26+00:00",
+ "fake": false,
+ "doctor": {
+  "text": "आपको Pantoprazole 40 mg सुबह खाली पेट, 14 दिन तक लेनी है। अगले Monday को blood test करवा लीजिए। अगर खून की उल्टी हो तो तुरंत आइए।",
+  "voice": "Gnani Timbre v3.0 Prakash (synthetic)",
+  "audio": "audio/doctor-visit.wav"
+ },
+ "turns": [
+  {
+   "speaker": "partner",
+   "text": "आपको Pantoprazole चालीस milligram सुबह खाली पेट चौदह दिन तक लेनी है अगले Monday को ब्लड टेस्ट करवा लीजिए। अगर खून की उल्टी हो तो तुरंत आइए।",
+   "t": 0.0
+  },
+  {
+   "speaker": "user",
+   "text": "क्या मैं चाय पी सकता हूँ?",
+   "t": 10.52
+  }
+ ],
+ "llm": "qwen/qwen3.8-27b",
+ "numbers": {
+  "doctor_tts_ms": 3253,
+  "doctor_audio_s": 9.52,
+  "prisma_ms": 501,
+  "summary_ms": 1234,
+  "readback_tts_ms": 7671,
+  "readback_audio_s": 12.02
+ },
+ "response": {
+  "summary": {
+   "medicines": [
+    {
+     "name": "Pantoprazole",
+     "dose": "चालीस milligram",
+     "when": [
+      "morning",
+      "empty_stomach"
+     ],
+     "days": null
+    }
+   ],
+   "tests": [
+    {
+     "en": "Get a blood test done next Monday.",
+     "hi": "अगले Monday को ब्लड टेस्ट करवा लीजिए।",
+     "quote": "अगले Monday को ब्लड टेस्ट करवा लीजिए"
+    }
+   ],
+   "next_visit": null,
+   "warning_signs": [
+    {
+     "en": "If you have vomiting of blood, come immediately.",
+     "hi": "अगर खून की उल्टी हो तो तुरंत आइए।",
+     "quote": "अगर खून की उल्टी हो तो तुरंत आइए"
+    }
+   ],
+   "advice": [],
+   "questions_asked": [
+    {
+     "en": "Can I drink tea?",
+     "hi": "क्या मैं चाय पी सकता हूँ?",
+     "quote": "क्या मैं चाय पी सकता हूँ?"
+    }
+   ]
+  },
+  "source": "llm",
+  "lang": "hi-IN",
+  "text_lang": "hi-IN",
+  "text": {
+   "local": "मेरे विज़िट नोट्स।\nदवाइयाँ: Pantoprazole चालीस milligram सुबह खाली पेट।\nजाँच: अगले Monday को ब्लड टेस्ट करवा लीजिए।।\nइनमें से कुछ हो तो तुरंत जाएँ: अगर खून की उल्टी हो तो तुरंत आइए।\nमैंने पूछा: क्या मैं चाय पी सकता हूँ?",
+   "en": "My visit notes.\nMedicines: Pantoprazole चालीस milligram in the morning on an empty stomach.\nTests: Get a blood test done next Monday..\nGo back at once if: If you have vomiting of blood, come immediately.\nI asked: Can I drink tea?"
+  },
+  "disclaimer": "ये नोट्स AI ने बातचीत से बनाए हैं। अपने डॉक्टर से ज़रूर पूछ लें।"
+ },
+ "readback": {
+  "file": "audio/visit-notes.wav",
+  "voice": "clone",
+  "text": "मेरे विज़िट नोट्स।\nदवाइयाँ: Pantoprazole चालीस milligram सुबह खाली पेट।\nजाँच: अगले Monday को ब्लड टेस्ट करवा लीजिए।।\nइनमें से कुछ हो तो तुरंत जाएँ: अगर खून की उल्टी हो तो तुरंत आइए।\nमैंने पूछा: क्या मैं चाय पी सकता हूँ?",
+  "lang": "hi-IN",
+  "prisma_text": "मेरे visit notes: दवाइयाँ, Pantoprazole चालीस mg, सुबह खाली पेट। जाँच। अगले Monday को blood test करवा लीजिए। इनमें से कुछ हो तो तुरंत जाएँ। अगर खून की उल्टी हो तो तुरंत आइए। मैंने पूछा, \"क्या मैं चाय पी सकता हूँ?\""
+ }
+}

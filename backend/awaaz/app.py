@@ -10,12 +10,13 @@ import json
 import logging
 import os
 import shutil
+from typing import Literal
 from urllib.parse import quote
 
 import numpy as np
 from fastapi import FastAPI, HTTPException, Request, Response, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from voice_core.audio import float_to_pcm16, read_wav, wav_bytes
 from voice_core.config import Settings, get_settings, repo_root
 from voice_core.gnani import TtsCache, create_voice_embedding, transcribe_rest, tts_clone_rest, tts_rest
@@ -24,6 +25,7 @@ from voice_core.turns import is_meaningful
 
 from . import fake_mode
 from . import pain as pain_mod
+from . import visit as visit_mod
 from .converse import ListenSession
 from .gate import GnaniGate
 from .phrases import default_phrases, sos_text, test_phrase
@@ -59,6 +61,17 @@ class PainIn(BaseModel):
     type: str = "sharp"
     since: str = ""
     lang: str = "hi-IN"
+
+
+class VisitTurnIn(BaseModel):
+    speaker: Literal["partner", "user"]  # partner = the doctor or nurse (captions); user = the patient's spoken replies
+    text: str
+    t: float | None = None
+
+
+class VisitIn(BaseModel):
+    turns: list[VisitTurnIn] = Field(max_length=200)
+    lang: str | None = None  # the read-back language; default: the profile language
 
 
 class SosIn(BaseModel):
@@ -228,6 +241,20 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
         except ValueError as e:
             raise HTTPException(400, str(e)) from None
         return {"text": text, "lang": lang, "template_lang": pain_mod.template_lang(lang)}
+
+    @app.post("/api/visit/summary")
+    async def visit_summary(body: VisitIn):
+        """Visit notes: medicines, tests, next visit, warning signs, advice and the patient's questions, checked against
+        the transcript, plus the text to read back (profile language) and in English. Speak it through /api/speak."""
+        lang = check_lang(body.lang or profile().language)
+        turns = [{"speaker": t.speaker, "text": t.text.strip()[:1000], "t": t.t} for t in body.turns if t.text.strip()]
+        if not any(t["speaker"] == "partner" for t in turns):
+            raise HTTPException(400, "no captions from the doctor or nurse yet: listen to the visit first")
+        summary, source = await visit_mod.extract(llm, turns)
+        tl = visit_mod.text_lang(lang)
+        return {"summary": summary, "source": source, "lang": lang, "text_lang": tl,
+                "text": {"local": visit_mod.read_back(summary, lang), "en": visit_mod.read_back(summary, "en-IN")},
+                "disclaimer": visit_mod.disclaimer(source, lang)}
 
     @app.post("/api/sos")
     async def sos(body: SosIn):

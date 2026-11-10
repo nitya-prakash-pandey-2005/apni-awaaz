@@ -2,13 +2,7 @@
   "name": "apni-awaaz-web",
   "private": true,
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:demo": "vite build --mode demo",
-    "preview": "vite preview",
-    "test": "node --test src/lib/dwell.test.js src/lib/family.test.js"
-  },
+  "scripts": { "dev": "vite", "build": "vite build", "build:demo": "vite build --mode demo", "preview": "vite preview", "test": "node --test src/lib/dwell.test.js src/lib/family.test.js src/lib/visit.test.js" },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.0",
     "@fontsource-variable/jetbrains-mono": "^5.2.0",

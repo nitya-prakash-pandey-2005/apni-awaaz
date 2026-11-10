@@ -8,7 +8,8 @@ For people who have lost their voice, or are losing it, to throat or oral cancer
 [![Gnani voice cloning](https://img.shields.io/badge/Gnani-voice%20cloning%20(vachana--vc--v1)-7c3aed)](#gnani-models-used-exactly)
 [![Timbre v3.0](https://img.shields.io/badge/Gnani-Timbre%20v3.0-db2777)](#gnani-models-used-exactly)
 [![Prisma v3.0](https://img.shields.io/badge/Gnani-Prisma%20v3.0-0891b2)](#gnani-models-used-exactly)
-[![Tests](https://img.shields.io/badge/tests-219%20passing-16a34a)](#tests)
+[![Tests](https://img.shields.io/badge/tests-256%20passing-16a34a)](#tests)
+[![CI](https://github.com/nitya-prakash-pandey-2005/apni-awaaz/actions/workflows/ci.yml/badge.svg)](https://github.com/nitya-prakash-pandey-2005/apni-awaaz/actions/workflows/ci.yml)
 [![PWA](https://img.shields.io/badge/PWA-installable-334155)](#accessibility)
 [![10 Indian languages](https://img.shields.io/badge/languages-10%20Indian-f59e0b)](#what-it-does)
 
@@ -57,6 +58,7 @@ Apni Awaaz follows Alice's path, old recordings in and your own voice out, and b
 | 5 | **SOS, even when the server is down, and a location for family** | One large button says an emergency message in your voice, in your language and a second language you pick, and shows it in large type. If Gnani or the server cannot be reached, the app still shows the message and reads it with the phone's own voice. **Send my location:** with one family contact saved on the phone (Profile, with consent text), SOS opens WhatsApp or SMS with a ready message in your language and a Google Maps link, if the browser allows location. The app never sends anything itself; you press Send. |
 | 6 | **Where does it hurt?** | Tap the body (front or back view, large regions, plus a list of every part as big buttons), pick how bad from 0 to 10 with faces or a slider, the kind of pain (sharp, burning, dull and aching, throbbing, itching) and, if you like, since when. It builds one clear sentence, for example "मेरी बाईं बाँह में तेज़ दर्द है, दस में से सात।", and speaks it in your voice. Hindi, Tamil and English have their own grammar-checked templates (Hindi possessives and "left/right" agree with the body part's gender); other languages start from English and are translated on the way out. |
 | 7 | **Word and phrase prediction** | As you type, in Latin letters or your own script, up to five big chips offer the next word or the whole phrase, from what you have said before (most-used first) and a starter list of hospital and home needs in Hindi, Tamil and English. Under the box, "Keystrokes saved this session" compares your key presses (each typed letter, each deletion and each chip tap) with the letters spoken from the box. |
+| 8 | **Visit notes** | After a doctor or nurse visit in Converse, tap "Make visit notes". From the captions and your own replies, Apni Awaaz builds clear notes: a medicines table (name, dose, when, how many days), tests, the next visit, what to watch for, advice and what you asked. "Play my visit notes" reads them in your own voice (Hindi or English text; other languages are translated on the way out), "Download notes" saves them as Markdown, "Download audio" saves the WAV, and WhatsApp or SMS sends them to your family contact. A note on every page says they were made by AI and to check with the doctor. People who cannot speak often cannot ask the doctor to repeat; now they can replay it. |
 
 ## Screens
 
@@ -107,6 +109,13 @@ All on a 390 px phone, live against Gnani on 10 Nov 2026 (synthetic voice).
 <img src="docs/screenshots/product/speak-predict-390.png" width="250" alt="Speak: mujhe p typed, with suggestion chips mujhe paani chahiye, mujhe pyaas lagi hai, paani and pyaas" />
 </p>
 
+**7 · Visit notes: what the doctor said, checked, in your own voice** <sub>(from the static demo build, replaying the live 10 Nov run: synthetic doctor, real Prisma captions, real Groq summary, read-back in the cloned voice)</sub>
+
+<p>
+<img src="docs/screenshots/product/visit-notes-390.png" width="250" alt="Visit notes: the doctor's live captions, a medicines table with Pantoprazole, चालीस milligram, morning and empty stomach, the blood test and the warning sign" />&nbsp;
+<img src="docs/screenshots/product/visit-notes-play-390.png" width="250" alt="Visit notes: the read-back text, Play my visit notes, Download notes and audio, and WhatsApp or SMS to family" />
+</p>
+
 <details>
 <summary><b>Desktop screenshots (1440 px)</b></summary>
 
@@ -115,6 +124,7 @@ All on a 390 px phone, live against Gnani on 10 Nov 2026 (synthetic voice).
 <img src="docs/screenshots/product/sos-1440.png" width="720" alt="SOS page on desktop" />
 <img src="docs/screenshots/product/voice-1440.png" width="720" alt="Voice bank on desktop" />
 <img src="docs/screenshots/product/profile-1440.png" width="720" alt="Profile on desktop" />
+<img src="docs/screenshots/product/visit-notes-1440.png" width="720" alt="Visit notes on desktop (static demo build)" />
 <img src="docs/screenshots/product/pain-1440.png" width="720" alt="Where does it hurt on desktop (static demo build)" />
 
 </details>
@@ -210,6 +220,23 @@ sequenceDiagram
 - **Shared voice engine:** `voice-core/`, the same Gnani clients used by our other two products.
 - **App:** React + Vite PWA (`frontend/`), phone-first, works on desktop.
 
+### Visit notes: transcript → one checked LLM call → notes in your own voice
+
+`POST /api/visit/summary` (`backend/awaaz/visit.py`) takes the Converse turns (the doctor's captions and the patient's
+spoken replies) and makes **one** LLM JSON call for medicines (name, dose, when, days), tests, the next visit,
+warning signs, advice and the patient's questions. Nothing is shown until it is checked against the transcript:
+
+- a medicine stays only if its name was said (a small lexicon with Latin and Devanagari spellings, a consonant-skeleton match so "पैंटोप्राजोल" in a caption counts as Pantoprazole, or the exact words);
+- every number (dose, days) must be said with that medicine (between its name and the next medicine), so "40 mg" can never become "400 mg" or move to another medicine: a dose with an unsaid
+  number is dropped, never "corrected";
+- every other item must quote words that are in the transcript, and any item naming a medicine or test nobody said is
+  dropped (tested with adversarial LLM output);
+- "when" is a fixed set of tags (morning, empty stomach, after food, …), each kept only if its words were said.
+
+If the LLM fails or is rate-limited, a keyword and regex pass over the doctor's sentences gives the same shape (the
+badge says "Keyword notes"). The read-back text is built from Hindi and English templates, never free-written, and is
+spoken through the normal `/api/speak` path: cloned voice first, fallback voice if cloning fails, with the honest badge.
+
 ## How it's different
 
 Good tools already exist, and we learned from them. Here is an honest comparison (facts as of Nov 2026, with sources).
@@ -261,6 +288,7 @@ All numbers come from real runs against Gnani's live APIs with synthetic voices 
 | SOS in Hindi and Tamil, cloned voice | 7.1 s to make both messages (10.7 s of audio) | 10 Nov |
 | Two Speak presses at the same moment | Both spoken in the cloned voice (2.0 s and 3.5 s, queued by the gate), no 429 | 10 Nov |
 | Delete my voice | Embedding and consent cleared, 9 cloned clips on disk → 0, the next Speak used the fallback voice (0.6 s) | 10 Nov |
+| Visit notes | A synthetic doctor visit captioned by Prisma (0.50 s), summarised by one Groq call (1.23 s) and read back in the cloned voice (7.7 s for 12 s of audio). Medicine, dose "चालीस milligram" as said, timing, test, warning sign and the patient's question kept; the LLM missed "14 days" | 10 Nov |
 | Converse | Prisma captioned a synthetic nurse ("नमस्ते शर्मा जी।", "आज आपको कैसा लग रहा है?") and 3 fitting replies appeared | 10 Nov |
 
 ## Privacy and consent by design
@@ -334,8 +362,8 @@ See [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) for the Vercel setup (`vercel
 ## Tests
 
 ```bash
-uv run python -m pytest -q     # 211 passed
-cd frontend && npm test        # 8 passed (dwell timing, family share links)
+uv run python -m pytest -q     # 244 passed
+cd frontend && npm test        # 12 passed (dwell timing, family share links, visit-notes share text)
 ```
 
 - **Where does it hurt? (15 tests):** every body part × side × pain type × onset × level 0 to 10 in Hindi, Tamil and English (4,400 sentences per language), checking Hindi possessive and left/right agreement against an independent gender table, the postposition after the body part, and the score words; other languages fall back to English; bad input is refused; the endpoint's sentence speaks through `/api/speak`. The browser builder gives the same 17,600 sentences as the server, and the browser predictor the same suggestions on 17 cases (2 tests run the web app's JavaScript with Node; skipped if Node is not installed).
