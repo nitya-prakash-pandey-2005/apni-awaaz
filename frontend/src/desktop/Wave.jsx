@@ -19,6 +19,7 @@ export default function Wave({ url, label, height = 44, compact = false }) {
         normalize: true, dragToSeek: true, interact: true,
       });
       ws.current = inst;
+      inst.on("decode", (d) => alive && setState((s) => ({ ...s, ready: true, d })));
       inst.on("ready", (d) => alive && setState((s) => ({ ...s, ready: true, d })));
       inst.on("play", () => alive && setState((s) => ({ ...s, playing: true })));
       inst.on("pause", () => alive && setState((s) => ({ ...s, playing: false })));
