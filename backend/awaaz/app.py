@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import shutil
 from urllib.parse import quote
 
 import numpy as np
@@ -64,6 +65,7 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
     settings.cache_dir.mkdir(parents=True, exist_ok=True)
     store = ProfileStore(settings.cache_dir / ("awaaz_fake.db" if fake else "awaaz.db"))
     cache = TtsCache(settings.cache_dir / ("fake" if fake else ""))
+    clone_cache = TtsCache(cache.dir.parent / "clone")  # audio in the user's voice: wiped by "Delete my voice"
     llm = llm or (fake_mode.FakeAwaazLLM() if fake else LLM(settings))
     if fake:
         clone_fn = tts_fn = fake_mode.tone_pcm
@@ -92,7 +94,7 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
             raise HTTPException(400, "send a 16-bit PCM WAV body") from None
 
     async def say(text: str, lang: str) -> tuple[bytes, dict]:
-        wav, meta = await speak(text, lang, profile(), settings, llm, cache, clone_fn=clone_fn, tts_fn=tts_fn, memo=rewrites)
+        wav, meta = await speak(text, lang, profile(), settings, llm, cache, clone_cache=clone_cache, clone_fn=clone_fn, tts_fn=tts_fn, memo=rewrites)
         for s in live:
             s.note_spoken(meta["spoken_text"])  # echo guard: captions of our own speech are dropped
         return wav, meta
@@ -174,7 +176,10 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
 
     @app.delete("/api/voice")
     async def delete_voice():
-        return public(store.delete_voice())
+        p = store.delete_voice()
+        shutil.rmtree(clone_cache.dir, ignore_errors=True)  # nothing spoken in the cloned voice stays on disk
+        clone_cache.dir.mkdir(parents=True, exist_ok=True)
+        return public(p)
 
     @app.post("/api/speak")
     async def speak_route(body: SpeakIn):

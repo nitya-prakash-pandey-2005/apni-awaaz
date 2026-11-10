@@ -55,18 +55,20 @@ async def rewrite(text: str, out_lang: str, llm, memo: dict | None = None) -> tu
     return out, True
 
 
-async def speak(text: str, out_lang: str, profile, settings, llm, cache, *,
+async def speak(text: str, out_lang: str, profile, settings, llm, cache, *, clone_cache=None,
                 clone_fn=tts_clone_rest, tts_fn=tts_rest, memo: dict | None = None) -> tuple[bytes, dict]:
+    """`clone_cache` (default `cache`) holds audio in the user's own voice, kept apart so it can be wiped on delete."""
     spoken, translated = await rewrite(text.strip(), out_lang, llm, memo)
     meta = {"voice": "clone", "spoken_text": spoken, "translated": translated}
     if profile and profile.voice:
         emb_id = hashlib.sha1(str(profile.voice.get("embedding", ""))[:4096].encode()).hexdigest()[:12]
-        key = cache.key(spoken, clone=emb_id, language=out_lang, sample_rate=RATE)
-        pcm = cache.get(key)
+        ccache = clone_cache or cache
+        key = ccache.key(spoken, clone=emb_id, language=out_lang, sample_rate=RATE)
+        pcm = ccache.get(key)
         if pcm is None:
             try:
                 pcm = await clone_fn(settings.gnani_api_key, spoken, profile.voice, language=out_lang, sample_rate=RATE)
-                cache.put(key, pcm)
+                ccache.put(key, pcm)
             except Exception as e:
                 log.warning("clone TTS failed, using fallback voice: %r", e)
         if pcm is not None:

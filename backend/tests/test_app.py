@@ -55,6 +55,15 @@ def test_enroll_needs_consent_then_speaks_in_clone_voice(client):
     assert client.post("/api/speak", json={"text": "नमस्ते", "lang": "hi-IN"}).headers["x-voice"] == "fallback"
 
 
+def test_delete_voice_also_deletes_audio_made_in_that_voice(client, tmp_path):
+    cached = lambda: sorted(tmp_path.rglob("*.bin"))  # noqa: E731
+    assert client.post("/api/voice/enroll?consent=true", content=_clip()).status_code == 200
+    assert client.post("/api/speak", json={"text": "मुझे पानी चाहिए", "lang": "hi-IN"}).headers["x-voice"] == "clone"
+    assert len(cached()) == 1
+    client.delete("/api/voice")
+    assert cached() == []
+
+
 def test_phrases_learn_from_use(client):
     assert len(client.get("/api/phrases?lang=hi-IN").json()) == 12
     client.post("/api/speak", json={"text": "चाय पीनी है", "lang": "hi-IN"})
