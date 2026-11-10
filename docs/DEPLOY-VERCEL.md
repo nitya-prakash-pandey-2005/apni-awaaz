@@ -41,7 +41,7 @@ It uses the same synthetic voice note (`PTT-20240521-WA0015.wav`), the same mode
 3. Add no environment variables. The demo needs no keys, so never add `GNANI_API_KEY` or `GROQ_API_KEY` to Vercel.
 4. Deploy, open the link on a phone, and replace `[link]` at the top of `README.md` and `PITCH.md`.
 
-To check locally first: `cd frontend && npm run build:demo && npx serve dist` (or `python -m http.server -d dist 8790`), with no backend running.
+To check locally first: `cd frontend && npm run build:demo && npx serve dist` (or `python -m http.server -d dist 8790`), with no backend running. Afterwards run `npm run build` again: the backend serves `frontend/dist`, and a demo build there would answer from the recording instead of the server.
 
 ## Refresh the snapshot after a new live session
 1. Run the app live and use it (synthetic voices only), then stop the server.
