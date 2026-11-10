@@ -5,7 +5,8 @@
   "lang": "hi-IN",
   "spoken": "नमस्ते, ये मेरी आवाज़ है।",
   "voice": "clone",
-  "file": null
+  "file": "audio/clone-01.wav",
+  "recorded_at": "2026-11-10T14:21:53+00:00"
  },
  {
   "kind": "speak",
@@ -13,7 +14,8 @@
   "lang": "hi-IN",
   "spoken": "मेरा गला ठीक नहीं है, पर मैं आपकी हर बात सुन रहा हूँ।",
   "voice": "clone",
-  "file": null
+  "file": "audio/clone-02.wav",
+  "recorded_at": "2026-11-10T14:21:53+00:00"
  },
  {
   "kind": "speak",
@@ -21,7 +23,8 @@
   "lang": "hi-IN",
   "spoken": "मुझे पानी चाहिए",
   "voice": "clone",
-  "file": null
+  "file": "audio/clone-03.wav",
+  "recorded_at": "2026-11-10T14:21:53+00:00"
  },
  {
   "kind": "speak",
@@ -29,7 +32,8 @@
   "lang": "ta-IN",
   "spoken": "வணக்கம் டாக்டர், நான் இப்போ நல்லா இருக்கேன்.",
   "voice": "clone",
-  "file": null
+  "file": "audio/clone-04.wav",
+  "recorded_at": "2026-11-10T14:21:53+00:00"
  },
  {
   "kind": "speak",
@@ -37,7 +41,8 @@
   "lang": "hi-IN",
   "spoken": "मैं ठीक हूँ, धन्यवाद।",
   "voice": "clone",
-  "file": null
+  "file": "audio/clone-05.wav",
+  "recorded_at": "2026-11-10T14:21:53+00:00"
  },
  {
   "kind": "speak",
@@ -45,7 +50,8 @@
   "lang": "hi-IN",
   "spoken": "मुझे थोड़ा आराम करना है।",
   "voice": "clone",
-  "file": null
+  "file": "audio/clone-06.wav",
+  "recorded_at": "2026-11-10T14:21:53+00:00"
  },
  {
   "kind": "speak",
@@ -53,7 +59,8 @@
   "lang": "hi-IN",
   "spoken": "कृपया डॉक्टर को बुलाइए।",
   "voice": "clone",
-  "file": null
+  "file": "audio/clone-07.wav",
+  "recorded_at": "2026-11-10T14:21:53+00:00"
  },
  {
   "kind": "sos",
@@ -66,6 +73,7 @@
    "அவசரம்! என்னால் பேச முடியாது. தயவுசெய்து எனக்கு உதவுங்கள், உடனே டாக்டரையோ என் குடும்பத்தையோ கூப்பிடுங்கள்."
   ],
   "voice": "clone",
-  "file": null
+  "file": "audio/sos.wav",
+  "recorded_at": "2026-11-10T14:21:53+00:00"
  }
 ]
