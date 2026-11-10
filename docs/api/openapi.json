@@ -428,6 +428,43 @@
         }
       }
     },
+    "/api/visit/summary": {
+      "post": {
+        "summary": "Visit Summary",
+        "description": "Visit notes: medicines, tests, next visit, warning signs, advice and the patient's questions, checked against\nthe transcript, plus the text to read back (profile language) and in English. Speak it through /api/speak.",
+        "operationId": "visit_summary_api_visit_summary_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisitIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/sos": {
       "post": {
         "summary": "Sos",
@@ -637,6 +674,67 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "VisitIn": {
+        "properties": {
+          "turns": {
+            "items": {
+              "$ref": "#/components/schemas/VisitTurnIn"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Turns"
+          },
+          "lang": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lang"
+          }
+        },
+        "type": "object",
+        "required": [
+          "turns"
+        ],
+        "title": "VisitIn"
+      },
+      "VisitTurnIn": {
+        "properties": {
+          "speaker": {
+            "type": "string",
+            "enum": [
+              "partner",
+              "user"
+            ],
+            "title": "Speaker"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "T"
+          }
+        },
+        "type": "object",
+        "required": [
+          "speaker",
+          "text"
+        ],
+        "title": "VisitTurnIn"
       }
     }
   }

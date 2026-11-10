@@ -32,6 +32,14 @@ async function loadRecordings() {
   return recordings;
 }
 
+let visitRec;
+async function loadVisit() {
+  if (visitRec === undefined) {
+    try { visitRec = await (await realFetch(`${DEMO_DIR}visit.json`)).json(); } catch { visitRec = null; }
+  }
+  return visitRec;
+}
+
 export const recordingsReady = async () => (await loadRecordings()).some((r) => r.file);
 
 export async function recordedPhrases(lang) {
@@ -67,8 +75,17 @@ async function handle(url, method, body) {
       return json({ detail: e.message }, 400);
     }
   }
+  if (p === "/api/visit/summary" && method === "POST") { // the summary made in the live run (real captions, real LLM)
+    try {
+      return json((await (await realFetch(`${DEMO_DIR}visit.json`)).json()).response);
+    } catch {
+      return json({ detail: "The recorded visit notes are missing from this build." }, 409);
+    }
+  }
   if (p === "/api/speak" && method === "POST") {
     const { text, lang } = JSON.parse(body || "{}");
+    const visit = await loadVisit();
+    if (visit?.readback?.file && norm(text) === norm(visit.readback.text)) return wav({ ...visit.readback, spoken: text }, text);
     const rec = (await recordedPhrases(lang)).find((r) => norm(r.text) === norm(text) || norm(r.spoken) === norm(text));
     return rec ? wav(rec, rec.spoken) : json({ detail: DEMO_SPEAK_MSG }, 409);
   }
