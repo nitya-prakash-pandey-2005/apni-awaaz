@@ -1,0 +1,136 @@
+/* Apni Awaaz: app-specific layout on top of the ui-kit. Colours come only from tokens.
+   People using this app may be older, tired, or have weak hands: big targets and big text where it matters. */
+
+:root {
+  --font-ui: "Inter Variable", "Noto Sans Devanagari", "Noto Sans Tamil", "Noto Sans Bengali", "Nirmala UI", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --scale: 1;
+}
+html[data-text="large"] { --scale: 1.2; }
+
+.narrow { max-width: 880px; margin: 0 auto; }
+.flex-none { flex: none; }
+.center-text { text-align: center; }
+.wrap-text { white-space: normal !important; overflow-wrap: anywhere; }
+svg.c-pink { color: var(--pink-2); flex: none; }
+svg.c-cyan { color: var(--cyan); }
+.c-rose { color: var(--rose); }
+.spin { animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.select option, .select optgroup { background: var(--surface-solid); color: var(--text); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.plain-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--text-2); font-size: 13.5px; }
+
+/* ---------- welcome ---------- */
+.step { display: flex; gap: 12px; align-items: flex-start; }
+.step-n {
+  width: 30px; height: 30px; border-radius: 10px; flex: none; display: grid; place-items: center;
+  background: var(--grad-soft); border: 1px solid var(--line-2); font-family: var(--font-display); font-weight: 700;
+}
+
+/* consent checkbox: the whole row is the target */
+.check-row {
+  display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; cursor: pointer;
+  border: 1px solid var(--line-2); background: rgba(0, 0, 0, 0.2); font-size: calc(15px * var(--scale)); line-height: 1.45; color: var(--text);
+}
+.check-row.on { border-color: var(--green); background: var(--green-a); }
+.check-row input { width: 24px; height: 24px; margin: 1px 0 0; flex: none; accent-color: var(--green); cursor: pointer; }
+
+/* ---------- voice bank ---------- */
+.clip-list { display: flex; flex-direction: column; margin-top: 16px; border-top: 1px solid var(--line); }
+.clip-row { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.clip-ic { width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center; background: var(--surface-2); color: var(--text-2); }
+.clip-name { overflow-wrap: anywhere; min-width: 0; }
+.reasons { margin: 6px 0 0; padding-left: 18px; color: var(--amber); font-size: 13px; display: flex; flex-direction: column; gap: 3px; }
+.heard { margin-top: 6px; color: var(--text-2); font-style: italic; overflow-wrap: anywhere; }
+.big-line { font-size: calc(22px * var(--scale)); font-family: var(--font-display); line-height: 1.35; overflow-wrap: anywhere; }
+
+/* ---------- speak ---------- */
+.speak-layout {
+  display: grid; gap: 16px; align-items: start;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-areas: "compose phrases" "history phrases";
+}
+.area-compose { grid-area: compose; }
+.area-phrases { grid-area: phrases; }
+.area-history { grid-area: history; }
+@media (max-width: 1180px) {
+  .speak-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "compose" "phrases" "history"; }
+}
+.say-box { resize: vertical; min-height: 110px; font-size: calc(19px * var(--scale)); line-height: 1.45; }
+.lang-chips { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.lang-chip { min-height: 40px; padding: 8px 14px; font-size: calc(14px * var(--scale)); }
+.speak-btn { min-height: 58px; font-size: calc(17px * var(--scale)); }
+.btn.lg.danger { min-height: 52px; }
+.last-said { margin-top: 16px; padding: 14px; border-radius: 14px; background: rgba(0, 0, 0, 0.22); border: 1px solid var(--line); }
+.said { margin: 8px 0 4px; font-size: calc(20px * var(--scale)); font-family: var(--font-display); line-height: 1.35; overflow-wrap: anywhere; }
+.big-chip { min-height: 44px; padding: 10px 14px; font-size: calc(14.5px * var(--scale)); white-space: normal; text-align: left; }
+
+.phrase-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.phrase-tile {
+  min-height: 92px; padding: 12px; border-radius: 16px; text-align: left; display: flex; flex-direction: column; gap: 6px;
+  background: var(--surface-2); border: 1px solid var(--line); color: var(--text); min-width: 0;
+  transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.phrase-tile:hover { border-color: var(--line-2); background: rgba(255, 255, 255, 0.08); }
+.phrase-tile:active { transform: scale(0.97); }
+.phrase-tile.busy { border-color: var(--pink); box-shadow: var(--glow-pink); }
+.phrase-tile .ic { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: var(--pink-a); color: var(--pink-2); flex: none; }
+.phrase-tile .txt { font-weight: 650; font-size: calc(16px * var(--scale)); line-height: 1.3; overflow-wrap: anywhere; }
+.phrase-tile .gloss { font-size: 11.5px; color: var(--muted); line-height: 1.3; }
+.phrase-tile.skeleton { border: 0; }
+
+/* ---------- conversation ---------- */
+.converse-layout {
+  display: grid; gap: 16px; align-items: start;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-areas: "controls side" "convo side";
+}
+.area-controls { grid-area: controls; }
+.area-convo { grid-area: convo; }
+.area-side { grid-area: side; }
+@media (max-width: 1180px) {
+  .converse-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "controls" "convo" "side"; }
+}
+.convo { display: flex; flex-direction: column; gap: 10px; min-height: 240px; max-height: 52vh; overflow-y: auto; padding-right: 4px; }
+@media (max-width: 900px) { .convo { min-height: 160px; max-height: 42vh; } }
+.bubble.talk { font-size: calc(16.5px * var(--scale)); max-width: 88%; }
+.bubble.typing { display: inline-flex; gap: 5px; align-items: center; width: auto; padding: 14px 16px; }
+.bubble.typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--text-2); animation: blink 1.2s infinite; }
+.bubble.typing span:nth-child(2) { animation-delay: 0.2s; }
+.bubble.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
+.echo-note { align-self: center; display: inline-flex; gap: 6px; align-items: center; font-size: 11.5px; color: var(--muted); }
+
+.suggest-list { display: flex; flex-direction: column; gap: 10px; }
+.suggest-btn {
+  min-height: 60px; padding: 12px 16px; border-radius: 16px; display: flex; gap: 12px; align-items: center; text-align: left;
+  background: var(--grad-soft); border: 1px solid rgba(255, 77, 157, 0.35); color: var(--text);
+  font-size: calc(17px * var(--scale)); font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; min-width: 0;
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+.suggest-btn svg { flex: none; color: var(--pink-2); }
+.suggest-btn:hover { border-color: var(--pink); }
+.suggest-btn:active { transform: scale(0.98); }
+.suggest-btn.skeleton { border: 0; }
+.reply-input { min-height: 52px; font-size: calc(16px * var(--scale)); }
+.btn.icon.reply-send { width: 52px; height: 52px; flex: none; }
+
+/* ---------- SOS ---------- */
+.sos-hero { padding: 22px; }
+.sos-ic { width: 52px; height: 52px; border-radius: 16px; flex: none; display: grid; place-items: center; background: var(--rose-a); color: var(--rose); }
+.sos-title { font-size: 26px; }
+.sos-btn {
+  margin-top: 18px; width: 100%; min-height: 112px; border-radius: 22px; display: flex; gap: 14px; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: calc(28px * var(--scale)); font-weight: 700; letter-spacing: -0.01em; color: var(--text);
+  background: linear-gradient(135deg, var(--rose), var(--pink)); box-shadow: 0 14px 44px var(--rose-a), var(--glow-pink);
+  transition: transform 0.1s ease;
+}
+.sos-btn:active { transform: scale(0.98); }
+.sos-btn:disabled { opacity: 0.7; }
+.sos-btn.stop { background: var(--surface-raised); border: 2px solid var(--rose); box-shadow: none; }
+.sos-line {
+  font-family: var(--font-display); font-size: calc(24px * var(--scale)); line-height: 1.4; color: var(--text-2);
+  opacity: 0.7; transition: opacity 0.2s ease, color 0.2s ease; overflow-wrap: anywhere;
+}
+.sos-line.on { opacity: 1; color: var(--text); }
+@media (max-width: 900px) { .sos-line { font-size: calc(21px * var(--scale)); } }
