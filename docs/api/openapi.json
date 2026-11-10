@@ -342,6 +342,92 @@
         }
       }
     },
+    "/api/predict": {
+      "get": {
+        "summary": "Predict Route",
+        "description": "Up to 5 next-word and phrase suggestions from the person's own phrases and a starter lexicon.",
+        "operationId": "predict_route_api_predict_get",
+        "parameters": [
+          {
+            "name": "text",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Text"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "hi-IN",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pain/sentence": {
+      "post": {
+        "summary": "Pain Sentence",
+        "description": "'Where does it hurt?': the sentence to speak (spoken through /api/speak like any other text).",
+        "operationId": "pain_sentence_api_pain_sentence_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PainIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/sos": {
       "post": {
         "summary": "Sos",
@@ -393,6 +479,50 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "PainIn": {
+        "properties": {
+          "part": {
+            "type": "string",
+            "title": "Part"
+          },
+          "side": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Side"
+          },
+          "level": {
+            "type": "integer",
+            "title": "Level",
+            "default": 5
+          },
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "default": "sharp"
+          },
+          "since": {
+            "type": "string",
+            "title": "Since",
+            "default": ""
+          },
+          "lang": {
+            "type": "string",
+            "title": "Lang",
+            "default": "hi-IN"
+          }
+        },
+        "type": "object",
+        "required": [
+          "part"
+        ],
+        "title": "PainIn"
       },
       "ProfileIn": {
         "properties": {

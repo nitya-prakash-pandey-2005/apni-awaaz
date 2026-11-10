@@ -8,7 +8,7 @@ For people who have lost their voice, or are losing it, to throat or oral cancer
 [![Gnani voice cloning](https://img.shields.io/badge/Gnani-voice%20cloning%20(vachana--vc--v1)-7c3aed)](#gnani-models-used-exactly)
 [![Timbre v3.0](https://img.shields.io/badge/Gnani-Timbre%20v3.0-db2777)](#gnani-models-used-exactly)
 [![Prisma v3.0](https://img.shields.io/badge/Gnani-Prisma%20v3.0-0891b2)](#gnani-models-used-exactly)
-[![Tests](https://img.shields.io/badge/tests-92%20passing-16a34a)](#tests)
+[![Tests](https://img.shields.io/badge/tests-219%20passing-16a34a)](#tests)
 [![PWA](https://img.shields.io/badge/PWA-installable-334155)](#accessibility)
 [![10 Indian languages](https://img.shields.io/badge/languages-10%20Indian-f59e0b)](#what-it-does)
 
@@ -334,7 +334,7 @@ See [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) for the Vercel setup (`vercel
 ## Tests
 
 ```bash
-uv run python -m pytest -q     # 123 passed
+uv run python -m pytest -q     # 211 passed
 cd frontend && npm test        # 8 passed (dwell timing, family share links)
 ```
 

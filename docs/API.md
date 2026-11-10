@@ -32,6 +32,8 @@ The backend is one FastAPI app (`backend/awaaz/app.py`, built by `create_app()`)
 | POST | `/api/speak` | Speak a sentence in the cloned voice (or the fallback voice) |
 | GET | `/api/phrases?lang=` | Quick phrases: the user's most used, then the defaults |
 | POST | `/api/sos` | Emergency message in the profile language and a local language, as one WAV |
+| GET | `/api/predict?text=&lang=` | Up to 5 next-word / phrase suggestions from the person's own phrases and a starter lexicon |
+| POST | `/api/pain/sentence` | "Where does it hurt?": builds the sentence to speak (then spoken through `/api/speak`) |
 | POST | `/api/messages?label=` | Bank an original recording (kept and replayed as it is) |
 | GET | `/api/messages` | List banked recordings |
 | GET | `/api/messages/{mid}/audio` | One banked recording's audio |
@@ -174,6 +176,30 @@ still carries the text so the app can show it in large type and read it with the
 ```json
 {"detail": {"message": "SOS speech failed: ...", "langs": ["hi-IN", "ta-IN"], "texts": ["आपातकाल! ...", "அவசரம்! ..."]}}
 ```
+
+## Communication aids
+
+### `GET /api/predict?text=mujhe pa&lang=hi-IN`
+Prefix and previous-word scoring over the person's own phrase counts (ranked first) and a starter lexicon (native and romanised Hindi and Tamil, English). `text` is cut to 500 characters.
+```json
+{"suggestions": [
+  {"text": "mujhe paani chahiye", "label": "mujhe paani chahiye", "kind": "phrase"},
+  {"text": "mujhe pankha chala dijiye", "label": "pankha chala dijiye", "kind": "phrase"},
+  {"text": "mujhe paani ", "label": "paani", "kind": "word"}
+]}
+```
+`text` is the full replacement for the input box, `label` what the chip shows, `kind` is `phrase` or `word`.
+
+### `POST /api/pain/sentence`
+Body (`PainIn`): `part` (e.g. `"arm"`), `side` (`"left"`/`"right"`/null), `level` 0–10, `type` (`sharp`, `burning`, `dull`, `throbbing`, `itching`), `since` (`""`, `"just_now"`, `"today"`, `"since_yesterday"`), `lang`.
+```json
+{"part": "arm", "side": "left", "level": 7, "type": "sharp", "since": "today", "lang": "hi-IN"}
+```
+Response: the sentence in that language (Hindi and Tamil from tested templates with gender/case agreement; other languages get English, which `/api/speak` translates).
+```json
+{"text": "मेरी बाईं बाँह में आज से तेज़ दर्द है, दस में से सात।", "lang": "hi-IN", "template_lang": "hi"}
+```
+Unknown part, type or level → `400` with a message. The same templates (`backend/awaaz/data/pain.json`) drive the browser in demo mode; a test checks that both produce identical sentences.
 
 ## Message banking
 
