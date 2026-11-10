@@ -194,3 +194,12 @@ def test_brand_said_as_such_keeps_its_name():
     turns = [{"speaker": "partner", "text": "Bukhar ho toh Dolo 650 lijiye."}]
     m = visit.sanitise({"medicines": [{"name": "Dolo 650", "dose": "650 mg"}]}, turns)["medicines"][0]
     assert m["name"] == "Dolo 650" and m["dose"] == "650 mg"
+
+
+def test_one_llm_call_with_the_transcript_and_no_invention_rule():
+    llm = FakeLLM([json.dumps(GOOD)])
+    run(visit.extract(llm, TURNS))
+    assert len(llm.calls) == 1
+    system, user = llm.calls[0][0]["content"], llm.calls[0][1]["content"]
+    assert "never add a medicine" in system and "quote" in system
+    assert user.startswith("Doctor: Aapko Pantoprazole 40 mg") and "Patient: Kya main chai" in user
