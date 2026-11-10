@@ -62,7 +62,7 @@ export default function App() {
   const path = HEADS[route.path] ? route.path : null;
   const landing = route.path === "/" && !standalone(); // browsers open on the product page; the installed app opens on Speak
   useEffect(() => {
-    if (!path && !landing && profile) window.location.hash = profile.has_voice ? "/speak" : "/voice";
+    if (!path && !landing && profile) window.location.replace(`#${profile.has_voice ? "/speak" : "/voice"}`); // replace: Back returns to the landing page
   }, [path, landing, profile]);
   useEffect(() => { if (!landing) window.scrollTo(0, 0); }, [landing]);
   const wide = useWide();
