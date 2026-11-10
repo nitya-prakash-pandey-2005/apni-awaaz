@@ -59,6 +59,11 @@ class ProfileStore:
         rows = self.db.execute("SELECT text FROM phrases WHERE lang = ? ORDER BY uses DESC, rowid LIMIT ?", (lang, n))
         return [r[0] for r in rows]
 
+    def phrase_counts(self, lang: str, n: int = 300) -> list[tuple[str, int]]:
+        """(text, uses) of the person's most-used phrases in a language: the personal part of word prediction."""
+        rows = self.db.execute("SELECT text, uses FROM phrases WHERE lang = ? ORDER BY uses DESC, rowid LIMIT ?", (lang, n))
+        return [(r[0], r[1]) for r in rows]
+
     # message banking: the person's own recordings, kept and replayed as they are (no AI)
     def add_message(self, label: str, mime: str, audio: bytes) -> dict:
         created = datetime.now(UTC).isoformat(timespec="seconds")

@@ -1,0 +1,45 @@
+{
+  "_about": "Pain sentence templates, shared by backend/awaaz/pain.py and the web app (frontend/src/lib/pain.js). Hindi nouns are in the oblique case (गला -> गले) because में follows; the possessive and the side adjective agree with the noun gender (मेरे बाएँ हाथ में, मेरी बाईं बाँह में).",
+  "parts": [
+    {"id": "head", "sided": false, "view": "both", "en": "head", "hi": {"noun": "सिर", "g": "m"}, "ta": "தலையில்"},
+    {"id": "eye", "sided": true, "view": "front", "en": "eye", "hi": {"noun": "आँख", "g": "f"}, "ta": "கண்ணில்"},
+    {"id": "ear", "sided": true, "view": "both", "en": "ear", "hi": {"noun": "कान", "g": "m"}, "ta": "காதில்"},
+    {"id": "mouth", "sided": false, "view": "front", "en": "mouth", "hi": {"noun": "मुँह", "g": "m"}, "ta": "வாயில்"},
+    {"id": "throat", "sided": false, "view": "front", "en": "throat", "hi": {"noun": "गले", "g": "m"}, "ta": "தொண்டையில்"},
+    {"id": "neck", "sided": false, "view": "back", "en": "neck", "hi": {"noun": "गर्दन", "g": "f"}, "ta": "கழுத்தில்"},
+    {"id": "chest", "sided": false, "view": "front", "en": "chest", "hi": {"noun": "छाती", "g": "f"}, "ta": "மார்பில்"},
+    {"id": "stomach", "sided": false, "view": "front", "en": "stomach", "hi": {"noun": "पेट", "g": "m"}, "ta": "வயிற்றில்"},
+    {"id": "upper_back", "sided": false, "view": "back", "en": "upper back", "hi": {"noun": "पीठ", "g": "f"}, "ta": "முதுகில்"},
+    {"id": "lower_back", "sided": false, "view": "back", "en": "lower back", "hi": {"noun": "कमर", "g": "f"}, "ta": "கீழ் முதுகில்"},
+    {"id": "arm", "sided": true, "view": "both", "en": "arm", "hi": {"noun": "बाँह", "g": "f"}, "ta": "கையில்"},
+    {"id": "hand", "sided": true, "view": "both", "en": "hand", "hi": {"noun": "हाथ", "g": "m"}, "ta": "உள்ளங்கையில்"},
+    {"id": "leg", "sided": true, "view": "both", "en": "leg", "hi": {"noun": "टाँग", "g": "f"}, "ta": "காலில்"},
+    {"id": "foot", "sided": true, "view": "both", "en": "foot", "hi": {"noun": "पैर", "g": "m"}, "ta": "பாதத்தில்"}
+  ],
+  "types": ["sharp", "burning", "dull", "throbbing", "itching"],
+  "since": ["", "just_now", "today", "yesterday"],
+  "langs": {
+    "en-IN": {
+      "template": "I have {type} in my {side}{part}{since}, {level} out of ten.",
+      "side": {"left": "left ", "right": "right "},
+      "types": {"sharp": "a sharp pain", "burning": "a burning pain", "dull": "a dull, aching pain", "throbbing": "a throbbing pain", "itching": "an itch"},
+      "since": {"": "", "just_now": " that started just now", "today": " that started today", "yesterday": " since yesterday"},
+      "numbers": ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+    },
+    "hi-IN": {
+      "template": "{my} {side}{part} में {since}{type} है, दस में से {level}।",
+      "my": {"m": "मेरे", "f": "मेरी"},
+      "side": {"left": {"m": "बाएँ ", "f": "बाईं "}, "right": {"m": "दाएँ ", "f": "दाईं "}},
+      "types": {"sharp": "तेज़ दर्द", "burning": "जलन", "dull": "हल्का-हल्का दर्द", "throbbing": "टीस वाला दर्द", "itching": "खुजली"},
+      "since": {"": "", "just_now": "थोड़ी देर से ", "today": "आज से ", "yesterday": "कल से "},
+      "numbers": ["शून्य", "एक", "दो", "तीन", "चार", "पाँच", "छह", "सात", "आठ", "नौ", "दस"]
+    },
+    "ta-IN": {
+      "template": "என் {side}{part} {since}{type} இருக்கு, பத்தில் {level}.",
+      "side": {"left": "இடது ", "right": "வலது "},
+      "types": {"sharp": "கூர்மையான வலி", "burning": "எரிச்சல்", "dull": "மந்தமான வலி", "throbbing": "துடிக்கும் வலி", "itching": "அரிப்பு"},
+      "since": {"": "", "just_now": "கொஞ்ச நேரமா ", "today": "இன்றிலிருந்து ", "yesterday": "நேற்றிலிருந்து "},
+      "numbers": ["பூஜ்ஜியம்", "ஒன்று", "இரண்டு", "மூன்று", "நான்கு", "ஐந்து", "ஆறு", "ஏழு", "எட்டு", "ஒன்பது", "பத்து"]
+    }
+  }
+}

@@ -52,9 +52,11 @@ Apni Awaaz follows Alice's path, old recordings in and your own voice out, and b
 |---|---|---|
 | 1 | **Get your voice back from old voice notes** | Tick consent, then upload 1 to 5 old WhatsApp voice notes (.opus, .ogg, .mp3, .wav) or record a new one. Each clip is checked before it is used: length of speech, clipping, background noise (SNR), and a Prisma v3.0 transcript to confirm there is clear speech. The clearest good clip becomes your voice with Gnani's zero-shot voice cloning, and you hear a test phrase straight away. |
 | 2 | **Speak: type in any script, or tap a phrase** | Type in Hindi, Tamil or any of 10 Indian languages, or in Latin letters ("mujhe paani chahiye"). Text in the wrong script is rewritten into the chosen language first, then spoken in your cloned voice. A badge always says honestly whose voice you heard: **Your voice**, **Fallback voice** (a Timbre voice, if cloning is unavailable) or **Phone's voice**. Quick phrases learn from what you say most. |
-| 3 | **Banked messages and switch scanning** | **Message banking:** record a few precious phrases before surgery ("I love you, beta", a laugh) or cut them from old notes. They play back exactly as recorded, with no AI. **Switch scanning:** for stroke and ALS users who cannot type or tap, a highlight steps through banked messages and phrases (fast, medium or slow). One press of Space, Enter, an assistive switch or the big Select button speaks the highlighted one. |
+| 3 | **Banked messages, switch scanning and dwell selection** | **Message banking:** record a few precious phrases before surgery ("I love you, beta", a laugh) or cut them from old notes. They play back exactly as recorded, with no AI. **Switch scanning:** for stroke and ALS users who cannot type or tap, a highlight steps through banked messages and phrases (fast, medium or slow). One press of Space, Enter, an assistive switch or the big Select button speaks the highlighted one. **Dwell selection** (Profile → "Select by holding the pointer still"): for a head pointer, eye-gaze software or a mouse the person cannot click, resting the pointer on a phrase, chip or body part fills a ring and presses it after 0.6 to 2.0 s. |
 | 4 | **Converse: hear them, answer in one tap** | Tap "Start listening". What the other person says appears as live captions (Prisma v3.0 streaming, Indian languages auto-detected). After each sentence, three short suggested replies appear in your language. One tap speaks the reply in your voice. Your own spoken replies are not captioned back (echo guard). |
-| 5 | **SOS, even when the server is down** | One large button says an emergency message in your voice, in your language and a second language you pick, and shows it in large type. If Gnani or the server cannot be reached, the app still shows the message and reads it with the phone's own voice. |
+| 5 | **SOS, even when the server is down, and a location for family** | One large button says an emergency message in your voice, in your language and a second language you pick, and shows it in large type. If Gnani or the server cannot be reached, the app still shows the message and reads it with the phone's own voice. **Send my location:** with one family contact saved on the phone (Profile, with consent text), SOS opens WhatsApp or SMS with a ready message in your language and a Google Maps link, if the browser allows location. The app never sends anything itself; you press Send. |
+| 6 | **Where does it hurt?** | Tap the body (front or back view, large regions, plus a list of every part as big buttons), pick how bad from 0 to 10 with faces or a slider, the kind of pain (sharp, burning, dull and aching, throbbing, itching) and, if you like, since when. It builds one clear sentence, for example "मेरी बाईं बाँह में तेज़ दर्द है, दस में से सात।", and speaks it in your voice. Hindi, Tamil and English have their own grammar-checked templates (Hindi possessives and "left/right" agree with the body part's gender); other languages start from English and are translated on the way out. |
+| 7 | **Word and phrase prediction** | As you type, in Latin letters or your own script, up to five big chips offer the next word or the whole phrase, from what you have said before (most-used first) and a starter list of hospital and home needs in Hindi, Tamil and English. Under the box, "Keystrokes saved this session" compares your key presses (each typed letter, each deletion and each chip tap) with the letters spoken from the box. |
 
 ## Screens
 
@@ -97,6 +99,14 @@ All on a 390 px phone, live against Gnani on 10 Nov 2026 (synthetic voice).
 <img src="docs/screenshots/product/profile-consent-390.png" width="250" alt="Profile: consent time, Delete my voice, and banked recordings" />
 </p>
 
+**6 · Where does it hurt? and word prediction** <sub>(from the static demo build, no server: the sentence and the suggestions come from the same templates and word list the server uses)</sub>
+
+<p>
+<img src="docs/screenshots/product/pain-body-390.png" width="250" alt="Where does it hurt: body outline with the left arm selected and a list of body parts as large buttons" />&nbsp;
+<img src="docs/screenshots/product/pain-say-390.png" width="250" alt="Where does it hurt: pain type, since when, and the Hindi sentence मेरी बाईं बाँह में तेज़ दर्द है, दस में से सात।" />&nbsp;
+<img src="docs/screenshots/product/speak-predict-390.png" width="250" alt="Speak: mujhe p typed, with suggestion chips mujhe paani chahiye, mujhe pyaas lagi hai, paani and pyaas" />
+</p>
+
 <details>
 <summary><b>Desktop screenshots (1440 px)</b></summary>
 
@@ -105,6 +115,7 @@ All on a 390 px phone, live against Gnani on 10 Nov 2026 (synthetic voice).
 <img src="docs/screenshots/product/sos-1440.png" width="720" alt="SOS page on desktop" />
 <img src="docs/screenshots/product/voice-1440.png" width="720" alt="Voice bank on desktop" />
 <img src="docs/screenshots/product/profile-1440.png" width="720" alt="Profile on desktop" />
+<img src="docs/screenshots/product/pain-1440.png" width="720" alt="Where does it hurt on desktop (static demo build)" />
 
 </details>
 
@@ -259,13 +270,17 @@ All numbers come from real runs against Gnani's live APIs with synthetic voices 
 - **The voice embedding stays on the app's own server.** It goes out only to Gnani, inside each speech request, and is never sent to the browser.
 - **What is sent to other services, and why:** audio goes only to Gnani, for the clip check, the embedding and speech. Text goes to the LLM (Groq) for suggested replies and for rewriting romanised text: the profile name, family names and condition, and the captions (text, not audio). Apni Awaaz stores nothing with any third party; their own retention policies apply to those calls.
 - **Banked messages** are stored and played back as they are. No AI touches them.
+- **The family contact and the location stay on the phone.** The SOS contact is kept in the browser's local storage, only after the person ticks the consent line, and can be removed in Profile. The location is asked for only when "Add my location" is pressed (or if the browser already allows it), goes only into the WhatsApp or SMS message the person sends themselves, and never reaches the Apni Awaaz server.
 - **Synthetic demo voice.** Every voice in our demos and screenshots was generated with Gnani Timbre. We never cloned a real person's voice for testing.
 
 ## Accessibility
 
 - **Large tap targets:** phrase tiles 64 px, suggested replies 60 px, the Speak button 64 px, language chips 48 px, the SOS button 260 px.
 - **Switch scanning** with Space, Enter, an assistive switch or the on-screen Select button, at three speeds. Typing in a text box never triggers it, and the highlight is never hidden under the tab bar.
-- **Screen readers:** icon-only buttons have labels, captions are announced (`aria-live`), and so are error messages.
+- **Dwell selection** for head pointers and eye-gaze software that move the cursor: hold still on any button, phrase, chip or body part and a ring fills, then presses it (0.6 to 2.0 s, set in Profile). Moving away or scrolling cancels it, it never fires twice without leaving first, touch taps are left alone, and with reduced motion the ring fills in four steps instead of a sweep. Text boxes and menus are never dwell-pressed.
+- **Fewer keystrokes:** word and phrase prediction chips (52 px tall) while typing, and an honest "Keystrokes saved this session" count of keys pressed against letters spoken.
+- **Where does it hurt?** needs no typing: tap the body or a 48 px body-part button, then faces for 0 to 10. Every body region is a labelled button that also works with the keyboard (Enter or Space).
+- **Screen readers:** icon-only buttons have labels, captions are announced (`aria-live`), and so are error messages and the built pain sentence.
 - **SOS works with the server down,** in the phone's own voice, with the message in large type.
 - **Installable PWA** with a phone-first layout that also works on desktop. One reply at a time, so a shaky double tap never plays two messages over each other.
 - Known gap: the scanning highlight is visual only; it is not yet announced to screen readers.
@@ -280,7 +295,7 @@ An honest roadmap: none of this is built yet. Each item says why it matters.
 | **Offline phrase cache** | Pre-synthesise the person's quick phrases, SOS message and top replies in their cloned voice and keep them in the service-worker cache | SOS already falls back to the phone's voice; this would keep the *own* voice for the most important sentences with no network, in a hospital basement or on a train. |
 | **Emotion and prosody controls** | Simple controls for calm, urgent, happy and question, plus speed and pauses, mapped to SSML-style hints or reference clips with that emotion | People do not only say words; they comfort, joke and insist. A single neutral style makes every sentence sound the same. |
 | **Hospital speech-therapy workflow** | A pre-surgery "bank your voice" checklist for speech-language therapists: record the reference clip and banked messages in the ward, and print a QR code that links the patient's profile | Message banking works best *before* a laryngectomy. Putting it into the hospital routine catches people while they can still speak. |
-| **AAC device and switch integrations** | Bluetooth and USB switch profiles, eye-gaze dwell selection, and a plain phrase export that other AAC apps can use | Many ALS and stroke users already use a switch or eye-gaze setup. Meeting them in their existing tools beats asking them to learn a new one. |
+| **AAC device and switch integrations** | Bluetooth and USB switch profiles, and a plain phrase export that other AAC apps can use (dwell selection for cursor-moving head and eye pointers is already built) | Many ALS and stroke users already use a switch or eye-gaze setup. Meeting them in their existing tools beats asking them to learn a new one. |
 | **Evon hosted for suggestions** | Host Gnani's Evon v3.3 on an 80 GB GPU ([plan](docs/EVON-HOSTING.md)) and switch `LLM_PROVIDER=evon` | The adapter already exists. An Indian-language LLM could give more natural code-mixed replies, and keep caption text with the same provider as the audio. |
 | **More languages and dialects** | Add languages as Gnani adds them, plus dialect-aware phrase packs (Bhojpuri, Awadhi, Marwari phrasing written in Hindi script) | People speak their mother tongue at home and in hospital. The closer the words are to how they really talk, the more it sounds like *them*. |
 | **Clinical pilot, with consent** | A small, ethics-approved pilot with a cancer hospital's speech therapy team: patients choose to take part, and we measure how often the voice is used, family recognition and quality of life | We have only tested with synthetic voices. Real patients, with informed consent and clinical oversight, are the only honest way to know whether it helps. |
@@ -319,9 +334,12 @@ See [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) for the Vercel setup (`vercel
 ## Tests
 
 ```bash
-uv run python -m pytest -q     # 92 passed
+uv run python -m pytest -q     # 123 passed
+cd frontend && npm test        # 8 passed (dwell timing, family share links)
 ```
 
+- **Where does it hurt? (15 tests):** every body part × side × pain type × onset × level 0 to 10 in Hindi, Tamil and English (4,400 sentences per language), checking Hindi possessive and left/right agreement against an independent gender table, the postposition after the body part, and the score words; other languages fall back to English; bad input is refused; the endpoint's sentence speaks through `/api/speak`. The browser builder gives the same 17,600 sentences as the server, and the browser predictor the same suggestions on 17 cases (2 tests run the web app's JavaScript with Node; skipped if Node is not installed).
+- **Word prediction (14 tests):** phrase completion from a partial word, romanised and native Hindi kept in the typed script, next word after a space, context from mid-sentence, the person's own phrases ranked above the starter list (more uses rank higher), at most five unique chips, the keystrokes-saved formula, and the endpoint learning from what was spoken.
 - **App (30 tests):** consent is required before a voice is built; voice-note checks (too short, clipping, noise, no clear speech, a long note judged on the 30 s actually used); romanised Hindi rewritten then cloned; clone failure falls back to Timbre; Delete my voice also deletes cloned audio; SOS in two languages, and SOS text returned when speech fails; message banking keeps the original recording; live captions with suggested replies and the echo guard; parallel Speak presses never overlap Gnani calls, and a 429 is retried without losing the cloned voice.
 - **Shared voice engine (62 tests):** Gnani protocol (headers, embeddings, TTS bodies), the request gate and retries, audio utilities, the LLM wrapper, turn handling and the realtime session.
 - `npm run build` and `npm run build:demo` check the app compiles. The app was also tested end to end in headless Chrome with a fake microphone.

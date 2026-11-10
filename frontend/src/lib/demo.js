@@ -1,3 +1,6 @@
+import { painSentence, templateLang } from "./pain";
+import { predict } from "./predict";
+
 // Static demo build (npm run build:demo): no backend. Every /api call is answered from files in /demo/,
 // snapshotted from a real live session (scripts/snapshot_demo.py). Nothing here reaches Gnani or Groq.
 export const DEMO = import.meta.env.VITE_DEMO === "1";
@@ -48,9 +51,21 @@ async function wav(rec, spokenHeader) {
 async function handle(url, method, body) {
   const p = url.pathname;
   if (method === "GET") {
+    if (p === "/api/predict") { // computed in the browser from the same lexicon as the server
+      const q = url.searchParams;
+      return json({ suggestions: predict(q.get("text") || "", q.get("lang") || "hi-IN") });
+    }
     if (p === "/api/phrases") return realFetch(`${DEMO_DIR}snapshot/phrases-${url.searchParams.get("lang") || "hi-IN"}.json`);
     const name = { "/api/health": "health", "/api/profile": "profile", "/api/messages": "messages" }[p];
     return name ? realFetch(`${DEMO_DIR}snapshot/${name}.json`) : json({ detail: "Not part of the demo." }, 404);
+  }
+  if (p === "/api/pain/sentence" && method === "POST") { // built in the browser from the same templates as the server
+    const b = JSON.parse(body || "{}");
+    try {
+      return json({ text: painSentence(b), lang: b.lang, template_lang: templateLang(b.lang) });
+    } catch (e) {
+      return json({ detail: e.message }, 400);
+    }
   }
   if (p === "/api/speak" && method === "POST") {
     const { text, lang } = JSON.parse(body || "{}");

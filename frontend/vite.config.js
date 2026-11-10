@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const voiceWeb = fileURLToPath(new URL("../voice-core/web", import.meta.url));
 const demoData = fileURLToPath(new URL("./demo", import.meta.url));
+const sharedData = fileURLToPath(new URL("../backend/awaaz/data", import.meta.url)); // templates shared with the backend
 
 // `vite build --mode demo` (npm run build:demo) also copies the recorded session in demo/ to dist/demo/.
 // The normal build is unchanged and ships no demo files.
@@ -18,10 +19,10 @@ const demoFiles = (mode) => ({
 
 export default defineConfig(({ mode }) => ({
   plugins: [react(), demoFiles(mode)],
-  resolve: { alias: { "@voice": voiceWeb } },
+  resolve: { alias: { "@voice": voiceWeb, "@data": sharedData } },
   server: {
     port: 5193,
-    fs: { allow: [".", voiceWeb] },
+    fs: { allow: [".", voiceWeb, sharedData] },
     proxy: {
       "/api": "http://127.0.0.1:8767",
       "/ws": { target: "ws://127.0.0.1:8767", ws: true },

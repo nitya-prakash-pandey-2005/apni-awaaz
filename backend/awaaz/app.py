@@ -23,9 +23,11 @@ from voice_core.llm import LLM
 from voice_core.turns import is_meaningful
 
 from . import fake_mode
+from . import pain as pain_mod
 from .converse import ListenSession
 from .gate import GnaniGate
 from .phrases import default_phrases, sos_text, test_phrase
+from .predict import predict
 from .profiles import Profile, ProfileStore
 from .quality import clip_quality
 from .speak import LANGS, RATE, speak
@@ -48,6 +50,15 @@ class SpeakIn(BaseModel):
     text: str
     lang: str = "hi-IN"
     remember: bool = True  # count it for phrase learning
+
+
+class PainIn(BaseModel):
+    part: str
+    side: str | None = None
+    level: int = 5
+    type: str = "sharp"
+    since: str = ""
+    lang: str = "hi-IN"
 
 
 class SosIn(BaseModel):
@@ -201,6 +212,22 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
     @app.get("/api/phrases")
     async def phrases(lang: str = "hi-IN"):
         return list(dict.fromkeys(store.top_phrases(check_lang(lang), 6) + default_phrases(lang)))[:12]
+
+    @app.get("/api/predict")
+    async def predict_route(text: str = "", lang: str = "hi-IN"):
+        """Up to 5 next-word and phrase suggestions from the person's own phrases and a starter lexicon."""
+        lang = check_lang(lang)
+        return {"suggestions": predict(text[:500], lang, store.phrase_counts(lang))}
+
+    @app.post("/api/pain/sentence")
+    async def pain_sentence(body: PainIn):
+        """'Where does it hurt?': the sentence to speak (spoken through /api/speak like any other text)."""
+        lang = check_lang(body.lang)
+        try:
+            text = pain_mod.sentence(body.part, body.level, body.type, lang, body.side, body.since)
+        except ValueError as e:
+            raise HTTPException(400, str(e)) from None
+        return {"text": text, "lang": lang, "template_lang": pain_mod.template_lang(lang)}
 
     @app.post("/api/sos")
     async def sos(body: SosIn):

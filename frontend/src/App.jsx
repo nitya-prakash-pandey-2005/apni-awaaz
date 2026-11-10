@@ -7,9 +7,11 @@ import { useApi } from "./lib/api";
 import { DEMO, REPO } from "./lib/demo";
 import VoiceBank from "./pages/VoiceBank";
 import Speak from "./pages/Speak";
+import Pain from "./pages/Pain";
 import Converse from "./pages/Converse";
 import Sos from "./pages/Sos";
 import Profile from "./pages/Profile";
+import DwellLayer from "./components/DwellLayer";
 
 const NAV = [{ group: "Apni Awaaz", items: [
   { to: "/speak", label: "Speak", icon: Volume2 },
@@ -20,6 +22,7 @@ const NAV = [{ group: "Apni Awaaz", items: [
 ] }];
 const TITLES = [
   ["/speak", "Speak", "Type or tap, heard in your own voice"],
+  ["/pain", "Where does it hurt?", "Tap the body, say how bad"],
   ["/converse", "Converse", "Live captions and one-tap replies"],
   ["/sos", "SOS", "Emergency message in your voice"],
   ["/voice", "My voice", "Build your voice from old voice notes"],
@@ -27,6 +30,7 @@ const TITLES = [
 ];
 const HEADS = {
   "/speak": ["अपनी आवाज़", "Speak in your own voice.", "Type in any script or tap a phrase. It speaks in your cloned voice, in any of 10 Indian languages."],
+  "/pain": ["दर्द कहाँ है?", "Where does it hurt?", "Tap the body, choose how bad and what kind. One clear sentence is spoken in your voice, in your language."],
   "/converse": ["Conversation", "Hear them. Answer in one tap.", "Captions show what the other person says. Pick one of three suggested replies and it is spoken in your voice."],
   "/sos": ["Emergency", "Call for help in your own voice.", null],
   "/voice": ["Voice bank", "Get your voice back from 30 seconds of voice notes.", "Gnani zero-shot voice cloning builds your voice from old WhatsApp notes. Only with your consent; delete it any time."],
@@ -54,7 +58,7 @@ export default function App() {
     if (!path && profile) window.location.hash = profile.has_voice ? "/speak" : "/voice";
   }, [path, profile]);
 
-  const page = { "/speak": Speak, "/converse": Converse, "/sos": Sos, "/voice": VoiceBank, "/profile": Profile }[path];
+  const page = { "/speak": Speak, "/pain": Pain, "/converse": Converse, "/sos": Sos, "/voice": VoiceBank, "/profile": Profile }[path];
   const [kicker, title, sub] = HEADS[path] || [];
   return (
     <>
@@ -81,6 +85,7 @@ export default function App() {
         {page && profile && (() => { const P = page; return <P profile={profile} reload={reload} />; })()}
       </AppShell>
       <Toasts />
+      <DwellLayer />
     </>
   );
 }

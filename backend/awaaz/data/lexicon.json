@@ -1,0 +1,34 @@
+{
+  "_about": "Starter lexicon for word and phrase prediction (hospital and home needs), shared by backend/awaaz/predict.py and the web app. Hindi and Tamil include romanised spellings because many people type that way; the person's own spoken history is added on top and ranks higher.",
+  "en-IN": [
+    "I need water", "I need the nurse", "I need the doctor", "I need to go to the toilet", "I need my medicine",
+    "I need to sit up", "I need to lie down", "I need help", "I am in pain", "I am hungry", "I am thirsty", "I am cold",
+    "I am hot", "I am tired", "I am feeling better", "I am feeling worse", "I cannot breathe well", "I cannot sleep",
+    "Please call my son", "Please call my daughter", "Please call my wife", "Please call my husband", "Please call the nurse",
+    "Please call the doctor", "Please change my position", "Please turn off the light", "Please turn on the fan",
+    "Please open the window", "Please clean my tube", "Please speak slowly", "Please wait a moment", "Please say that again",
+    "Thank you", "Thank you very much", "Yes", "No", "I do not know", "I want to go home", "I want to sleep", "When is the doctor coming"
+  ],
+  "hi-IN": [
+    "मुझे पानी चाहिए", "मुझे दवाई चाहिए", "मुझे नर्स चाहिए", "मुझे डॉक्टर से मिलना है", "मुझे बाथरूम जाना है", "मुझे भूख लगी है",
+    "मुझे प्यास लगी है", "मुझे ठंड लग रही है", "मुझे गर्मी लग रही है", "मुझे दर्द हो रहा है", "मुझे साँस लेने में तकलीफ़ है",
+    "मुझे नींद नहीं आ रही", "मुझे बैठना है", "मुझे लेटना है", "मुझे घर जाना है", "कृपया नर्स को बुलाइए", "कृपया डॉक्टर को बुलाइए",
+    "कृपया मेरे बेटे को बुलाइए", "कृपया मेरी बेटी को बुलाइए", "कृपया पंखा चला दीजिए", "कृपया लाइट बंद कर दीजिए",
+    "कृपया धीरे बोलिए", "कृपया फिर से बोलिए", "थोड़ा रुकिए", "धन्यवाद", "बहुत धन्यवाद", "हाँ", "नहीं", "मैं ठीक हूँ", "मैं थक गया हूँ",
+    "mujhe paani chahiye", "mujhe dawai chahiye", "mujhe nurse chahiye", "mujhe bathroom jana hai", "mujhe bhook lagi hai",
+    "mujhe pyaas lagi hai", "mujhe thand lag rahi hai", "mujhe dard ho raha hai", "mujhe saans lene mein takleef hai",
+    "mujhe neend nahi aa rahi", "mujhe baithna hai", "mujhe letna hai", "mujhe ghar jana hai", "nurse ko bulaiye",
+    "doctor ko bulaiye", "mere bete ko bulaiye", "meri beti ko bulaiye", "pankha chala dijiye", "light band kar dijiye",
+    "dheere boliye", "phir se boliye", "thoda rukiye", "dhanyavaad", "haan", "nahi", "main theek hoon", "main thak gaya hoon"
+  ],
+  "ta-IN": [
+    "எனக்கு தண்ணீர் வேணும்", "எனக்கு மருந்து வேணும்", "எனக்கு நர்ஸ் வேணும்", "எனக்கு டாக்டரை பார்க்கணும்", "நான் கழிவறைக்கு போகணும்",
+    "எனக்கு பசிக்குது", "எனக்கு தாகமா இருக்கு", "எனக்கு குளிருது", "எனக்கு வலிக்குது", "எனக்கு மூச்சு விட கஷ்டமா இருக்கு",
+    "எனக்கு தூக்கம் வரலை", "நான் உட்காரணும்", "நான் படுக்கணும்", "நான் வீட்டுக்கு போகணும்", "நர்ஸை கூப்பிடுங்க", "டாக்டரை கூப்பிடுங்க",
+    "என் மகனை கூப்பிடுங்க", "என் மகளை கூப்பிடுங்க", "ஃபேனை போடுங்க", "லைட்டை அணைங்க", "மெதுவா பேசுங்க", "மறுபடியும் சொல்லுங்க",
+    "கொஞ்சம் இருங்க", "நன்றி", "ஆமாம்", "இல்லை",
+    "enakku thanni venum", "enakku marundhu venum", "enakku pasikkudhu", "enakku valikkudhu", "naan bathroom poganum",
+    "nurse-a koopidunga", "doctor-a koopidunga", "en magana koopidunga", "en magala koopidunga", "fan-a podunga",
+    "konjam irunga", "maripadiyum sollunga", "nandri", "aamaam", "illai"
+  ]
+}
