@@ -32,6 +32,9 @@ const HEADS = {
   "/profile": ["Profile", "About you.", null],
 };
 
+// Used when the server can't be reached, so every page (above all SOS) still renders.
+const OFFLINE_PROFILE = { name: "", language: "hi-IN", family_names: [], condition: "", fallback_voice: "Shivani", has_voice: false };
+
 function HealthPill({ health }) {
   if (!health) return <Badge tone="muted" dot>Server offline</Badge>;
   if (health.fake) return <Badge tone="amber" dot>Fake mode: no API keys</Badge>;
@@ -41,8 +44,9 @@ function HealthPill({ health }) {
 
 export default function App() {
   const route = useRoute();
-  const { data: health } = useApi("/api/health");
-  const { data: profile, reload } = useApi("/api/profile");
+  const { data: health, reload: reloadHealth } = useApi("/api/health");
+  const { data: loaded, error, reload } = useApi("/api/profile");
+  const profile = loaded || (error ? OFFLINE_PROFILE : null);
   const path = HEADS[route.path] ? route.path : null;
   useEffect(() => {
     if (!path && profile) window.location.hash = profile.has_voice ? "/speak" : "/voice";
@@ -61,6 +65,12 @@ export default function App() {
         footer={<div className="pill-src">Built on Gnani AI: voice cloning (vachana-vc-v1) · Timbre v3.0 · Prisma v3.0</div>}
       >
         {path && <PageHead kicker={kicker} title={title} sub={sub} />}
+        {error && !loaded && (
+          <div className="callout warn" role="alert" style={{ marginBottom: 14 }}>
+            <div className="grow">Can't reach the Apni Awaaz server. SOS still works in the phone's own voice.</div>
+            <button className="btn sm" onClick={() => { reload(); reloadHealth(); }}>Retry</button>
+          </div>
+        )}
         {page && profile && (() => { const P = page; return <P profile={profile} reload={reload} />; })()}
       </AppShell>
       <Toasts />

@@ -157,7 +157,7 @@ export function Toasts() {
   const list = useSyncExternalStore((f) => { tl.add(f); return () => tl.delete(f); }, () => toasts);
   const ICON = { info: Info, ok: CheckCircle2, warn: AlertTriangle };
   return (
-    <div className="toasts">
+    <div className="toasts" role="status" aria-live="polite">
       <AnimatePresence>
         {list.map((t) => {
           const I = ICON[t.tone] || Info;
