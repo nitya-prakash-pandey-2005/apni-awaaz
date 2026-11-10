@@ -1,10 +1,11 @@
 """One Gnani REST request at a time, with a short retry on 429.
 
 Live finding (8 Nov 2026): a key allows one short REST request at a time; a second concurrent one gets
-429 RATE_LIMITED (an open Prisma stream plus one REST request is fine). This repo's copy of voice-core has
-no gate, so every REST call the app makes (clip transcript, voice embedding, clone TTS, Timbre TTS) goes
-through this one. Without it a double tap, a switch press while speaking, or Speak during a clip check gets a
-429 on the clone call, and speak() silently answers in the fallback voice.
+429 RATE_LIMITED (an open Prisma stream plus one REST request is fine). Every REST call the app makes (clip
+transcript, voice embedding, clone TTS, Timbre TTS) goes through this one. Without it a double tap, a switch
+press while speaking, or Speak during a clip check gets a 429 on the clone call, and speak() silently answers in
+the fallback voice. voice-core now also gates its own REST calls (voice_core/gnani/gate.py); this app-level lock
+stays so the guarantee holds whichever voice-core copy is installed, and it is what the app's tests check.
 """
 
 from __future__ import annotations
