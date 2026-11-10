@@ -1,18 +1,20 @@
 # Apni Awaaz · अपनी आवाज़: your own voice, back
 
-**Live demo:** *[link]* · **Code:** [github.com/nitya-prakash-pandey-2005/apni-awaaz](https://github.com/nitya-prakash-pandey-2005/apni-awaaz) · Built on Gnani AI
+**Live demo:** *[live demo link]* · **Video:** *[video link]* · **Code:** [github.com/nitya-prakash-pandey-2005/apni-awaaz](https://github.com/nitya-prakash-pandey-2005/apni-awaaz) · Built on Gnani AI
 
 ## The problem
 Nearly half of the world's oral cancer is in India. GLOBOCAN 2024 estimates 2,05,878 new lip and oral cavity cancer cases in India, about 45.5% of the world's 4,52,205 (our calculation), and it is the most common cancer in Indian men ([IARC India sheet](https://gco.iarc.who.int/media/globocan/factsheets/populations/356-india-fact-sheet.pdf), [IARC world sheet](https://gco.iarc.who.int/media/globocan/factsheets/cancers/1-lip-oral-cavity-fact-sheet.pdf)). There are 35,169 new cases a year of cancer of the voice box, and about 12.9 lakh new strokes in a year ([ThePrint, Lancet study](https://theprint.in/health/india-recorded-13-lakh-stroke-cases-in-2019-highest-in-southeast-asia-finds-lancet-study/1798324)). Many of these people lose their speech. What they get is an electrolarynx buzz, a notebook, or an app that speaks in a stranger's voice. Shrenik Shah wrote on paper for three months after his voice box was removed ([Cancerworld](https://cancerworld.net/shrenik-shah-the-voice-that-transcends-sound/)).
 
 ## The product
 Apni Awaaz rebuilds a person's **own** voice from the WhatsApp voice notes they already have, then speaks for them in that voice:
+
 - **My voice:** consent first, then a quality check on each note (speech length, clipping, noise, and a Prisma v3.0 transcript), then Gnani zero-shot voice cloning.
 - **Speak:** type in any of 10 Indian languages, or romanised ("mujhe paani chahiye"), or tap a quick phrase. It is spoken through `vachana-vc-v1`, and a badge always says whose voice you heard.
 - **Converse:** live captions of the other person (Prisma v3.0 streaming) and three suggested replies; one tap speaks a reply in your voice.
 - **Banked messages, switch scanning** for stroke and ALS users, and **SOS** that still speaks, in the phone's voice, when the server is down.
 
 ## Proof (live Gnani runs, synthetic voices)
+
 - The voice was built in 0.67 s. Sentences were spoken in the cloned voice in 1.5–2.2 s. Tamil was spoken in the cloned voice of a Hindi speaker.
 - All 7 cloned clips were transcribed back by Prisma word for word, in Hindi and Tamil.
 - Two simultaneous Speak presses were both spoken in the cloned voice, with no rate-limit error.
