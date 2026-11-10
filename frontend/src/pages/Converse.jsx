@@ -7,6 +7,7 @@ import { getJSON, useSpeak } from "../lib/api";
 import { DEMO, DEMO_DIR } from "../lib/demo";
 import { LANGS } from "../lib/langs";
 import { VoiceBadge } from "./Speak";
+import VisitNotes from "../components/VisitNotes";
 
 const RATE = 16000;
 const wsUrl = (path) => `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}${path}`;
@@ -68,7 +69,7 @@ export default function Converse({ profile }) {
         setStt(m.stt);
         if (m.message) toast(m.message, "warn");
       } else if (m.type === "caption") {
-        setLines((l) => [...l, { who: "them", text: m.text }]);
+        setLines((l) => [...l, { who: "them", text: m.text, t: m.t }]);
       } else if (m.type === "suggestions") {
         setSuggestions(m.items);
       }
@@ -148,6 +149,8 @@ export default function Converse({ profile }) {
           <button className="btn ghost" style={{ marginTop: 12 }} onClick={() => setTyping(true)}><Keyboard size={16} /> Type instead</button>
         )}
       </Card>
+
+      <VisitNotes lines={lines} profile={profile} listening={on} />
     </div>
   );
 }

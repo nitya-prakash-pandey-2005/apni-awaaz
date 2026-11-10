@@ -2,7 +2,7 @@
   "name": "apni-awaaz-web",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "vite", "build": "vite build", "build:demo": "vite build --mode demo", "preview": "vite preview", "test": "node --test src/lib/dwell.test.js src/lib/family.test.js" },
+  "scripts": { "dev": "vite", "build": "vite build", "build:demo": "vite build --mode demo", "preview": "vite preview", "test": "node --test src/lib/dwell.test.js src/lib/family.test.js src/lib/visit.test.js" },
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
