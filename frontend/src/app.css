@@ -88,3 +88,8 @@
   .body-map { max-height: 360px; }
   .pain-types { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Word and phrase prediction */
+.suggest-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip.suggest { font-size: 17px; padding: 10px 16px; min-height: 52px; white-space: normal; text-align: left; color: var(--text); }
+.chip.suggest.phrase { border-color: rgba(255, 77, 157, 0.45); background: var(--grad-soft); }

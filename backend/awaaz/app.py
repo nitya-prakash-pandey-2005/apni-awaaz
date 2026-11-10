@@ -26,6 +26,7 @@ from . import fake_mode
 from .converse import ListenSession
 from .gate import GnaniGate
 from . import pain as pain_mod
+from .predict import predict
 from .phrases import default_phrases, sos_text, test_phrase
 from .profiles import Profile, ProfileStore
 from .quality import clip_quality
@@ -211,6 +212,12 @@ def create_app(settings: Settings | None = None, *, llm=None, stt_factory=None) 
     @app.get("/api/phrases")
     async def phrases(lang: str = "hi-IN"):
         return list(dict.fromkeys(store.top_phrases(check_lang(lang), 6) + default_phrases(lang)))[:12]
+
+    @app.get("/api/predict")
+    async def predict_route(text: str = "", lang: str = "hi-IN"):
+        """Up to 5 next-word and phrase suggestions from the person's own phrases and a starter lexicon."""
+        lang = check_lang(lang)
+        return {"suggestions": predict(text[:500], lang, store.phrase_counts(lang))}
 
     @app.post("/api/pain/sentence")
     async def pain_sentence(body: PainIn):

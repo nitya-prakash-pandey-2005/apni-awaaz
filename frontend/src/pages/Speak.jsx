@@ -1,8 +1,10 @@
 // Speak board: type in any script, pick a language, tap a quick phrase; spoken in the user's own voice.
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Heart, History, PersonStanding, Radio, ScanLine, Volume2 } from "lucide-react";
 import { Badge, Card, Seg } from "../ui";
-import { useApi, useSpeak } from "../lib/api";
+import { getJSON, useApi, useSpeak } from "../lib/api";
+import { keystrokesSaved } from "../lib/predict";
+import { speak as speakLocally } from "../lib/speech";
 import { LangChips } from "../lib/langs";
 import { useScan } from "../lib/scan";
 import BankRecorder from "../components/BankRecorder";
@@ -32,12 +34,46 @@ export default function Speak({ profile }) {
   const [ready, setReady] = useState(true);
   useEffect(() => { if (DEMO) { recordedPhrases(lang).then(setRecorded); recordingsReady().then(setReady); } }, [lang]);
 
+  // Word and phrase prediction, and an honest count of keys pressed vs letters spoken from this box
+  const [sugg, setSugg] = useState([]);
+  const keys = useRef(0);
+  const [saved, setSaved] = useState({ pressed: 0, letters: 0 });
+  useEffect(() => {
+    let live = true;
+    const t = setTimeout(() => {
+      getJSON(`/api/predict?lang=${lang}&text=${encodeURIComponent(text)}`).then((d) => live && setSugg(d.suggestions || [])).catch(() => live && setSugg([]));
+    }, 120);
+    return () => { live = false; clearTimeout(t); };
+  }, [text, lang]);
+  const type = (v) => { keys.current += v.length > text.length ? v.length - text.length : 1; setText(v); };
+  const takeSuggestion = (s) => { keys.current += 1; setText(s.text); document.getElementById("say-anything")?.focus(); };
+  const [device, setDevice] = useState(null); // demo: a typed sentence that was not recorded is read by the phone's own voice
+  const speakBox = async () => {
+    const t = text;
+    if (!t.trim() || busy) return;
+    let r;
+    if (DEMO && !recorded.some((x) => x.text.trim() === t.trim())) {
+      speakLocally(t, { lang });
+      r = { voice: "device", text: t, spoken: t };
+      setDevice(r);
+      setHistory((h) => [{ text: t, spoken: t, lang }, ...h].slice(0, 20));
+    } else {
+      setDevice(null);
+      r = await speak(t);
+    }
+    if (r) {
+      setSaved((v) => ({ pressed: v.pressed + keys.current, letters: v.letters + t.trim().length }));
+      keys.current = 0;
+    }
+  };
+
   const speak = async (t) => {
     const r = await say(t, lang);
     if (r) {
       setHistory((h) => [{ text: t, spoken: r.spoken, lang }, ...h].slice(0, 20));
       reload();
     }
+    return r;
   };
 
   const pick = (i) => { const it = items[i]; if (it && !busy) (it.kind === "msg" ? playOriginal(it.m) : speak(it.p)); }; // one at a time
@@ -73,16 +109,23 @@ export default function Speak({ profile }) {
             : <div className="small muted">{ready ? "Nothing was recorded live in this language." : "The cloned-voice recordings are not in this build yet."}</div>}
         </Card>
       )}
-      <Card title="Say anything" right={<VoiceBadge last={last} />}>
+      <Card title="Say anything" right={<VoiceBadge last={device || last} />}>
         <div className="stack-sm">
-          <textarea className="textarea big-text" rows={3} value={text} onChange={(e) => setText(e.target.value)}
+          <textarea id="say-anything" className="textarea big-text" rows={3} value={text} onChange={(e) => type(e.target.value)}
             placeholder="Type in any script — “mujhe paani chahiye” works too" aria-label="Text to speak"
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); speak(text); } }} />
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); speakBox(); } }} />
+          {sugg.length > 0 && (
+            <div className="suggest-chips" role="group" aria-label="Suggestions: tap to use">
+              {sugg.map((s) => <button key={s.text} type="button" className={`chip suggest ${s.kind}`} onClick={() => takeSuggestion(s)}>{s.label}</button>)}
+            </div>
+          )}
           <LangChips value={lang} onChange={setLang} />
-          <button className="btn primary lg block speak-btn" disabled={busy || !text.trim()} onClick={() => speak(text)}>
+          <button className="btn primary lg block speak-btn" disabled={busy || !text.trim()} onClick={speakBox}>
             <Volume2 size={22} /> {busy ? "Speaking…" : "Speak"}
           </button>
           {last?.spoken && last.spoken !== last.text && <div className="small muted">Spoken as: {last.spoken}</div>}
+          {DEMO && <div className="small muted">In the demo, a sentence you type is read by the phone's own voice; the real app speaks it in your cloned voice.</div>}
+          {saved.letters > 0 && <div className="small muted" aria-live="polite">Keystrokes saved this session: <b>{keystrokesSaved(saved.pressed, "x".repeat(saved.letters))}%</b> ({saved.pressed} key presses for {saved.letters} letters spoken from this box)</div>}
         </div>
       </Card>
 
