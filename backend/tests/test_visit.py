@@ -149,3 +149,17 @@ def test_invented_tests_are_dropped():
                              {"en": "Liver panel", "hi": "लिवर पैनल", "quote": Q}], "advice": [{"en": "Get an X-ray", "hi": "एक्स-रे कराएँ", "quote": Q}]}
     s, _ = run(visit.extract(FakeLLM([json.dumps(bad)]), TURNS))
     assert [t["en"] for t in s["tests"]] == ["Blood test"] and s["advice"] == []
+
+
+@pytest.mark.parametrize("latin,dev", [("Pantoprazole", "पेंटोप्रज़ोल"), ("Pantoprazole", "पैन्टोप्राजोल"), ("Paracetamol", "पैरासीटामॉल"),
+                                       ("Metformin", "मेटफ़ॉर्मिन"), ("Azithromycin", "एज़िथ्रोमाइसिन"), ("Amoxicillin", "अमॉक्सीसिलीन")])
+def test_devanagari_spellings_not_in_the_lexicon_still_match(latin, dev):
+    turns = [{"speaker": "partner", "text": f"आपको {dev} 500 mg रात को लेनी है।"}]
+    assert visit.sanitise({"medicines": [{"name": latin, "dose": "500 mg", "when": ["night"], "days": None}]}, turns)["medicines"][0]["name"] == latin
+    assert visit.fallback(turns)["medicines"][0]["name"] == latin
+
+
+def test_skeleton_does_not_confuse_different_medicines():
+    turns = [{"speaker": "partner", "text": "आपको पैंटोप्राजोल 40 mg लेनी है।"}]
+    for other in ["Omeprazole", "Paracetamol", "Amlodipine", "Atorvastatin"]:
+        assert visit.sanitise({"medicines": [{"name": other, "dose": "40 mg"}]}, turns)["medicines"] == []

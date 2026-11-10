@@ -122,6 +122,36 @@ def _said(words: list[str], said: str) -> bool:
     return any(re.search(rf"(?<!\w){re.escape(_norm(w))}(?!\w)", said) for w in words)
 
 
+_WORD_SPLIT = re.compile(r"[\s,.;:!?।|()\"'“”‘’/-]+")
+_DEV = dict(zip("कखगघचछजझञटठडढणतथदधनपफबभमरलवशषसंँ", "kkggccjjnttddnttddnpfbbmrlvsssnn", strict=True))
+
+
+def _words(s: str) -> list[str]:
+    """Words split on spaces and punctuation (not on regex word characters: Devanagari vowel signs are not ones)."""
+    return [w for w in _WORD_SPLIT.split(s) if w]
+
+
+def _skeleton(word: str) -> str:
+    """Consonant skeleton, the same for a Latin drug name and its Devanagari spelling in a caption:
+    Pantoprazole and पैंटोप्राजोल both give 'pntprjl'. Vowels, h and y are dropped; z = j; soft c = s."""
+    w = unicodedata.normalize("NFD", word.casefold())
+    if any("ऀ" <= ch <= "ॿ" for ch in w):
+        w = "".join(_DEV.get(ch, "") for ch in w)
+    else:
+        w = re.sub(r"c(?=[eiy])", "s", w).replace("ph", "f").replace("x", "ks").replace("q", "k").replace("c", "k")
+        w = re.sub(r"[^a-z]", "", w.replace("z", "j").replace("w", "v"))
+        w = re.sub(r"[aeiouyh]", "", w)
+    return re.sub(r"(.)\1+", r"\1", w)
+
+
+def _drug_said(key: str, said: str) -> bool:
+    """The medicine was said: a lexicon spelling, or a caption word with the same consonant skeleton (>= 5 letters)."""
+    if _said([key.casefold(), *DRUGS[key]], said):
+        return True
+    sk = _skeleton(key)
+    return len(sk) >= 5 and any(_skeleton(w) == sk for w in _words(said) if len(w) > 3)
+
+
 def _drug_key(name: str) -> str | None:
     n = _norm(name)
     for key, aliases in DRUGS.items():
@@ -133,7 +163,10 @@ def _drug_key(name: str) -> str | None:
 def _names_unsaid(text: str, said: str) -> bool:
     """True if `text` names a lexicon medicine or test that nobody said: the guard against invented drugs and tests."""
     t = _norm(text)
-    for key, aliases in [*DRUGS.items(), *TESTS.items()]:
+    for key in DRUGS:
+        if _drug_said(key, t) and not _drug_said(key, said):
+            return True
+    for key, aliases in TESTS.items():
         words = [key.casefold(), *aliases]
         if _said(words, t) and not _said(words, said):
             return True
@@ -151,8 +184,8 @@ def _test_said(item: dict, said: str) -> bool:
 
 def _grounded(quote: str, said: str) -> bool:
     """The item's quote (the transcript words it rests on) must really be in the transcript: >= 60% of its words."""
-    words = re.findall(r"\w+", _norm(quote))
-    have = set(re.findall(r"\w+", said))
+    words = _words(_norm(quote))
+    have = set(_words(said))
     return bool(words) and sum(w in have for w in words) >= max(1, 0.6 * len(words))
 
 
@@ -181,7 +214,7 @@ def _medicine(m, said: str) -> dict | None:
     name = str(m["name"]).strip()[:60]
     key = _drug_key(name)
     if key:
-        if not _said([key.casefold(), *DRUGS[key]], said):
+        if not _drug_said(key, said):
             return None
         name = key
     elif _norm(name) not in said or not _numbers_said(name, said):
@@ -222,8 +255,8 @@ def fallback(turns: list[dict]) -> dict:
     meds, tests, nxt, warn = {}, {}, None, []
     for s in doc:
         n = _norm(s)
-        for key, aliases in DRUGS.items():
-            if key not in meds and _said([key.casefold(), *aliases], n):
+        for key in DRUGS:
+            if key not in meds and _drug_said(key, n):
                 dose = _DOSE_RE.search(ascii_digits(s))
                 days = _DAYS_RE.search(ascii_digits(s))
                 meds[key] = {"name": key, "dose": f"{dose.group(1)} {dose.group(2)}" if dose else "",

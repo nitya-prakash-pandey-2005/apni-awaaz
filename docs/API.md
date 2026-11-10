@@ -218,11 +218,7 @@ which `/api/speak` translates) and in English (`text.en`). Each text item carrie
              "next_visit": {"en": "Next Monday", "hi": "अगले सोमवार", "quote": "Agle Monday ko"},
              "warning_signs": [], "advice": [], "questions_asked": [{"en": "Can I drink tea?", "hi": "क्या मैं चाय पी सकता हूँ?", "quote": "क्या मैं चाय पी सकता हूँ?"}]},
  "source": "llm", "lang": "hi-IN", "text_lang": "hi-IN",
- "text": {"local": "मेरे विज़िट नोट्स।
-दवाइयाँ: Pantoprazole 40 mg सुबह खाली पेट 14 दिन तक।
-…", "en": "My visit notes.
-Medicines: Pantoprazole 40 mg in the morning on an empty stomach for 14 days.
-…"},
+ "text": {"local": "मेरे विज़िट नोट्स।\nदवाइयाँ: Pantoprazole 40 mg सुबह खाली पेट 14 दिन तक।\n…", "en": "My visit notes.\nMedicines: Pantoprazole 40 mg in the morning on an empty stomach for 14 days.\n…"},
  "disclaimer": "ये नोट्स AI ने बातचीत से बनाए हैं। अपने डॉक्टर से ज़रूर पूछ लें।"}
 ```
 No doctor/nurse turn with text → `400`; unsupported `lang` → `400`; a bad `speaker` or more than 200 turns → `422`.
