@@ -90,13 +90,17 @@ export default function Pain({ profile }) {
       speakLocally(text, { lang: tl });
       return;
     }
+    let fromServer;
     try {
-      const r = await send("/api/pain/sentence", { json: { ...sel, level, type, since, lang } });
-      setDevice(null);
-      await say((await r.json()).text, lang);
-    } catch (e) {
-      toast(e.message, "warn");
+      fromServer = (await (await send("/api/pain/sentence", { json: { ...sel, level, type, since, lang } })).json()).text;
+    } catch (e) { // server unreachable: the same sentence is built here, and the phone's own voice reads it (as SOS does)
+      setDevice({ voice: "device" });
+      speakLocally(text, { lang: tl });
+      toast(`Using the phone's voice. ${e.message}`, "warn");
+      return;
     }
+    setDevice(null);
+    await say(fromServer, lang);
   };
 
   const partChips = PAIN.parts.filter((p) => p.view === "both" || p.view === view)
