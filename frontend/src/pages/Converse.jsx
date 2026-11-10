@@ -1,16 +1,17 @@
 // Conversation mode: live captions of the partner (Prisma), 3 suggested replies, one tap speaks in the user's voice.
 import { useEffect, useRef, useState } from "react";
-import { Keyboard, Mic, MicOff, Send } from "lucide-react";
+import { Keyboard, Mic, MicOff, Play, Send, Square } from "lucide-react";
 import { startMic } from "@voice/index.js";
 import { Badge, Card, toast } from "../ui";
-import { useSpeak } from "../lib/api";
+import { getJSON, useSpeak } from "../lib/api";
+import { DEMO, DEMO_DIR } from "../lib/demo";
 import { LANGS } from "../lib/langs";
 import { VoiceBadge } from "./Speak";
 
 const RATE = 16000;
 const wsUrl = (path) => `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}${path}`;
 const STT_BADGE = { idle: ["muted", "Mic off"], connecting: ["cyan", "Connecting…"], connected: ["green", "Listening"],
-                    error: ["rose", "Speech service error"], closed: ["muted", "Stopped"] };
+                    error: ["rose", "Speech service error"], closed: ["muted", "Stopped"], replay: ["cyan", "Replaying"] };
 
 export default function Converse({ profile }) {
   const [on, setOn] = useState(false);
@@ -30,11 +31,32 @@ export default function Converse({ profile }) {
   const stop = () => {
     refs.current.mic?.stop();
     refs.current.ws?.close();
+    refs.current.audio?.pause();
+    (refs.current.timers || []).forEach(clearTimeout);
     refs.current = { ws: null, mic: null };
     setOn(false);
     setStt("idle");
   };
   useEffect(() => stop, []);
+
+  // Demo build: replay the live session's conversation (the nurse's audio, its captions and the 3 suggestions) at its own pace.
+  // No microphone and no WebSocket.
+  const replay = async () => {
+    let c;
+    try { c = await getJSON(`${DEMO_DIR}converse.json`); } catch { toast("The recorded conversation is missing from this build.", "warn"); return; }
+    setLines([]);
+    setSuggestions([]);
+    setOn(true);
+    setStt("replay");
+    const audio = new Audio(DEMO_DIR + c.audio);
+    const timers = c.events.map((ev) => setTimeout(() => {
+      if (ev.type === "caption") setLines((l) => [...l, { who: "them", text: ev.text }]);
+      else if (ev.type === "suggestions") setSuggestions(ev.items);
+    }, ev.t * 1000));
+    timers.push(setTimeout(() => { if (refs.current.audio === audio) { refs.current = { ws: null, mic: null }; setOn(false); setStt("closed"); } }, c.duration * 1000));
+    refs.current = { ws: null, mic: null, audio, timers };
+    audio.play().catch(() => {});
+  };
 
   const start = async () => {
     setStt("connecting");
@@ -75,9 +97,11 @@ export default function Converse({ profile }) {
 
   const reply = async (text) => {
     if (!text.trim()) return;
+    const shown = suggestions;
     setLines((l) => [...l, { who: "me", text }]);
     setSuggestions([]);
     const r = await say(text, replyLang);
+    if (!r && DEMO) { setLines((l) => l.slice(0, -1)); setSuggestions(shown); return; } // not recorded: the demo said why
     if (r?.spoken && r.spoken !== text) setLines((l) => l.map((x, i) => (i === l.length - 1 ? { ...x, spoken: r.spoken } : x)));
   };
 
@@ -86,9 +110,15 @@ export default function Converse({ profile }) {
     <div className="stack">
       <Card title="Conversation" right={<div className="row"><VoiceBadge last={last} /><Badge tone={tone} dot>{label}</Badge></div>}>
         <div className="row wrap between">
-          <button className={`btn lg ${on ? "danger" : "primary"}`} onClick={on ? stop : start}>
-            {on ? <><MicOff size={18} /> Stop listening</> : <><Mic size={18} /> Start listening</>}
-          </button>
+          {DEMO ? (
+            <button className={`btn lg ${on ? "danger" : "primary"}`} onClick={on ? stop : replay}>
+              {on ? <><Square size={18} /> Stop</> : <><Play size={18} /> Play the recorded conversation</>}
+            </button>
+          ) : (
+            <button className={`btn lg ${on ? "danger" : "primary"}`} onClick={on ? stop : start}>
+              {on ? <><MicOff size={18} /> Stop listening</> : <><Mic size={18} /> Start listening</>}
+            </button>
+          )}
           <label className="field reply-lang">Reply in
             <select className="select" value={replyLang} onChange={(e) => setReplyLang(e.target.value)}>
               {LANGS.map((l) => <option key={l.value} value={l.value}>{l.label}</option>)}
@@ -96,7 +126,7 @@ export default function Converse({ profile }) {
           </label>
         </div>
         <div className="convo" aria-live="polite">
-          {lines.length === 0 && <div className="empty">Tap “Start listening”. What the other person says appears here as captions.</div>}
+          {lines.length === 0 && <div className="empty">{DEMO ? "Tap “Play the recorded conversation” to hear a nurse recorded in the live session (a synthetic voice) and see her live captions and the 3 replies Apni Awaaz suggested." : "Tap “Start listening”. What the other person says appears here as captions."}</div>}
           {lines.map((l, i) => (
             <div key={i} className={`bubble ${l.who}`}>{l.text}{l.spoken && <div className="meta">spoken as: {l.spoken}</div>}</div>
           ))}

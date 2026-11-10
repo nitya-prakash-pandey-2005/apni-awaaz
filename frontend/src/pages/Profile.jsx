@@ -4,6 +4,7 @@ import { Save, Trash2 } from "lucide-react";
 import { Badge, Card, Sheet, toast } from "../ui";
 import { send, useApi } from "../lib/api";
 import { LANGS, VOICES } from "../lib/langs";
+import { DEMO } from "../lib/demo";
 
 export default function Profile({ profile, reload }) {
   const [form, setForm] = useState(null);
@@ -100,7 +101,8 @@ export default function Profile({ profile, reload }) {
 
       <Sheet open={confirm} onClose={() => setConfirm(false)} title="Delete your voice?">
         <p>This removes your cloned voice from this app. You can build it again from your clips at any time.</p>
-        <div className="row"><button className="btn danger" onClick={del}>Delete</button><button className="btn ghost" onClick={() => setConfirm(false)}>Cancel</button></div>
+        {DEMO && <p className="small muted">Disabled in the demo: nothing is stored here. In the real app, Delete wipes the voice embedding, the consent record and every clip made in your voice. We tested it live on 10 Nov.</p>}
+        <div className="row"><button className="btn danger" disabled={DEMO} onClick={del}>Delete</button><button className="btn ghost" onClick={() => setConfirm(false)}>Cancel</button></div>
       </Sheet>
     </div>
   );

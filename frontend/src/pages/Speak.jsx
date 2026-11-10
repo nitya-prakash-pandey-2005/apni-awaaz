@@ -1,14 +1,15 @@
 // Speak board: type in any script, pick a language, tap a quick phrase; spoken in the user's own voice.
 import { useEffect, useState } from "react";
-import { Heart, History, ScanLine, Volume2 } from "lucide-react";
+import { Heart, History, Radio, ScanLine, Volume2 } from "lucide-react";
 import { Badge, Card, Seg } from "../ui";
 import { useApi, useSpeak } from "../lib/api";
 import { LangChips } from "../lib/langs";
 import { useScan } from "../lib/scan";
 import BankRecorder from "../components/BankRecorder";
+import { DEMO, messageAudioUrl, recordedPhrases, recordingsReady } from "../lib/demo";
 
 const SPEEDS = [{ value: 1000, label: "Fast" }, { value: 1500, label: "Medium" }, { value: 2500, label: "Slow" }];
-const playOriginal = (m) => new Audio(`/api/messages/${m.id}/audio`).play().catch(() => {});
+const playOriginal = (m) => new Audio(messageAudioUrl(m.id)).play().catch(() => {});
 
 export function VoiceBadge({ last }) {
   if (!last) return null;
@@ -27,6 +28,9 @@ export default function Speak({ profile }) {
   const [speed, setSpeed] = useState(1500);
   const items = [...(messages || []).map((m) => ({ kind: "msg", m })), ...(phrases || []).map((p) => ({ kind: "phrase", p }))];
   useEffect(() => { if (profile?.language) setLang(profile.language); }, [profile?.language]);
+  const [recorded, setRecorded] = useState([]); // demo build: sentences spoken live, with their recorded audio
+  const [ready, setReady] = useState(true);
+  useEffect(() => { if (DEMO) { recordedPhrases(lang).then(setRecorded); recordingsReady().then(setReady); } }, [lang]);
 
   const speak = async (t) => {
     const r = await say(t, lang);
@@ -61,6 +65,13 @@ export default function Speak({ profile }) {
           </div>
         </Card>
       )}
+      {DEMO && (
+        <Card title="Spoken live in the recorded session" icon={Radio}>
+          {recorded.length > 0
+            ? <div className="phrase-grid">{recorded.map((r) => <button key={r.file} className="phrase" disabled={busy} onClick={() => speak(r.text)}>{r.text}</button>)}</div>
+            : <div className="small muted">{ready ? "Nothing was recorded live in this language." : "The cloned-voice recordings are not in this build yet."}</div>}
+        </Card>
+      )}
       <Card title="Say anything" right={<VoiceBadge last={last} />}>
         <div className="stack-sm">
           <textarea className="textarea big-text" rows={3} value={text} onChange={(e) => setText(e.target.value)}
@@ -83,7 +94,8 @@ export default function Speak({ profile }) {
       </Card>
 
       <Card title="Bank a message in your real voice" icon={Heart}>
-        <BankRecorder onSaved={reloadMessages} />
+        {DEMO ? <div className="small muted">Recording new messages is off in the demo. The two above were banked during the live session (synthetic voice).</div>
+          : <BankRecorder onSaved={reloadMessages} />}
       </Card>
 
       {history.length > 0 && (

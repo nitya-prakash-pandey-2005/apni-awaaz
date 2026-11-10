@@ -55,3 +55,5 @@
 .phrase.scan-on { outline: 4px solid var(--amber); outline-offset: 2px; transform: scale(1.03); }
 /* the scanning highlight must never sit under the sticky top bar or the phone's bottom tab bar */
 .phrase { scroll-margin: calc(var(--topbar) + 12px) 0 calc(var(--bottomnav) + 24px + env(safe-area-inset-bottom)); }
+.demo-banner { margin-bottom: 14px; padding: 9px 12px; border-color: var(--cyan); background: var(--cyan-a); font-size: 12.5px; line-height: 1.4; }
+.demo-banner a { color: inherit; font-weight: 600; text-decoration: underline; }
