@@ -1,15 +1,9 @@
 <div align="center">
 
-<img src="frontend/public/icons/icon.svg" width="72" alt="" />
+<img src="docs/brand/banner.png" width="100%" alt="Apni Awaaz · अपनी आवाज़ — Your own voice, back." />
 
-# Apni Awaaz · अपनी आवाज़
-
-**Your own voice, back.**
-
-**Live demo:** *[link]* · **One-page pitch:** [PITCH.md](PITCH.md)
-
+**Apni Awaaz rebuilds a person's own voice from old WhatsApp voice notes, then speaks for them in that voice in 10 Indian languages.**
 For people who have lost their voice, or are losing it, to throat or oral cancer surgery, stroke, ALS/MND or Parkinson's.
-Apni Awaaz rebuilds a person's own voice from old WhatsApp voice notes, then speaks for them in that voice in 10 Indian languages.
 
 [![Gnani voice cloning](https://img.shields.io/badge/Gnani-voice%20cloning%20(vachana--vc--v1)-7c3aed)](#gnani-models-used-exactly)
 [![Timbre v3.0](https://img.shields.io/badge/Gnani-Timbre%20v3.0-db2777)](#gnani-models-used-exactly)
@@ -18,15 +12,21 @@ Apni Awaaz rebuilds a person's own voice from old WhatsApp voice notes, then spe
 [![PWA](https://img.shields.io/badge/PWA-installable-334155)](#accessibility)
 [![10 Indian languages](https://img.shields.io/badge/languages-10%20Indian-f59e0b)](#what-it-does)
 
-<img src="docs/screenshots/product/speak-romanised-390.png" width="260" alt="Speak page: 'mujhe paani chahiye' typed in Latin letters, spoken as मुझे पानी चाहिए, badge says Your voice" />&nbsp;
-<img src="docs/screenshots/product/converse-live-390.png" width="260" alt="Converse page: live captions of a nurse in Hindi and three suggested replies" />&nbsp;
-<img src="docs/screenshots/product/sos-spoken-390.png" width="260" alt="SOS page: the emergency message in Hindi and Tamil in large type, spoken in the user's voice" />
+**Live demo:** *[live demo link]* &nbsp;·&nbsp; **Video:** *[video link]* &nbsp;·&nbsp; **One-page pitch:** [PDF](PITCH.pdf) · [Markdown](PITCH.md)
+<br/>
+**Combined pitch for all three products:** [Dadi vs Scammers PITCH.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/PITCH.md) &nbsp;·&nbsp; **Sister repos:** [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers) · [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar)
+
+<img src="docs/screenshots/product/speak-romanised-390.png" width="250" alt="Speak page: 'mujhe paani chahiye' typed in Latin letters, spoken as मुझे पानी चाहिए, badge says Your voice" />&nbsp;
+<img src="docs/screenshots/product/converse-live-390.png" width="250" alt="Converse page: live captions of a nurse in Hindi and three suggested replies" />&nbsp;
+<img src="docs/screenshots/product/sos-spoken-390.png" width="250" alt="SOS page: the emergency message in Hindi and Tamil in large type, spoken in the user's voice" />
 
 <sub>Real screenshots of the app running against Gnani's live APIs on 10 Nov 2026. The "old voice notes" in this demo are <b>synthetic</b>: we generated them with Gnani Timbre (voice <i>Shubham</i>). No real person's voice was cloned.</sub>
 
 </div>
 
 ---
+
+**Contents:** [Problem](#the-problem) · [What it does](#what-it-does) · [Screens](#screens) · [Wireframe](#wireframe) · [How it works](#how-it-works) · [How it's different](#how-its-different) · [Gnani models](#gnani-models-used-exactly) · [Results](#measured-results) · [Privacy](#privacy-and-consent-by-design) · [Accessibility](#accessibility) · [Roadmap](#how-we-would-make-it-more-advanced) · [Run it](#run-it) · [Tests](#tests) · [Team](#team-and-family) · [Docs](#docs)
 
 ## The problem
 
@@ -38,7 +38,7 @@ Losing your voice is not only losing speech. It is losing the sound your family 
 - **Census 2011** counted about **20 lakh** people in India with a speech disability, including people born with one ([MoSPI 2016](https://www.mospi.gov.in/sites/default/files/publication_reports/Disabled_persons_in_India_2016.pdf)).
 - **What people get today:** an electrolarynx (a mechanical buzz; ₹10,000 to ₹80,000 from [one Indian seller](https://m.indiamart.com/nrenterprisesindia)), a voice prosthesis, a notebook, or an app that speaks in a stranger's voice.
 
-**Real stories**
+### Real stories
 
 - **Shrenik Shah** had his voice box removed in 1997 for stage IV vocal-cord cancer. He wrote on paper for three months, then taught himself to speak with an electrolarynx ([Cancerworld](https://cancerworld.net/shrenik-shah-the-voice-that-transcends-sound/)).
 - **Sapna Rana**, a Radio Mirchi Mumbai voice for about 20 years, lost her speech to ALS. She rebuilt her own voice with ElevenLabs and now speaks Hindi and English with it, as reported from ElevenLabs' India summit ([CXOToday](https://cxotoday.com/media-coverage/elevenlabs-charts-next-phase-of-india-growth-at-first-summit-in-bengaluru/)).
@@ -48,50 +48,57 @@ Apni Awaaz follows Alice's path, old recordings in and your own voice out, and b
 
 ## What it does
 
-### 1. Get your voice back from old voice notes
-Tick consent, then upload 1 to 5 old WhatsApp voice notes (.opus, .ogg, .mp3, .wav) or record a new one. Each clip is checked before it is used: length of speech, clipping, background noise (SNR), and a Prisma v3.0 transcript to confirm there is clear speech. The clearest good clip becomes your voice with Gnani's zero-shot voice cloning, and you hear a test phrase straight away.
+| | Feature | What happens |
+|---|---|---|
+| 1 | **Get your voice back from old voice notes** | Tick consent, then upload 1 to 5 old WhatsApp voice notes (.opus, .ogg, .mp3, .wav) or record a new one. Each clip is checked before it is used: length of speech, clipping, background noise (SNR), and a Prisma v3.0 transcript to confirm there is clear speech. The clearest good clip becomes your voice with Gnani's zero-shot voice cloning, and you hear a test phrase straight away. |
+| 2 | **Speak: type in any script, or tap a phrase** | Type in Hindi, Tamil or any of 10 Indian languages, or in Latin letters ("mujhe paani chahiye"). Text in the wrong script is rewritten into the chosen language first, then spoken in your cloned voice. A badge always says honestly whose voice you heard: **Your voice**, **Fallback voice** (a Timbre voice, if cloning is unavailable) or **Phone's voice**. Quick phrases learn from what you say most. |
+| 3 | **Banked messages and switch scanning** | **Message banking:** record a few precious phrases before surgery ("I love you, beta", a laugh) or cut them from old notes. They play back exactly as recorded, with no AI. **Switch scanning:** for stroke and ALS users who cannot type or tap, a highlight steps through banked messages and phrases (fast, medium or slow). One press of Space, Enter, an assistive switch or the big Select button speaks the highlighted one. |
+| 4 | **Converse: hear them, answer in one tap** | Tap "Start listening". What the other person says appears as live captions (Prisma v3.0 streaming, Indian languages auto-detected). After each sentence, three short suggested replies appear in your language. One tap speaks the reply in your voice. Your own spoken replies are not captioned back (echo guard). |
+| 5 | **SOS, even when the server is down** | One large button says an emergency message in your voice, in your language and a second language you pick, and shows it in large type. If Gnani or the server cannot be reached, the app still shows the message and reads it with the phone's own voice. |
+
+## Screens
+
+All on a 390 px phone, live against Gnani on 10 Nov 2026 (synthetic voice).
+
+**1 · My voice: check old voice notes, build the voice**
 
 <p>
-<img src="docs/screenshots/product/voice-clips-390.png" width="260" alt="Voice bank: three voice notes checked, two Good and one too short" />&nbsp;
-<img src="docs/screenshots/product/voice-built-390.png" width="260" alt="Voice built: the test phrase and a Sounds like me button" />
+<img src="docs/screenshots/product/voice-clips-390.png" width="250" alt="Voice bank: three voice notes checked, two Good and one too short" />&nbsp;
+<img src="docs/screenshots/product/voice-built-390.png" width="250" alt="Voice built: the test phrase and a Sounds like me button" />
 </p>
 
 <sub>The two good clips show an SNR above 100 dB because these synthetic notes have perfectly silent gaps. Real voice notes score lower; the check asks for at least 15 dB.</sub>
 
-### 2. Speak: type in any script, or tap a phrase
-Type in Hindi, Tamil or any of 10 Indian languages, or in Latin letters ("mujhe paani chahiye"). Text in the wrong script is rewritten into the chosen language first, then spoken in your cloned voice. A badge always says honestly whose voice you heard: **Your voice**, **Fallback voice** (a Timbre voice, if cloning is unavailable) or **Phone's voice**. Quick phrases learn from what you say most.
+**2 · Speak: Hindi, then Tamil in the same cloned voice**
 
 <p>
-<img src="docs/screenshots/product/speak-hindi-390.png" width="260" alt="Speak: a Hindi sentence spoken in the user's voice" />&nbsp;
-<img src="docs/screenshots/product/speak-tamil-390.png" width="260" alt="Speak: a Tamil sentence spoken in the same cloned voice" />
+<img src="docs/screenshots/product/speak-hindi-390.png" width="250" alt="Speak: a Hindi sentence spoken in the user's voice" />&nbsp;
+<img src="docs/screenshots/product/speak-tamil-390.png" width="250" alt="Speak: a Tamil sentence spoken in the same cloned voice" />
 </p>
 
-### 3. Banked messages and switch scanning
-**Message banking:** record a few precious phrases before surgery ("I love you, beta", a laugh) or cut them from old notes. They play back exactly as recorded, with no AI. **Switch scanning:** for stroke and ALS users who cannot type or tap, a highlight steps through banked messages and phrases (fast, medium or slow). One press of Space, Enter, an assistive switch or the big Select button speaks the highlighted one.
+**3 · Banked messages and switch scanning**
 
 <p>
-<img src="docs/screenshots/product/speak-banked-390.png" width="260" alt="Banked messages in the user's own recorded voice" />&nbsp;
-<img src="docs/screenshots/product/speak-scanning-390.png" width="260" alt="Switch scanning: one phrase highlighted, Select button" />
+<img src="docs/screenshots/product/speak-banked-390.png" width="250" alt="Banked messages in the user's own recorded voice" />&nbsp;
+<img src="docs/screenshots/product/speak-scanning-390.png" width="250" alt="Switch scanning: one phrase highlighted, Select button" />
 </p>
 
-### 4. Converse: hear them, answer in one tap
-Tap "Start listening". What the other person says appears as live captions (Prisma v3.0 streaming, Indian languages auto-detected). After each sentence, three short suggested replies appear in your language. One tap speaks the reply in your voice. Your own spoken replies are not captioned back (echo guard).
+**4 · Converse: captions in, one-tap replies out**
 
 <p>
-<img src="docs/screenshots/product/converse-live-390.png" width="260" alt="Converse: captions of a nurse and three suggested replies" />&nbsp;
-<img src="docs/screenshots/product/converse-reply-390.png" width="260" alt="Converse: a suggested reply spoken in the user's voice" />
+<img src="docs/screenshots/product/converse-live-390.png" width="250" alt="Converse: captions of a nurse and three suggested replies" />&nbsp;
+<img src="docs/screenshots/product/converse-reply-390.png" width="250" alt="Converse: a suggested reply spoken in the user's voice" />
 </p>
 
-### 5. SOS, even when the server is down
-One large button says an emergency message in your voice, in your language and a second language you pick, and shows it in large type. If Gnani or the server cannot be reached, the app still shows the message and reads it with the phone's own voice.
+**5 · SOS and Profile (consent time, Delete my voice)**
 
 <p>
-<img src="docs/screenshots/product/sos-spoken-390.png" width="260" alt="SOS: emergency message in Hindi and Tamil" />&nbsp;
-<img src="docs/screenshots/product/profile-consent-390.png" width="260" alt="Profile: consent time, Delete my voice, and banked recordings" />
+<img src="docs/screenshots/product/sos-spoken-390.png" width="250" alt="SOS: emergency message in Hindi and Tamil" />&nbsp;
+<img src="docs/screenshots/product/profile-consent-390.png" width="250" alt="Profile: consent time, Delete my voice, and banked recordings" />
 </p>
 
 <details>
-<summary><b>Desktop screenshots</b></summary>
+<summary><b>Desktop screenshots (1440 px)</b></summary>
 
 <img src="docs/screenshots/product/speak-1440.png" width="720" alt="Speak page on desktop" />
 <img src="docs/screenshots/product/converse-1440.png" width="720" alt="Converse page on desktop" />
@@ -100,6 +107,97 @@ One large button says an emergency message in your voice, in your language and a
 <img src="docs/screenshots/product/profile-1440.png" width="720" alt="Profile on desktop" />
 
 </details>
+
+## Wireframe
+
+The six phone screens, their labelled regions and the main path through them (low fidelity; source: [`scripts/make_wireframe.py`](scripts/make_wireframe.py)). Screens 1 and 2 are the two halves of the My voice page: the first run opens it, and nothing can be uploaded until consent is ticked.
+
+<img src="docs/design/wireframe.svg" width="100%" alt="Wireframe: Welcome and consent, Voice bank, Speak, Converse, SOS and Profile phone screens with numbered regions and flow arrows" />
+
+## How it works
+
+### Architecture
+
+```mermaid
+flowchart LR
+  A["Old WhatsApp voice notes<br/>or a new recording"] --> B{"Consent ticked?"}
+  B -->|no| X["Blocked: API returns 400"]
+  B -->|yes| C["Quality check<br/>speech length, clipping, SNR<br/>+ Prisma v3.0 transcript"]
+  C -->|good clip| D["Gnani voice cloning<br/>speaker embedding"]
+  D --> E[("Embedding stored on<br/>the app's own server")]
+  E --> S["Speak: typed text,<br/>quick phrases, replies"]
+  P["The other person speaks"] --> Q["Prisma v3.0<br/>live captions"]
+  Q --> R["LLM: 3 short replies"] --> S
+  S --> T["Wrong script?<br/>LLM rewrites to the language"]
+  T --> V["Gnani vachana-vc-v1<br/>speech in YOUR voice"]
+  V -.->|cloning unavailable| W["Timbre v3.0 fallback<br/>badge says so"]
+  O["SOS button"] --> V
+  O -.->|server or Gnani down| Y["Phone's own voice<br/>+ large text"]
+```
+
+### Building the voice: voice notes → quality check → consent → embedding → speak
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor U as Person (or family)
+  participant App as Apni Awaaz app (PWA)
+  participant API as Apni Awaaz server (FastAPI)
+  participant P as Gnani Prisma v3.0
+  participant C as Gnani voice cloning
+  participant V as Gnani vachana-vc-v1
+  U->>App: Tick consent (upload and record unlock)
+  U->>App: Add 1 to 5 old voice notes
+  loop each note
+    App->>API: POST /api/voice/clip-check
+    API->>API: speech length, clipping, SNR
+    API->>P: transcribe (REST, codemix)
+    P-->>API: transcript (clear speech?)
+    API-->>App: Good / Too short / Noisy
+  end
+  App->>API: POST /api/voice/enroll?consent=true (clearest good clip)
+  Note over API: no consent → HTTP 400, nothing is built
+  API->>C: reference audio (up to 30 s)
+  C-->>API: speaker embedding
+  API->>API: store embedding + consent time (never sent to the browser)
+  App->>API: POST /api/speak (test phrase)
+  API->>V: text + embedding + language
+  V-->>API: audio in the person's own voice
+  API-->>App: audio + badge "Your voice"
+  U->>App: "Sounds like me"
+```
+
+### Converse: partner speech → captions → 3 suggestions → cloned reply
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor N as Nurse / family member
+  participant App as Apni Awaaz app
+  participant API as Server (/ws/listen)
+  participant P as Gnani Prisma v3.0 (streaming)
+  participant L as LLM (Groq qwen3.8-27b)
+  participant V as Gnani vachana-vc-v1
+  actor U as User
+  N->>App: speaks (phone microphone)
+  App->>API: 16 kHz audio frames over WebSocket
+  API->>P: stream audio (indic-auto, family names as keyterms)
+  P-->>API: partial and final transcript
+  API-->>App: live caption (aria-live)
+  API->>L: caption + profile → 3 short replies in the user's language
+  L-->>API: 3 replies
+  API-->>App: suggestion buttons
+  U->>App: one tap on a reply
+  App->>API: POST /api/speak
+  API->>V: reply + embedding + language
+  V-->>API: audio in the user's voice
+  API-->>App: play reply
+  Note over API: echo guard, the user's own spoken reply is not captioned back
+```
+
+- **Backend:** FastAPI (`backend/awaaz/`), SQLite for the profile, embedding and banked recordings, and a disk cache so the same sentence is not synthesised twice. Audio made in the cloned voice has its own cache, so it can be wiped on delete.
+- **Shared voice engine:** `voice-core/`, the same Gnani clients used by our other two products.
+- **App:** React + Vite PWA (`frontend/`), phone-first, works on desktop.
 
 ## How it's different
 
@@ -154,29 +252,6 @@ All numbers come from real runs against Gnani's live APIs with synthetic voices 
 | Delete my voice | Embedding and consent cleared, 9 cloned clips on disk → 0, the next Speak used the fallback voice (0.6 s) | 10 Nov |
 | Converse | Prisma captioned a synthetic nurse ("नमस्ते शर्मा जी।", "आज आपको कैसा लग रहा है?") and 3 fitting replies appeared | 10 Nov |
 
-## How it works
-
-```mermaid
-flowchart LR
-  A["Old WhatsApp voice notes<br/>or a new recording"] --> B{"Consent ticked?"}
-  B -->|no| X["Blocked: API returns 400"]
-  B -->|yes| C["Quality check<br/>speech length, clipping, SNR<br/>+ Prisma v3.0 transcript"]
-  C -->|good clip| D["Gnani voice cloning<br/>speaker embedding"]
-  D --> E[("Embedding stored on<br/>the app's own server")]
-  E --> S["Speak: typed text,<br/>quick phrases, replies"]
-  P["The other person speaks"] --> Q["Prisma v3.0<br/>live captions"]
-  Q --> R["LLM: 3 short replies"] --> S
-  S --> T["Wrong script?<br/>LLM rewrites to the language"]
-  T --> V["Gnani vachana-vc-v1<br/>speech in YOUR voice"]
-  V -.->|cloning unavailable| W["Timbre v3.0 fallback<br/>badge says so"]
-  O["SOS button"] --> V
-  O -.->|server or Gnani down| Y["Phone's own voice<br/>+ large text"]
-```
-
-- **Backend:** FastAPI (`backend/awaaz/`), SQLite for the profile, embedding and banked recordings, and a disk cache so the same sentence is not synthesised twice. Audio made in the cloned voice has its own cache, so it can be wiped on delete.
-- **Shared voice engine:** `voice-core/`, the same Gnani clients used by our other two products.
-- **App:** React + Vite PWA (`frontend/`), phone-first, works on desktop.
-
 ## Privacy and consent by design
 
 - **Consent is mandatory.** Upload and record stay disabled until the consent box is ticked, and the API itself refuses to build a voice without `consent=true` (HTTP 400). The consent time is stored and shown on the Profile page.
@@ -195,6 +270,21 @@ flowchart LR
 - **Installable PWA** with a phone-first layout that also works on desktop. One reply at a time, so a shaky double tap never plays two messages over each other.
 - Known gap: the scanning highlight is visual only; it is not yet announced to screen readers.
 
+## How we would make it more advanced
+
+An honest roadmap: none of this is built yet. Each item says why it matters.
+
+| Next step | What we would build | Why |
+|---|---|---|
+| **On-device embedding storage** | Keep the speaker embedding encrypted on the phone (WebCrypto + IndexedDB, or the OS keystore in a native shell) and send it only inside each speech request | A voice is biometric data. Today it lives on the app's server; moving it to the person's own device means no server copy to leak, and Delete my voice becomes a local wipe the person can see. |
+| **Offline phrase cache** | Pre-synthesise the person's quick phrases, SOS message and top replies in their cloned voice and keep them in the service-worker cache | SOS already falls back to the phone's voice; this would keep the *own* voice for the most important sentences with no network, in a hospital basement or on a train. |
+| **Emotion and prosody controls** | Simple controls for calm, urgent, happy and question, plus speed and pauses, mapped to SSML-style hints or reference clips with that emotion | People do not only say words; they comfort, joke and insist. A single neutral style makes every sentence sound the same. |
+| **Hospital speech-therapy workflow** | A pre-surgery "bank your voice" checklist for speech-language therapists: record the reference clip and banked messages in the ward, and print a QR code that links the patient's profile | Message banking works best *before* a laryngectomy. Putting it into the hospital routine catches people while they can still speak. |
+| **AAC device and switch integrations** | Bluetooth and USB switch profiles, eye-gaze dwell selection, and a plain phrase export that other AAC apps can use | Many ALS and stroke users already use a switch or eye-gaze setup. Meeting them in their existing tools beats asking them to learn a new one. |
+| **Evon hosted for suggestions** | Host Gnani's Evon v3.3 on an 80 GB GPU ([plan](docs/EVON-HOSTING.md)) and switch `LLM_PROVIDER=evon` | The adapter already exists. An Indian-language LLM could give more natural code-mixed replies, and keep caption text with the same provider as the audio. |
+| **More languages and dialects** | Add languages as Gnani adds them, plus dialect-aware phrase packs (Bhojpuri, Awadhi, Marwari phrasing written in Hindi script) | People speak their mother tongue at home and in hospital. The closer the words are to how they really talk, the more it sounds like *them*. |
+| **Clinical pilot, with consent** | A small, ethics-approved pilot with a cancer hospital's speech therapy team: patients choose to take part, and we measure how often the voice is used, family recognition and quality of life | We have only tested with synthetic voices. Real patients, with informed consent and clinical oversight, are the only honest way to know whether it helps. |
+
 ## Run it
 
 Needs Python 3.12 with [uv](https://docs.astral.sh/uv/), and Node 20+.
@@ -212,9 +302,19 @@ uv run python -m uvicorn awaaz.app:create_app --factory --host 127.0.0.1 --port 
 AWAAZ_FAKE=1 uv run python -m uvicorn awaaz.app:create_app --factory --host 127.0.0.1 --port 8767
 ```
 
-Static demo with no backend, as on the live link (it replays a recorded session): `cd frontend && npm run build:demo`, then serve `frontend/dist`. See [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md).
-
 PowerShell: run `$env:AWAAZ_FAKE = "1"` first, then the same command. For frontend development, `npm run dev` in `frontend/` serves on port 5193 and proxies API calls to the backend.
+
+**Static demo with no backend** (what the live link serves; it replays a session recorded on Gnani's live servers):
+
+```bash
+cd frontend && npm run build:demo     # writes frontend/dist
+python -m http.server 5391 -d dist    # open http://localhost:5391
+npm run build                         # afterwards: rebuild the normal app for a local backend
+```
+
+See [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) for the Vercel setup (`vercel.json` runs `npm run build:demo`).
+
+**Brand and docs assets:** `python scripts/make_brand.py` (logo, wordmark and app icon SVGs), `node scripts/render_brand.cjs` (PNG icons and banner; needs `puppeteer-core`), `python scripts/make_wireframe.py` (wireframe) and `uv run --no-project --with markdown python scripts/make_pitch_pdf.py` (the one-page `PITCH.pdf`).
 
 ## Tests
 
@@ -224,10 +324,21 @@ uv run python -m pytest -q     # 92 passed
 
 - **App (30 tests):** consent is required before a voice is built; voice-note checks (too short, clipping, noise, no clear speech, a long note judged on the 30 s actually used); romanised Hindi rewritten then cloned; clone failure falls back to Timbre; Delete my voice also deletes cloned audio; SOS in two languages, and SOS text returned when speech fails; message banking keeps the original recording; live captions with suggested replies and the echo guard; parallel Speak presses never overlap Gnani calls, and a 429 is retried without losing the cloned voice.
 - **Shared voice engine (62 tests):** Gnani protocol (headers, embeddings, TTS bodies), the request gate and retries, audio utilities, the LLM wrapper, turn handling and the realtime session.
-- `npm run build` checks the app compiles. The app was also tested end to end in headless Chrome with a fake microphone.
+- `npm run build` and `npm run build:demo` check the app compiles. The app was also tested end to end in headless Chrome with a fake microphone.
+
+## Team and family
+
+Design and shared voice engine: **Nitya Prakash Pandey**. Implementation and live testing: **Dilavesh Kanz Nidooli**. Final review and hardening: **Nitya Prakash Pandey**.
+
+Part of a three-product entry built on one Gnani voice engine: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers) (flagship: an AI grandmother who wastes scammers' time), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) (an overflow emergency voice line for floods and disasters), and Apni Awaaz. Combined pitch: [Dadi's PITCH.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/PITCH.md).
+
+Built for Gnani AI's *Great Indian AI Internship Challenge*. #GnaniAI #GreatIndianAIInternshipChallenge
 
 ## Docs
 
+- [PITCH.pdf](PITCH.pdf) / [PITCH.md](PITCH.md): the one-page pitch
+- [docs/brand/](docs/brand): logo, small logo, wordmark and banner ([how the mark is made](scripts/make_brand.py): a speech bubble whose voice waveform traces a heart)
+- [docs/design/wireframe.svg](docs/design/wireframe.svg): phone wireframe of the six screens
 - [docs/02-design.md](docs/02-design.md): design and decisions
 - [docs/01-gnani-api-reference.md](docs/01-gnani-api-reference.md): the Gnani APIs we use
 - [docs/test-log.md](docs/test-log.md): live test results
@@ -236,11 +347,3 @@ uv run python -m pytest -q     # 92 passed
 - [docs/EVON-HOSTING.md](docs/EVON-HOSTING.md): how to host Evon v3.3
 - [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md): the static live demo (replays a recorded session, no backend) and how to refresh it
 - [docs/START-HERE.md](docs/START-HERE.md): for contributors
-
-## Team and family
-
-Design and shared voice engine: **Nitya Prakash Pandey**. Implementation and live testing: **Dilavesh Kanz Nidooli**. Final review and hardening: **Nitya Prakash Pandey**.
-
-Part of a three-product entry built on one Gnani voice engine: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar), and Apni Awaaz.
-
-Built for Gnani AI's *Great Indian AI Internship Challenge*. #GnaniAI #GreatIndianAIInternshipChallenge
