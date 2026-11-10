@@ -15,7 +15,7 @@ For people who have lost their voice, or are losing it, to throat or oral cancer
 
 **Live demo:** [apni-awaaz-kappa.vercel.app](https://apni-awaaz-kappa.vercel.app/) &nbsp;·&nbsp; **Video:** *[video link]* &nbsp;·&nbsp; **One-page pitch:** [PDF](PITCH.pdf) · [Markdown](PITCH.md)
 <br/>
-**Combined pitch for all three products:** [Dadi vs Scammers PITCH.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/docs/THREE-PRODUCTS.md) &nbsp;·&nbsp; **Sister repos:** [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers) · [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar)
+**Combined pitch for all three products:** [THREE-PRODUCTS.pdf](docs/THREE-PRODUCTS.pdf) &nbsp;·&nbsp; **Sister repos:** [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers) · [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar)
 
 <img src="docs/screenshots/product/speak-romanised-390.png" width="250" alt="Speak page: 'mujhe paani chahiye' typed in Latin letters, spoken as मुझे पानी चाहिए, badge says Your voice" />&nbsp;
 <img src="docs/screenshots/product/converse-live-390.png" width="250" alt="Converse page: live captions of a nurse in Hindi and three suggested replies" />&nbsp;
@@ -376,7 +376,7 @@ cd frontend && npm test        # 12 passed (dwell timing, family share links, vi
 
 Team: **Nitya Prakash Pandey** · **Dilavesh Kanz Nidooli**
 
-Part of a three-product entry built on one Gnani voice engine: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers) (flagship: an AI grandmother who wastes scammers' time), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) (an overflow emergency voice line for floods and disasters), and Apni Awaaz. Combined pitch: [Dadi's PITCH.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/docs/THREE-PRODUCTS.md).
+Part of a three-product entry built on one Gnani voice engine: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers) (flagship: an AI grandmother who wastes scammers' time), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) (an overflow emergency voice line for floods and disasters), and Apni Awaaz. Combined pitch: [THREE-PRODUCTS.pdf](docs/THREE-PRODUCTS.pdf).
 
 Built for Gnani AI's *Great Indian AI Internship Challenge*. #GnaniAI #GreatIndianAIInternshipChallenge
 

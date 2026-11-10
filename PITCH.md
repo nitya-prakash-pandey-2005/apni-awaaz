@@ -33,4 +33,4 @@ Every voice in our demos is synthetic (Gnani Timbre). We never cloned a real per
 ## Team
 Team: Nitya Prakash Pandey · Dilavesh Kanz Nidooli.
 
-One Gnani voice engine, three products: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) and Apni Awaaz. All three: [THREE-PRODUCTS.md](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers/blob/main/docs/THREE-PRODUCTS.md). #GnaniAI #GreatIndianAIInternshipChallenge
+One Gnani voice engine, three products: [Dadi vs Scammers](https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers), [Pukaar](https://github.com/nitya-prakash-pandey-2005/pukaar) and Apni Awaaz. All three: [THREE-PRODUCTS.pdf](https://github.com/nitya-prakash-pandey-2005/apni-awaaz/blob/main/docs/THREE-PRODUCTS.pdf). #GnaniAI #GreatIndianAIInternshipChallenge
