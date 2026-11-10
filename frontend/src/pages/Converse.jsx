@@ -51,16 +51,25 @@ export default function Converse({ profile }) {
         setSuggestions(m.items);
       }
     };
-    ws.onclose = () => { if (refs.current.ws === ws) stop(); };
+    let opened = false;
+    ws.onopen = () => { opened = true; };
+    ws.onclose = () => {
+      if (refs.current.ws !== ws) return;
+      if (!opened) toast("Can't reach the Apni Awaaz server, so captions are off. Check the connection and try again.", "warn");
+      stop();
+    };
     refs.current.ws = ws;
     setOn(true);
     try {
-      refs.current.mic = await startMic({
+      const mic = await startMic({
         targetRate: RATE,
         onFrame: (ab) => { if (ws.readyState === WebSocket.OPEN && ws.bufferedAmount < 256 * 1024) ws.send(ab); },
       });
+      if (refs.current.ws === ws) refs.current.mic = mic;
+      else mic.stop(); // stopped or disconnected while the mic was starting: never leave it on
     } catch (e) {
       toast(`Microphone unavailable: ${e?.message || e}`, "warn");
+      if (refs.current.ws === ws) stop();
     }
   };
 
