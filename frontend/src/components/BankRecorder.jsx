@@ -1,5 +1,5 @@
 // Message banking: record (or upload) a phrase in the person's real voice; it is replayed exactly as recorded.
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Mic, Square, Upload } from "lucide-react";
 import { toast } from "../ui";
 
@@ -14,6 +14,11 @@ export default function BankRecorder({ onSaved }) {
   const [label, setLabel] = useState("");
   const [rec, setRec] = useState(null);
   const chunks = useRef([]);
+  const live = useRef(null); // { mr, stream } while recording
+  useEffect(() => () => { // leaving the page mid-recording: mic off, nothing saved
+    const l = live.current;
+    if (l) { l.mr.onstop = null; try { l.mr.stop(); } catch { /* not started */ } l.stream.getTracks().forEach((t) => t.stop()); }
+  }, []);
 
   const store = async (blob) => {
     try { await save(label.trim(), blob); toast("Saved in your own voice", "ok"); setLabel(""); onSaved?.(); }
@@ -25,8 +30,9 @@ export default function BankRecorder({ onSaved }) {
       const mr = new MediaRecorder(stream);
       chunks.current = [];
       mr.ondataavailable = (e) => chunks.current.push(e.data);
-      mr.onstop = () => { stream.getTracks().forEach((t) => t.stop()); store(new Blob(chunks.current, { type: mr.mimeType || "audio/webm" })); };
+      mr.onstop = () => { live.current = null; stream.getTracks().forEach((t) => t.stop()); store(new Blob(chunks.current, { type: mr.mimeType || "audio/webm" })); };
       mr.start();
+      live.current = { mr, stream };
       setRec(mr);
     } catch { toast("Microphone not available", "warn"); }
   };

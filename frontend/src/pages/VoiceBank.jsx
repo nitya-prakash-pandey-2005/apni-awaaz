@@ -1,5 +1,5 @@
 // Voice bank: consent, add 1-5 clips (upload or record), per-clip quality, build the voice, hear the test phrase.
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, Mic, Square, Upload, Wand2, X } from "lucide-react";
 import { decodeToPcm16, pcmToWav, startMic } from "@voice/index.js";
 import { Badge, Card, toast } from "../ui";
@@ -43,6 +43,9 @@ export default function VoiceBank({ profile, reload }) {
   const [cloneError, setCloneError] = useState(null);
   const [rec, setRec] = useState(null); // { mic, frames, t0 }
   const fileRef = useRef(null);
+  const recRef = useRef(null);
+  useEffect(() => { recRef.current = rec; }, [rec]);
+  useEffect(() => () => recRef.current?.mic.stop(), []); // leaving the page mid-recording turns the mic off
   const { busy, say } = useSpeak();
 
   const update = (id, patch) => setClips((cs) => cs.map((c) => (c.id === id ? { ...c, ...patch } : c)));
