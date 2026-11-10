@@ -8,7 +8,7 @@ For people who have lost their voice, or are losing it, to throat or oral cancer
 [![Gnani voice cloning](https://img.shields.io/badge/Gnani-voice%20cloning%20(vachana--vc--v1)-7c3aed)](#gnani-models-used-exactly)
 [![Timbre v3.0](https://img.shields.io/badge/Gnani-Timbre%20v3.0-db2777)](#gnani-models-used-exactly)
 [![Prisma v3.0](https://img.shields.io/badge/Gnani-Prisma%20v3.0-0891b2)](#gnani-models-used-exactly)
-[![Tests](https://img.shields.io/badge/tests-251%20passing-16a34a)](#tests)
+[![Tests](https://img.shields.io/badge/tests-255%20passing-16a34a)](#tests)
 [![PWA](https://img.shields.io/badge/PWA-installable-334155)](#accessibility)
 [![10 Indian languages](https://img.shields.io/badge/languages-10%20Indian-f59e0b)](#what-it-does)
 
@@ -218,7 +218,7 @@ spoken replies) and makes **one** LLM JSON call for medicines (name, dose, when,
 warning signs, advice and the patient's questions. Nothing is shown until it is checked against the transcript:
 
 - a medicine stays only if its name was said (a small lexicon with Latin and Devanagari spellings, a consonant-skeleton match so "पैंटोप्राजोल" in a caption counts as Pantoprazole, or the exact words);
-- every number (dose, days) must appear in the transcript, so "40 mg" can never become "400 mg": a dose with an unsaid
+- every number (dose, days) must be said with that medicine (between its name and the next medicine), so "40 mg" can never become "400 mg" or move to another medicine: a dose with an unsaid
   number is dropped, never "corrected";
 - every other item must quote words that are in the transcript, and any item naming a medicine or test nobody said is
   dropped (tested with adversarial LLM output);
@@ -352,7 +352,7 @@ See [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) for the Vercel setup (`vercel
 ## Tests
 
 ```bash
-uv run python -m pytest -q     # 239 passed
+uv run python -m pytest -q     # 243 passed
 cd frontend && npm test        # 12 passed (dwell timing, family share links, visit-notes share text)
 ```
 

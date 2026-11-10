@@ -171,3 +171,26 @@ def test_hindi_number_words_count_as_said():
     assert (m["dose"], m["days"]) == ("40 mg", 14)
     m = visit.sanitise({"medicines": [{"name": "Pantoprazole", "dose": "400 mg", "days": 41}]}, turns)["medicines"][0]
     assert (m["dose"], m["days"]) == ("", None)
+
+
+TWO = [{"speaker": "partner", "text": "Pantoprazole 40 mg subah 14 din, aur Paracetamol 500 mg raat ko 5 din tak."}]
+
+
+def test_doses_are_never_swapped_between_medicines():
+    swapped = {"medicines": [{"name": "Pantoprazole", "dose": "500 mg", "days": 5}, {"name": "Paracetamol", "dose": "40 mg", "days": 14}]}
+    s = visit.sanitise(swapped, TWO)
+    assert [(m["name"], m["dose"], m["days"]) for m in s["medicines"]] == [("Pantoprazole", "", None), ("Paracetamol", "", None)]
+    right = {"medicines": [{"name": "Pantoprazole", "dose": "40 mg", "days": 14}, {"name": "Paracetamol", "dose": "500 mg", "days": 5}]}
+    s = visit.sanitise(right, TWO)
+    assert [(m["dose"], m["days"]) for m in s["medicines"]] == [("40 mg", 14), ("500 mg", 5)]
+
+
+def test_fallback_gives_each_medicine_its_own_dose():
+    s = visit.fallback(TWO)
+    assert [(m["name"], m["dose"], m["days"]) for m in s["medicines"]] == [("Pantoprazole", "40 mg", 14), ("Paracetamol", "500 mg", 5)]
+
+
+def test_brand_said_as_such_keeps_its_name():
+    turns = [{"speaker": "partner", "text": "Bukhar ho toh Dolo 650 lijiye."}]
+    m = visit.sanitise({"medicines": [{"name": "Dolo 650", "dose": "650 mg"}]}, turns)["medicines"][0]
+    assert m["name"] == "Dolo 650" and m["dose"] == "650 mg"

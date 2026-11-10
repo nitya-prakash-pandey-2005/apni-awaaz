@@ -218,6 +218,33 @@ def _items(xs, said: str) -> list[dict]:
     return list({o["en"]: o for o in out if o}.values())[:MAX_ITEMS]
 
 
+_TOKEN_RE = re.compile(r"[^\s,;:!?।|()\"'“”‘’/]+")
+
+
+def _mentions(said: str) -> list[tuple[int, str]]:
+    """(position, medicine) for every lexicon medicine named in the text, in order."""
+    out = set()
+    for key, aliases in DRUGS.items():
+        for a in [key.casefold(), *aliases]:
+            out |= {(m.start(), key) for m in re.finditer(rf"(?<!\w){re.escape(_norm(a))}(?!\w)", said)}
+        sk = _skeleton(key)
+        if len(sk) >= 5:
+            out |= {(m.start(), key) for m in _TOKEN_RE.finditer(said) if len(m.group()) > 3 and _skeleton(m.group()) == sk}
+    return sorted(out)
+
+
+def _windows(said: str, starts: list[int], key: str | None = None) -> list[str]:
+    """For each mention: the text from it up to the next other medicine or the end of that line. A dose or a number
+    of days counts for a medicine only if it is said in its own window, so doses are never swapped between medicines."""
+    ms = _mentions(said)
+    out = []
+    for pos in starts:
+        nxt = [p for p, k in ms if p > pos and k != key]
+        line_end = said.find("\n", pos)
+        out.append(said[pos:min([*nxt, line_end if line_end != -1 else len(said), len(said)])])
+    return out
+
+
 def _medicine(m, said: str) -> dict | None:
     if not isinstance(m, dict) or not str(m.get("name") or "").strip():
         return None
@@ -226,15 +253,19 @@ def _medicine(m, said: str) -> dict | None:
     if key:
         if not _drug_said(key, said):
             return None
-        name = key
+        starts = [p for p, k in _mentions(said) if k == key]
+        name = name if _norm(name) in said else key  # a brand said as such ("Dolo 650") stays as said
     elif _norm(name) not in said or not _numbers_said(name, said):
         return None  # not in the lexicon: kept only if the exact name is in the transcript
+    else:
+        starts = [mm.start() for mm in re.finditer(re.escape(_norm(name)), said)]
+    wins = _windows(said, starts, key) or [said]
     dose = str(m.get("dose") or "").strip()[:40]
-    if dose and not (_numbers_said(dose, said) if _numbers(dose) else _norm(dose) in said):
-        dose = ""  # a dose whose number nobody said is dropped, never "corrected"
+    if dose and not any(_numbers_said(dose, w) if _numbers(dose) else _norm(dose) in w for w in wins):
+        dose = ""  # a dose not said with this medicine is dropped, never "corrected"
     days = m.get("days")
     days = str(days).strip() if isinstance(days, (int, str)) and str(days).strip() else None
-    if days and (not days.isdigit() or days not in _said_numbers(said)):
+    if days and (not days.isdigit() or not any(days in _said_numbers(w) for w in wins)):
         days = None
     when = [w for w in (m.get("when") if isinstance(m.get("when"), list) else []) if w in WHEN and _said(WHEN[w], said)]
     return {"name": name, "dose": dose, "when": list(dict.fromkeys(when)), "days": int(days) if days else None}
@@ -265,12 +296,13 @@ def fallback(turns: list[dict]) -> dict:
     meds, tests, nxt, warn = {}, {}, None, []
     for s in doc:
         n = _norm(s)
-        for key in DRUGS:
-            if key not in meds and _drug_said(key, n):
-                dose = _DOSE_RE.search(ascii_digits(s))
-                days = _DAYS_RE.search(ascii_digits(s))
-                meds[key] = {"name": key, "dose": f"{dose.group(1)} {dose.group(2)}" if dose else "",
-                             "when": [w for w, words in WHEN.items() if _said(words, n)], "days": int(days.group(1)) if days else None}
+        for pos, key in _mentions(n):
+            if key in meds:
+                continue
+            win = _windows(n, [pos], key)[0]
+            dose, days = _DOSE_RE.search(win), _DAYS_RE.search(win)
+            meds[key] = {"name": key, "dose": f"{dose.group(1)} {dose.group(2)}" if dose else "",
+                         "when": [w for w, words in WHEN.items() if _said(words, n)], "days": int(days.group(1)) if days else None}
         for key, aliases in TESTS.items():
             if key not in tests and _said([key.casefold(), *aliases], n):
                 tests[key] = {"en": key, "hi": aliases[-1], "quote": s}
