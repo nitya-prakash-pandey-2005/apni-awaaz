@@ -13,7 +13,7 @@
 .speak-btn { height: 64px; font-size: 18px; }
 
 .lang-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
-.lang-chips .chip { font-size: 14px; padding: 8px 14px; min-height: 40px; }
+.lang-chips .chip { font-size: 15px; padding: 8px 16px; min-height: 48px; } /* weak hands: at least 48 px */
 
 /* quick phrases and suggestions: big tap targets (>= 56 px) */
 .phrase-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
