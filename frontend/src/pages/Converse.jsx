@@ -4,7 +4,7 @@ import { Keyboard, Mic, MicOff, Play, Send, Square } from "lucide-react";
 import { startMic } from "@voice/index.js";
 import { Badge, Card, toast } from "../ui";
 import { getJSON, useSpeak } from "../lib/api";
-import { DEMO, DEMO_DIR } from "../lib/demo";
+import { DEMO, DEMO_DIR, takeAutoplay } from "../lib/demo";
 import { LANGS } from "../lib/langs";
 import { VoiceBadge } from "./Speak";
 import VisitNotes from "../components/VisitNotes";
@@ -41,8 +41,8 @@ export default function Converse({ profile }) {
   useEffect(() => stop, []);
 
   // Demo build: replay the live session's conversation (the nurse's audio, its captions and the 3 suggestions) at its own pace.
-  // No microphone and no WebSocket.
-  const replay = async () => {
+  // No microphone and no WebSocket. answer: when it ends, tap the first suggested reply (the landing page's auto demo).
+  const replay = async ({ answer = false } = {}) => {
     let c;
     try { c = await getJSON(`${DEMO_DIR}converse.json`); } catch { toast("The recorded conversation is missing from this build.", "warn"); return; }
     setLines([]);
@@ -54,7 +54,22 @@ export default function Converse({ profile }) {
       if (ev.type === "caption") setLines((l) => [...l, { who: "them", text: ev.text }]);
       else if (ev.type === "suggestions") setSuggestions(ev.items);
     }, ev.t * 1000));
-    timers.push(setTimeout(() => { if (refs.current.audio === audio) { refs.current = { ws: null, mic: null }; setOn(false); setStt("closed"); } }, c.duration * 1000));
+    const first = c.events.find((ev) => ev.type === "suggestions")?.items?.[0];
+    timers.push(setTimeout(() => {
+      if (refs.current.audio !== audio) return; // stopped or restarted
+      refs.current = { ws: null, mic: null };
+      setOn(false);
+      setStt("closed");
+      if (answer && first) { // leave the 3 suggestions on screen a moment, then tap the first
+        const tap = setTimeout(() => {
+          if (refs.current.tap !== tap) return; // restarted, or the page was left
+          refs.current = { ws: null, mic: null };
+          toast("Auto demo: one tap on the first suggested reply speaks it in the cloned voice.");
+          reply(first);
+        }, 1500);
+        refs.current = { ws: null, mic: null, tap, timers: [tap] };
+      }
+    }, c.duration * 1000));
     refs.current = { ws: null, mic: null, audio, timers };
     audio.play().catch(() => {});
   };
@@ -106,13 +121,21 @@ export default function Converse({ profile }) {
     if (r?.spoken && r.spoken !== text) setLines((l) => l.map((x, i) => (i === l.length - 1 ? { ...x, spoken: r.spoken } : x)));
   };
 
+  // Demo: "Try the live demo" on the landing page lands here and plays the conversation by itself. The short delay
+  // lets the page settle, and the cleanup makes React's double effect in development start it only once.
+  useEffect(() => {
+    if (!DEMO) return undefined;
+    const t = setTimeout(() => { if (takeAutoplay()) replay({ answer: true }); }, 700);
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const [tone, label] = STT_BADGE[stt] || STT_BADGE.idle;
   return (
     <div className="stack">
       <Card title="Conversation" right={<div className="row"><VoiceBadge last={last} /><Badge tone={tone} dot>{label}</Badge></div>}>
         <div className="row wrap between">
           {DEMO ? (
-            <button className={`btn lg ${on ? "danger" : "primary"}`} onClick={on ? stop : replay}>
+            <button className={`btn lg ${on ? "danger" : "primary"}`} onClick={on ? stop : () => replay()}>
               {on ? <><Square size={18} /> Stop</> : <><Play size={18} /> Play the recorded conversation</>}
             </button>
           ) : (

@@ -99,6 +99,16 @@ async function handle(url, method, body) {
   return json({ detail: off || "Not part of the demo." }, 409);
 }
 
+// Landing "Try the live demo" (#/converse?play=1): play the recorded conversation once, without another tap.
+// Only after a click on this page (so the browser allows sound); the flag is removed so a reload does not replay it.
+export function takeAutoplay() {
+  if (!DEMO) return false;
+  const [path, qs] = window.location.hash.replace(/^#/, "").split("?");
+  if (new URLSearchParams(qs || "").get("play") !== "1") return false;
+  window.history.replaceState(null, "", `#${path}`);
+  return navigator.userActivation ? navigator.userActivation.hasBeenActive : true;
+}
+
 // Call once before the app renders.
 export function installDemo() {
   if (!DEMO || realFetch) return;

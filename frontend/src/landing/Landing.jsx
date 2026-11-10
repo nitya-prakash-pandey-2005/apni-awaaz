@@ -4,7 +4,7 @@ import { REPO } from "../lib/demo";
 import { reducedMotion } from "../motion/prefs";
 import { startLanding } from "./animate";
 import {
-  APP_ENTRY, COMPARE, DADI_REPO, DADI_URL, FACTS, FEATURES, PIPE_BUILD, PIPE_TALK, PUKAAR_REPO, PUKAAR_URL, RESULTS, STORIES, TIMINGS, VIDEO_URL,
+  APP_ENTRY, COMPARE, PLAY_ENTRY, DADI_REPO, DADI_URL, FACTS, FEATURES, PIPE_BUILD, PIPE_TALK, PUKAAR_REPO, PUKAAR_URL, RESULTS, STORIES, TIMINGS, VIDEO_URL,
 } from "./content";
 
 const BARS = [[130, 130.5, 94.9], [183, 118.7, 149.5], [236, 164.2, 161.9], [289, 118.7, 149.5], [342, 130.5, 94.9]];
@@ -138,7 +138,7 @@ export default function Landing() {
           <a href="#/" onClick={(e) => { e.preventDefault(); document.getElementById("lp-how")?.scrollIntoView({ behavior: motion ? "smooth" : "auto" }); }}>How it works</a>
           <a href="#/" onClick={(e) => { e.preventDefault(); document.getElementById("lp-results")?.scrollIntoView({ behavior: motion ? "smooth" : "auto" }); }}>Results</a>
         </nav>
-        <a className="lp-btn sm" href={APP_ENTRY}>Try it <ArrowRight size={16} /></a>
+        <a className="lp-btn sm" href={PLAY_ENTRY}>Try it <ArrowRight size={16} /></a>
       </header>
 
       <main>
@@ -155,7 +155,7 @@ export default function Landing() {
               old WhatsApp voice notes, so you can speak again, in 10 Indian languages.
             </p>
             <div className="lp-ctas" data-hero>
-              <a className="lp-btn" href={APP_ENTRY}>Try the live demo <ArrowRight size={18} /></a>
+              <a className="lp-btn" href={PLAY_ENTRY}>Try the live demo <ArrowRight size={18} /></a>
               <a className="lp-btn ghost" href={VIDEO_URL} target="_blank" rel="noreferrer"><PlayCircle size={18} /> Watch the 3-minute video</a>
             </div>
             <ul className="lp-chips" data-hero>
@@ -264,7 +264,7 @@ export default function Landing() {
             <div className="lp-trio">
               <Product name="Dadi vs Scammers" text="An AI grandmother who wastes scammers’ time." live={DADI_URL} repo={DADI_REPO} />
               <Product name="Pukaar" text="An overflow emergency voice line for floods and disasters." live={PUKAAR_URL} repo={PUKAAR_REPO} />
-              <Product name="Apni Awaaz" text="Your own voice back, in 10 Indian languages." live={APP_ENTRY} repo={REPO} us />
+              <Product name="Apni Awaaz" text="Your own voice back, in 10 Indian languages." live={PLAY_ENTRY} repo={REPO} us />
             </div>
           </div>
         </section>
@@ -275,7 +275,7 @@ export default function Landing() {
             <h2 className="lp-h2" data-reveal>Hear it for yourself.</h2>
             <p className="lp-p" data-reveal>The demo replays a real session recorded on Gnani&rsquo;s live servers. No sign-up.</p>
             <div className="lp-ctas center" data-reveal>
-              <a className="lp-btn" href={APP_ENTRY}>Try the live demo <ArrowRight size={18} /></a>
+              <a className="lp-btn" href={PLAY_ENTRY}>Try the live demo <ArrowRight size={18} /></a>
               <a className="lp-btn ghost" href={REPO} target="_blank" rel="noreferrer"><Github size={18} /> Source on GitHub</a>
             </div>
           </div>

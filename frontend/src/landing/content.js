@@ -1,5 +1,5 @@
 // Every number and claim below is taken from the README (sources linked there) and docs/test-log.md.
-import { REPO } from "../lib/demo";
+import { DEMO, REPO } from "../lib/demo";
 
 export const VIDEO_URL = `${REPO}#readme`;
 export const AWAAZ_URL = "https://apni-awaaz-kappa.vercel.app/";
@@ -8,6 +8,8 @@ export const PUKAAR_URL = "https://pukaar-snowy.vercel.app/";
 export const DADI_REPO = "https://github.com/nitya-prakash-pandey-2005/dadi-vs-scammers";
 export const PUKAAR_REPO = "https://github.com/nitya-prakash-pandey-2005/pukaar";
 export const APP_ENTRY = "#/app"; // not a page: App.jsx sends it to /speak or /voice like a first run
+// Demo build: the "Try it" buttons open Converse, which plays the recorded conversation by itself (see takeAutoplay).
+export const PLAY_ENTRY = DEMO ? "#/converse?play=1" : APP_ENTRY;
 
 const IARC_INDIA = "https://gco.iarc.who.int/media/globocan/factsheets/populations/356-india-fact-sheet.pdf";
 
