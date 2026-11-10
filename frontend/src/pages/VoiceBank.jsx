@@ -127,11 +127,11 @@ export default function VoiceBank({ profile, reload }) {
       </Card>
 
       <Card title="2. Add 1–5 voice notes" right={<Badge tone="muted">{clips.length}/{MAX_CLIPS}</Badge>}>
-        <p className="small muted" style={{ marginTop: 0 }}>Old WhatsApp voice notes work (.opus, .ogg, .mp3, .wav). Pick clips with 5–30 seconds of only your voice, no music.</p>
+        <p className="small muted" style={{ marginTop: 0 }}>Old WhatsApp voice notes work (.opus, .ogg, .mp3, .wav). Pick clips with 5–30 seconds of only your voice, no music.{!consent && " Tick the consent box first: clips are checked by Gnani's speech service."}</p>
         <div className="row wrap">
           <input ref={fileRef} type="file" accept="audio/*,.opus,.ogg,.m4a" multiple hidden onChange={(e) => onFiles(e.target.files)} />
-          <button className="btn" onClick={() => fileRef.current?.click()}><Upload size={16} /> Upload clips</button>
-          <button className={`btn ${rec ? "danger" : "ghost"}`} onClick={toggleRec}>{rec ? <><Square size={16} /> Stop recording</> : <><Mic size={16} /> Record</>}</button>
+          <button className="btn" disabled={!consent} onClick={() => fileRef.current?.click()}><Upload size={16} /> Upload clips</button>
+          <button className={`btn ${rec ? "danger" : "ghost"}`} disabled={!consent && !rec} onClick={toggleRec}>{rec ? <><Square size={16} /> Stop recording</> : <><Mic size={16} /> Record</>}</button>
         </div>
         {clips.length > 0 && <div className="list" style={{ marginTop: 10 }}>{clips.map((c) => <ClipRow key={c.id} clip={c} onRemove={() => setClips((cs) => cs.filter((x) => x.id !== c.id))} />)}</div>}
       </Card>
